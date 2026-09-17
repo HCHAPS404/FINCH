@@ -1,0 +1,7 @@
+{
+  "name": "@finch/desktop",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Windows, macOS and Linux desktop application.",
+  "type": "module"
+}

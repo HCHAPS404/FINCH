@@ -1,0 +1,11 @@
+{
+  "name": "@finch/db",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Drizzle schema, migrations and seeds. The only package permitted to touch the database driver. README \u00a724.",
+  "type": "module",
+  "dependencies": {
+    "@finch/contracts": "workspace:*",
+    "drizzle-orm": "0.45.2"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@finch/observability",
+  "version": "0.0.0",
+  "private": true,
+  "description": "OpenTelemetry bootstrap, structured logging with redaction, correlation. README \u00a746.",
+  "type": "module",
+  "dependencies": {
+    "@finch/contracts": "workspace:*"
+  }
+}

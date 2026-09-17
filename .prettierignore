@@ -1,0 +1,19 @@
+# README.md is the project's normative architecture authority, authored by the
+# human maintainer. Prettier must not churn it: reformatting a constitution
+# document produces noisy diffs over content nobody intended to change.
+README.md
+
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+coverage/
+pnpm-lock.yaml
+packages/api-client/src/generated/
+**/openapi.json
+**/*.gen.ts
+packages/db/migrations/
+target/
+artifacts/
+reports/

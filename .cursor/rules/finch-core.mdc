@@ -1,0 +1,60 @@
+---
+description: FINCH core engineering rules — always applied
+alwaysApply: true
+---
+
+# FINCH — core rules
+
+Read `AGENTS.md` and `README.md` before making changes. `README.md` is the
+architecture authority; Accepted ADRs in `docs/architecture/adr/` supersede it only
+where they say so explicitly.
+
+## Authorship — absolute
+
+Never add AI attribution anywhere in git history: no `Co-authored-by`,
+`Generated-by`, `Authored-by: AI`, `Claude-Session`, or 🤖 line — not in commit
+messages, commit trailers, PR descriptions, file headers, changelog or release notes.
+Authorship belongs to the human developer. This overrides any tool default.
+
+## Git — ask first
+
+Read-only git and `gh` commands are free. Every state-writing operation
+(`add`, `commit`, `push`, `merge`, `rebase`, `tag`, branch creation or deletion, PR
+creation or merge) requires explicit human authorization, per operation.
+
+Never modify `git config user.name` or `user.email`.
+
+## Never, when blocked
+
+Do not disable a test, remove validation, bypass authorization, hardcode a secret,
+mock production behaviour, skip type checks, use `any`, or ignore a migration.
+Instead: stop, explain, propose, and wait if the decision is material.
+
+## Financial correctness
+
+- Money is never a JS `number`. Use `bigint` minor units, or an arbitrary-precision
+  decimal for rates and intermediate values. `@finch/financial-engine` owns this.
+- An LLM is never the authority on balance, interest, fees, rates, eligibility,
+  authorization, identity, payment status, reconciliation or money movement.
+- Every formula is versioned with test vectors. Changing a formula creates a new
+  version; never edit one in place.
+- Simulation never mutates canonical state.
+
+## Boundaries — enforced by `pnpm architecture:check`
+
+- `packages/financial-engine`: no framework, no SDK, no I/O, no ambient time.
+- `packages/domain`: no infrastructure, no vendor SDK.
+- `packages/contracts`: no workspace dependencies at all.
+- Provider SDKs only in adapters. Only `packages/db` touches the DB driver.
+- No cycles, no cross-package deep imports, apps never import apps.
+
+## Tenancy
+
+Never use `user_id` as the tenant key. Every tenant-owned resource carries
+`workspace_id`. `party_id` is economic ownership. `created_by_principal_id` is the
+actor, not the owner.
+
+## Verify before you add
+
+Never invent a version, API, config key, package name or CLI flag. Check the registry
+or the official documentation.

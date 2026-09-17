@@ -1,0 +1,7 @@
+{
+  "name": "@finch/worker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Background runtime. Same monorepo, different entrypoint. Outbox publication, provider sync, document pipelines, recomputations.",
+  "type": "module"
+}

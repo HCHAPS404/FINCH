@@ -1,0 +1,10 @@
+{
+  "name": "@finch/provider-sdk",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Provider port definitions, contract fixtures and the capability registry. README \u00a727, \u00a728.",
+  "type": "module",
+  "dependencies": {
+    "@finch/contracts": "workspace:*"
+  }
+}

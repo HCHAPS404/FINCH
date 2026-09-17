@@ -1,0 +1,32 @@
+{
+  "name": "@finch/domain",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Domain entities, value objects and invariants. Framework-free. README \u00a78, \u00a720.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run --passWithNoTests",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "@finch/contracts": "workspace:*",
+    "@finch/financial-engine": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
+  }
+}

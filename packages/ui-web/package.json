@@ -1,0 +1,10 @@
+{
+  "name": "@finch/ui-web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React component library for apps/web and apps/desktop. README \u00a734.",
+  "type": "module",
+  "dependencies": {
+    "@finch/design-tokens": "workspace:*"
+  }
+}

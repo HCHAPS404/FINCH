@@ -1,0 +1,10 @@
+{
+  "name": "@finch/api-client",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Typed HTTP client GENERATED from the API's OpenAPI document. Never hand-written. README \u00a758, \u00a7102.6.",
+  "type": "module",
+  "dependencies": {
+    "@finch/contracts": "workspace:*"
+  }
+}

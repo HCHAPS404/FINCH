@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./packages/contracts/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/financial-engine/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/config/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/domain/tsconfig.build.json"
+    }
+  ]
+}

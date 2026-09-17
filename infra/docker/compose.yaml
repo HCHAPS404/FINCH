@@ -1,0 +1,45 @@
+# ---------------------------------------------------------------------------
+# FINCH local development infrastructure — README §79, §81.
+#
+# Scope discipline (Constitution §4.19): this file contains PostgreSQL and nothing
+# else. Redis, LocalStack, OpenSearch and friends are added only when a concrete
+# capability requires them and an ADR records the decision (README §77, §90).
+#
+# Credentials here are local-only placeholders and are safe in version control.
+# Production credentials come from AWS Secrets Manager (§40).
+# ---------------------------------------------------------------------------
+name: finch-local
+
+services:
+  postgres:
+    # Pinned to the patch level (README §56: never `latest` in anything reproducible).
+    # PostgreSQL 18.6 — the baseline recorded in README §110.
+    image: postgres:18.6-trixie
+    container_name: finch-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: finch
+      POSTGRES_PASSWORD: finch_local_dev
+      POSTGRES_DB: finch_dev
+      # Deterministic collation: sort order differences between machines silently
+      # change query results and index behaviour.
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U finch -d finch_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    # Bounded so a local Postgres cannot starve the rest of the dev machine.
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+
+volumes:
+  postgres-data:
+    name: finch-postgres-data

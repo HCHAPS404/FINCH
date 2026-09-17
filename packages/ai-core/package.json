@@ -1,0 +1,10 @@
+{
+  "name": "@finch/ai-core",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AI Gateway: policy, PII classification, prompt registry, schema validation, cost limits. README \u00a730, \u00a731.",
+  "type": "module",
+  "dependencies": {
+    "@finch/contracts": "workspace:*"
+  }
+}

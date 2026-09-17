@@ -1,0 +1,7 @@
+{
+  "name": "@finch/security",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Cryptographic helpers, redaction, webhook verification, security headers. README \u00a738.",
+  "type": "module"
+}

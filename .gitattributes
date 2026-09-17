@@ -1,0 +1,26 @@
+# FINCH .gitattributes — deterministic diffs and honest PR review surface.
+* text=auto eol=lf
+
+*.sh      text eol=lf
+*.bat     text eol=crlf
+*.ps1     text eol=crlf
+
+# Lockfiles: keep diffs but collapse them in review UIs.
+pnpm-lock.yaml        linguist-generated=true -diff
+
+# Generated artifacts (README §58, §102.6) — must not be hand-edited.
+packages/api-client/src/generated/**  linguist-generated=true -diff
+**/openapi.json                       linguist-generated=true
+**/*.gen.ts                           linguist-generated=true -diff
+packages/db/migrations/**/*.sql       -diff
+
+# Binary assets
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.webp binary
+*.pdf  binary
+*.ttf  binary
+*.otf  binary
+*.woff binary
+*.woff2 binary

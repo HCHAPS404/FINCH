@@ -1,0 +1,10 @@
+{
+  "name": "@finch/ui-mobile",
+  "version": "0.0.0",
+  "private": true,
+  "description": "React Native component library for apps/mobile. README \u00a734.",
+  "type": "module",
+  "dependencies": {
+    "@finch/design-tokens": "workspace:*"
+  }
+}
