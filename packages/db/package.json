@@ -2,10 +2,40 @@
   "name": "@finch/db",
   "version": "0.0.0",
   "private": true,
-  "description": "Drizzle schema, migrations and seeds. The only package permitted to touch the database driver. README \u00a724.",
+  "description": "Drizzle schema, migrations and seeds. The only package permitted to touch the database driver. README §24.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "migrations"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/migrate-cli.ts",
+    "db:seed": "tsx src/seed-cli.ts",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
   "dependencies": {
     "@finch/contracts": "workspace:*",
-    "drizzle-orm": "0.45.2"
+    "@finch/testing": "workspace:*",
+    "drizzle-orm": "0.45.2",
+    "pg": "8.23.0"
+  },
+  "devDependencies": {
+    "@types/pg": "8.23.1",
+    "drizzle-kit": "0.31.10",
+    "tsx": "4.23.13",
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
   }
 }

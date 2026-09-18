@@ -14,3 +14,7 @@ allowBuilds:
   # than run unreviewed native-addon install scripts.
   cpu-features: false
   ssh2: false
+  # esbuild's install script only fetches its own official prebuilt binary for the
+  # current OS/arch (no arbitrary third-party code) and drizzle-kit's CLI cannot load
+  # its TypeScript config without it — approved, unlike the denied scripts above.
+  esbuild: true

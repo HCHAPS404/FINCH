@@ -19,6 +19,9 @@
     },
     {
       "path": "./packages/testing/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/db/tsconfig.build.json"
     }
   ]
 }
