@@ -8,3 +8,9 @@ allowBuilds:
   # encoding, not protobuf, so its install script buys us nothing — denied rather than
   # run unreviewed (README §43: dependency scripts are opt-in, not implicit).
   protobufjs: false
+  # cpu-features/ssh2 are transitive deps of testcontainers/dockerode, used only for
+  # connecting to a remote Docker host over SSH. FINCH's local dev and CI both talk to
+  # a local Docker daemon directly, so this path is never exercised — denied rather
+  # than run unreviewed native-addon install scripts.
+  cpu-features: false
+  ssh2: false
