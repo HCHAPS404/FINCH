@@ -159,6 +159,31 @@ export const pureLayers = {
 };
 
 /**
+ * NestJS apps (README §19.2/§19.3: `apps/api`, `apps/worker` — same DI-based
+ * composition-root style, different entrypoint).
+ *
+ * NestJS resolves constructor-injected dependencies from `emitDecoratorMetadata`,
+ * which needs the real, value-level class reference at the parameter type position —
+ * not an erased `import type`. `consistent-type-imports` cannot tell "used only as a
+ * type" (its normal signal to rewrite to `import type`) apart from "used only as an
+ * injected constructor parameter type, where the concrete import must survive
+ * emission," so it is off here rather than fought file by file.
+ *
+ * `no-extraneous-class` flags a class with only static members or no members at all —
+ * exactly the shape of every `@Module()` class, which exists solely to carry Nest's
+ * decorator metadata. `allowWithDecorator` keeps the rule live for an *undecorated*
+ * extraneous class (still almost always a mistake) while exempting the framework
+ * pattern it can't otherwise tell apart.
+ */
+export const nestApps = {
+  files: ['apps/api/**/*.ts', 'apps/worker/**/*.ts'],
+  rules: {
+    '@typescript-eslint/consistent-type-imports': 'off',
+    '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
+  },
+};
+
+/**
  * Plain JavaScript — repository tooling and the ESLint rules themselves.
  *
  * These files are intentionally outside any tsconfig, so type-aware rules cannot run
@@ -207,8 +232,13 @@ export const tests = {
     '@typescript-eslint/no-unnecessary-condition': 'off',
     'no-restricted-properties': 'off',
     'no-console': 'off',
+    // `expect(mockObj.method).toHaveBeenCalled(...)` is the normal vitest mocking
+    // idiom, but reads to this rule as tearing an unbound method off its receiver.
+    // `eslint-plugin-vitest`'s matcher-aware replacement isn't in this repo's
+    // dependency tree, so the rule is off here rather than fought call by call.
+    '@typescript-eslint/unbound-method': 'off',
   },
 };
 
 /** The default composed configuration consumed by the repository root. */
-export default [ignores, ...base, ...typed, pureLayers, ...repoScripts, tests, prettier];
+export default [ignores, ...base, ...typed, pureLayers, nestApps, ...repoScripts, tests, prettier];

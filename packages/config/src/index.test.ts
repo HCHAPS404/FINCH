@@ -16,6 +16,13 @@ const VALID = {
   FINCH_DEFAULT_LOCALE: 'es-CO',
   FINCH_DEFAULT_TIMEZONE: 'America/Bogota',
   FINCH_DEFAULT_CURRENCY: 'COP',
+  LOG_LEVEL: 'debug',
+  OTEL_ENABLED: 'false',
+  OTEL_EXPORTER_OTLP_ENDPOINT: '',
+  OTEL_SERVICE_NAME: 'finch-api',
+  SENTRY_ENVIRONMENT: 'local',
+  AUTH_ISSUER_URL: '',
+  AUTH_AUDIENCE: '',
   DATABASE_URL: 'postgresql://finch:supersecret@localhost:5432/finch_dev',
   SENTRY_DSN: '',
   AUTH_JWKS_URL: '',
@@ -41,6 +48,17 @@ describe('loadConfig', () => {
     const config = loadConfig(VALID);
     expect(config.secrets.sentryDsn).toBeUndefined();
     expect(config.secrets.authJwksUrl).toBeUndefined();
+    expect(config.observability.otelExporterOtlpEndpoint).toBeUndefined();
+    expect(config.identity.authIssuerUrl).toBeUndefined();
+    expect(config.identity.authAudience).toBeUndefined();
+  });
+
+  it('parses observability configuration, OTel disabled by default', () => {
+    const config = loadConfig(VALID);
+    expect(config.observability.logLevel).toBe('debug');
+    expect(config.observability.otelEnabled).toBe(false);
+    expect(config.observability.otelServiceName).toBe('finch-api');
+    expect(config.observability.sentryEnvironment).toBe('local');
   });
 
   it('ships every kill switch disabled by default', () => {

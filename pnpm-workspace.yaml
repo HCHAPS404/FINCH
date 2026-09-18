@@ -18,3 +18,6 @@ allowBuilds:
   # current OS/arch (no arbitrary third-party code) and drizzle-kit's CLI cannot load
   # its TypeScript config without it — approved, unlike the denied scripts above.
   esbuild: true
+  # scarf is an install-time telemetry package (phones home on install) pulled in by
+  # a transitive dependency — denied, not needed for anything we use.
+  "@scarf/scarf": false
