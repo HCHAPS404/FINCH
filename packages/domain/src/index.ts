@@ -31,3 +31,8 @@ export {
   membershipGrants,
   revokeMembership,
 } from './membership.js';
+
+export type { AuthSession, AuthSessionPort } from './auth-session.js';
+export { isSessionExpired, isAuthSandboxEligible } from './auth-session.js';
+
+export type { EventPublisher } from './event-publisher.js';

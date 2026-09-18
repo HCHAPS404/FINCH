@@ -29,6 +29,29 @@ const jurisdictionConfigSchema = z.object({
 });
 
 /**
+ * Observability — README §46, §3.8, ADR-0024. Traces/metrics via OTel; Sentry is a
+ * separate integration composed alongside `@finch/observability`, not inside it.
+ */
+const observabilityConfigSchema = z.object({
+  logLevel: z.enum(['trace', 'debug', 'info', 'warn', 'error', 'fatal']),
+  otelEnabled: z.coerce.boolean(),
+  otelExporterOtlpEndpoint: z.url().optional(),
+  otelServiceName: z.string().min(1),
+  sentryEnvironment: z.string().min(1),
+});
+
+/**
+ * Identity — README §8, ADR-0015 (still Proposed; no vendor chosen). Issuer/audience
+ * are ordinary OIDC discovery values, not secrets; `authJwksUrl` stays in
+ * `secretConfigSchema` below since an empty value must be treated as "no provider
+ * configured yet" the same way a missing secret is.
+ */
+const identityConfigSchema = z.object({
+  authIssuerUrl: z.url().optional(),
+  authAudience: z.string().min(1).optional(),
+});
+
+/**
  * Kill switches — README §62.
  *
  * Present and wired from day one even though every capability behind them is still
@@ -55,6 +78,8 @@ const secretConfigSchema = z.object({
 export const configSchema = z.object({
   public: publicConfigSchema,
   jurisdiction: jurisdictionConfigSchema,
+  observability: observabilityConfigSchema,
+  identity: identityConfigSchema,
   flags: featureFlagSchema,
   secrets: secretConfigSchema,
 });
@@ -96,6 +121,17 @@ export function loadConfig(env: Record<string, string | undefined>): FinchConfig
       timezone: env['FINCH_DEFAULT_TIMEZONE'],
       currency: env['FINCH_DEFAULT_CURRENCY'],
     },
+    observability: {
+      logLevel: env['LOG_LEVEL'],
+      otelEnabled: env['OTEL_ENABLED'] === 'true',
+      otelExporterOtlpEndpoint: optionalEnv(env['OTEL_EXPORTER_OTLP_ENDPOINT']),
+      otelServiceName: env['OTEL_SERVICE_NAME'],
+      sentryEnvironment: env['SENTRY_ENVIRONMENT'],
+    },
+    identity: {
+      authIssuerUrl: optionalEnv(env['AUTH_ISSUER_URL']),
+      authAudience: optionalEnv(env['AUTH_AUDIENCE']),
+    },
     flags: {
       bankSyncEnabled: env['FEATURE_BANK_SYNC_ENABLED'] === 'true',
       documentAiEnabled: env['FEATURE_DOCUMENT_AI_ENABLED'] === 'true',
@@ -130,6 +166,8 @@ export function redactedConfig(config: FinchConfig): Record<string, unknown> {
   return {
     public: config.public,
     jurisdiction: config.jurisdiction,
+    observability: config.observability,
+    identity: config.identity,
     flags: config.flags,
     secrets: Object.fromEntries(
       Object.entries(config.secrets).map(([key, value]) => [

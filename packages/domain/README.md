@@ -15,6 +15,10 @@ built on it reproducible.
   invariants (README §8.6).
 - `membershipGrants` / `revokeMembership` — the domain-level half of the README §9
   authorization harness (revocation semantics, capability matching).
+- `AuthSessionPort` — the shape of a verified session, deliberately vendor-silent since
+  ADR-0015 (identity provider) is still Proposed. `isSessionExpired` and
+  `isAuthSandboxEligible` are the pure logic around it.
+- `EventPublisher` — the port `apps/worker` publishes outbox rows through.
 
 ## Does not own
 
@@ -23,8 +27,9 @@ built on it reproducible.
 - Persistence — schema and queries live in `@finch/db`. This package never imports a
   database driver (`domain-is-framework-free`, `.dependency-cruiser.cjs`).
 - Financial mathematics — that is `@finch/financial-engine`.
-- Vendor-shaped identity/session concerns (tokens, OIDC claims) — those belong to an
-  adapter in the composition root that consumes a domain-defined port, once one exists.
+- Concrete, vendor-shaped implementations of `AuthSessionPort` or `EventPublisher`
+  (OIDC verification, SQS/EventBridge publishing) — those are adapters at a
+  composition root (`apps/api/src/infrastructure/**`, `apps/worker`), never here.
 
 ## Invariants
 
@@ -52,9 +57,10 @@ the composition root that wires it in.
 ## Tests
 
 `src/tenancy.test.ts` covers the README §9 harness (owner allowed / membership without
-grant denied / revoked member denied / other workspace denied) at the entity level. See
-`@finch/authorization` for the relational policy tests once that package exists.
+grant denied / revoked member denied / other workspace denied) at the entity level —
+see `@finch/authorization` for the relational policy tests. `src/auth-session.test.ts`
+covers session expiry and sandbox-environment eligibility.
 
 ## Unblocked by
 
-FIN-017, FIN-018, FIN-019, FIN-020
+FIN-017, FIN-018, FIN-019, FIN-020, FIN-021
