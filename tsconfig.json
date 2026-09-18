@@ -13,6 +13,9 @@
     },
     {
       "path": "./packages/domain/tsconfig.build.json"
+    },
+    {
+      "path": "./packages/observability/tsconfig.build.json"
     }
   ]
 }

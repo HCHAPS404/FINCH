@@ -2,3 +2,9 @@ packages:
   - "apps/*"
   - "packages/*"
   - "jurisdictions/*"
+allowBuilds:
+  # protobufjs is a transitive dep of the OTel OTLP exporters (@finch/observability),
+  # pulled in for its protobuf type definitions. FINCH uses the default JSON OTLP
+  # encoding, not protobuf, so its install script buys us nothing — denied rather than
+  # run unreviewed (README §43: dependency scripts are opt-in, not implicit).
+  protobufjs: false

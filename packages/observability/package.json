@@ -2,9 +2,37 @@
   "name": "@finch/observability",
   "version": "0.0.0",
   "private": true,
-  "description": "OpenTelemetry bootstrap, structured logging with redaction, correlation. README \u00a746.",
+  "description": "OpenTelemetry bootstrap, structured logging with redaction, correlation. README §46.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
   "dependencies": {
-    "@finch/contracts": "workspace:*"
+    "@finch/contracts": "workspace:*",
+    "@opentelemetry/api": "1.9.1",
+    "@opentelemetry/exporter-metrics-otlp-http": "0.222.0",
+    "@opentelemetry/exporter-trace-otlp-http": "0.222.0",
+    "@opentelemetry/sdk-metrics": "2.11.0",
+    "@opentelemetry/sdk-node": "0.222.0",
+    "@opentelemetry/sdk-trace-base": "2.11.0",
+    "pino": "10.3.1"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
   }
 }
