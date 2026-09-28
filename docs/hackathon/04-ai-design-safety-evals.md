@@ -15,7 +15,7 @@ Invariantes que este diseño preserva (AGENTS.md §5, Constitución §4.2):
 
 | Nivel (`ModelTier`) | Modelo (ID a confirmar con `/v1/models`)                          | Cuándo                                                                                                                                               | Parámetros guía                                                                     |
 | ------------------- | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `FAST`              | `nvidia/Nemotron-3_5-Lightning`                                   | Clasificación de intención, extracción de entidades, detección de idioma, resúmenes de Telegram, preguntas simples sin cálculo.                      | temperatura 0–0,2; structured output obligatorio.                                   |
+| `FAST`              | `nvidia/Nemotron-3_5-Lightning`                                   | Clasificación de intención, extracción de entidades, detección de idioma, notificaciones bancarias, briefing, preguntas simples sin cálculo.         | temperatura 0–0,2; structured output obligatorio.                                   |
 | `AGENT`             | `nvidia/nemotron-3-super-120b-a12b`                               | Bucle de agente con tool calling; redacción de Decision Cards y cartas.                                                                              | temperatura 0,2–0,4; máximo 6 pasos de herramientas por turno.                      |
 | `DEEP`              | `nvidia/Nemotron-3-Ultra-550b-a55b`                               | Segunda opinión sobre Decision Cards y acciones R2; juez en evals; casos que el router marca "complejos" (varias deudas o planes a más de 12 meses). | Solo structured output (veredicto + hallazgos); presupuesto separado.               |
 | `VISION`            | Nemotron multimodal (Nano VL u Omni): **VERIFICAR**               | Documentos en imagen.                                                                                                                                | Salida estructurada; todo campo queda `ESTIMATED` hasta que el usuario lo confirma. |
@@ -180,7 +180,8 @@ reales (no los objetivos). Una tabla honesta con 93 % convence más que un "100 
   fecha y resultados de eval asociados.
 - Cambiar un prompt crea una versión nueva; el log de auditoría guarda `promptId@version` por llamada.
 - Prompts iniciales: `router@1`, `agent.system@1`, `decision_card.narrative@1`,
-  `second_opinion@1`, `doc_extract.offer@1`, `telegram.digest@1`, `eval.judge@1`.
+  `second_opinion@1`, `doc_extract.offer@1`, `doc_extract.receipt@1`, `doc_extract.vault@1`,
+  `notification.parse@1`, `query.dsl@1`, `payday.explain@1`, `briefing.digest@1`, `eval.judge@1`.
 
 ## 9. Auditoría de cada llamada a modelo (tabla `ai_calls`)
 

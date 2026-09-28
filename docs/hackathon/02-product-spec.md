@@ -1,165 +1,148 @@
-# 02 — Especificación de producto: FINCH, CFO personal
+# 02 — Especificación de producto: FINCH, CFO personal premium
 
-Nivel de riesgo (README §18): la hackathon entrega capacidades **R0–R1** (información e
-inteligencia financiera) y una sola **R2 acotada**: borradores de documentos que el usuario envía
-por su cuenta. **R3/R4 fuera de alcance.**
+> Alcance funcional completo y niveles (H / P): **[08-feature-catalog.md](08-feature-catalog.md)**.
+> Este documento describe la **experiencia**: visión, principios premium, personas, navegación,
+> flujos y skills.
 
-Capacidad regulatoria (README §37): `INFORMATION`, `COMPARISON`, `SIMULATION`. La recomendación
-personalizada (`PERSONALIZED_RECOMMENDATION`) se presenta como **simulación educativa con
-supuestos explícitos**, no como asesoría. Ver aviso legal en §7 y la decisión D-07 en 07.
+Nivel de riesgo (README §18): R0–R1 y **R2 acotada** (borradores, checklists, enlaces compartibles).
+**FINCH nunca mueve dinero.** Capacidad regulatoria (README §37): `INFORMATION`, `COMPARISON`,
+`SIMULATION`; lo personalizado se presenta como simulación educativa con supuestos explícitos
+(decisión D-07).
 
 ---
 
-## 1. Personas del demo (sintéticas, README §80)
+## 1. Visión
 
-Se implementan 3 de las 7 personas de `fixtures/colombia/` para el demo. Las demás quedan para evals.
+**FINCH es la app que administra tu vida financiera como lo haría un CFO personal**: sabe cuándo te
+llega el dinero, lo reparte con criterio, controla tus tarjetas, te frena antes de una mala compra,
+encuentra dinero que estás perdiendo, busca mejores productos en el mercado real y protege a tu
+hogar — y **cada número que te muestra viene con su recibo**.
 
-| Persona                                       | Perfil                                                                                          | Historia del demo                                                                                                                              |
-| --------------------------------------------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `credit_card_heavy`: **Laura, 29, Medellín**  | Salario de COP 4,2 M; 2 tarjetas (una con tasa cercana a la usura); crédito de libre inversión. | _Estrella del video._ Pregunta si le conviene una compra de cartera; FINCH calcula el ahorro con recibos. El Vigía detecta un cambio de usura. |
-| `freelancer_variable`: **Andrés, 34, Bogotá** | Ingresos variables; arriendo; metas de ahorro.                                                  | Panorama de 30 días: déficit probable el día 18 y cuánto puede gastar hoy.                                                                     |
-| `household_shared`: **Hogar Pérez**           | Dos ingresos; gastos compartidos; meta de cuota inicial.                                        | Memoria de metas compartidas; plan de ahorro.                                                                                                  |
+- **Autónoma:** todo ocurre dentro de FINCH (bandeja, push, calendario, bóveda). Correo, SMS,
+  WhatsApp o Telegram son extras opcionales para traer o enviar información (ADR-0039).
+- **Global-ready, Colombia-deep:** multimoneda y FX en vivo para todos; reglas colombianas a fondo;
+  un segundo país en mínimo viable demuestra la escalabilidad.
+- **Personal AI de verdad:** siempre activa, privada, con memoria controlable y skills reutilizables.
 
-Los datos de las personas son 100 % sintéticos y no contienen PII real (Constitución §4.18).
+## 2. Principios premium (criterios de aceptación de diseño para todas las pantallas)
 
-## 2. Funcionalidades (MoSCoW)
+| Principio                    | Criterio verificable                                                                                                                   |
+| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| **Confianza visible**        | Toda cifra es clicable → recibo; badges de verdad con texto + ícono (Verificado · Declarado · Calculado · Estimado · Desactualizado).  |
+| **Velocidad**                | Interacciones locales < 100 ms (UI optimista); primer token de IA < 1,5 s (streaming); Lighthouse ≥ 90 en performance y accesibilidad. |
+| **Calma por defecto**        | Máximo 1 notificación push diaria salvo alertas críticas; horario silencioso; cada notificación responde "¿qué gano con abrirla?".     |
+| **Primer valor en 60 s**     | Onboarding de 3 preguntas (ingreso, fecha de pago, deuda principal) → primer plan del mes.                                             |
+| **Identidad**                | Verde FINCH, tipografía editorial, microanimaciones de 150–250 ms, ilustración con el motivo del pájaro, modo oscuro de primera clase. |
+| **Estados diseñados**        | Vacío, cargando (skeletons), error, sin conexión, desactualizado — diseñados para cada pantalla.                                       |
+| **Accesibilidad**            | Navegación por teclado, lector de pantalla, contraste AA, nada comunicado solo por color (README §34–35).                              |
+| **Criterio**                 | FINCH dice "vas bien, no hagas nada" cuando corresponde.                                                                               |
+| **Privacidad como producto** | "Lo que FINCH sabe de ti", exportar/borrar en un clic, sin publicidad ni venta de datos.                                               |
 
-### MUST: sin esto no hay envío competitivo
+## 3. Personas del demo (sintéticas, README §80)
 
-| ID   | Funcionalidad                         | Descripción                                                                                                                                                                                                                                                                                  | Criterio de aceptación                                                                                                                                                                   |
-| ---- | ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| M-1  | **Workspace y personas**              | "Probar como Laura/Andrés/Hogar" sin registro (sesión aislada y efímera) y "Mi espacio privado" (datos manuales o extracto).                                                                                                                                                                 | Un jurado entra al demo y ve datos en < 10 s sin crear cuenta.                                                                                                                           |
-| M-2  | **Motor financiero Colombia**         | Conversión EA↔MV↔NAMV (vencida y anticipada), cuota francesa, tabla de amortización, costo total con seguros, cuota de manejo y GMF parametrizable, verificación de usura, flujo de caja a 30 días, _safe-to-spend_, plan de pago avalancha/bola de nieve, comparación de compra de cartera. | Cada fórmula está registrada en el Formula Registry con versión y _golden vectors_ verificados en una fuente independiente (hoja de cálculo auditada). `pnpm financial:verify` en verde. |
-| M-3  | **Market Truth (Tavily)**             | Tasa de usura vigente, IBR/TRM de referencia y ofertas públicas de compra de cartera. Dominios oficiales en lista blanca, extracción determinista, frescura y procedencia.                                                                                                                   | Cada valor de mercado muestra fuente (URL), fecha de consulta y frescura. Si falla la fuente: badge _STALE_ y último valor conocido, nunca un valor inventado.                           |
-| M-4  | **Agente con skills**                 | Nemotron Super orquesta con tool calling sobre las skills; Lightning enruta y clasifica; Ultra da la segunda opinión.                                                                                                                                                                        | En la eval E2, ≥ 90 % de tool calls correctos (objetivo; se reporta el real).                                                                                                            |
-| M-5  | **Proof-carrying answers**            | Toda cifra en una respuesta referencia un recibo; el verificador bloquea cifras sin recibo. Las cifras en la UI son clicables y abren el recibo (fórmula, versión, entradas, fuente).                                                                                                        | E3: 0 cifras sin respaldo en producción. La tasa previa al verificador se publica.                                                                                                       |
-| M-6  | **Decision Cards**                    | Estructura de README §17: qué se detectó, por qué importa, impacto, datos, supuestos, frescura, confianza, alternativas, riesgos, siguiente acción, conflicto de interés ("FINCH no recibe comisión").                                                                                       | Persistida como estructura, no como prosa. Renderizada en web y Telegram.                                                                                                                |
-| M-7  | **Vigía siempre activo**              | Job diario (Nebius Serverless Job) que recalcula el Twin, consulta Market Truth, detecta eventos (cambio de usura, déficit próximo, oportunidad de compra de cartera) y crea Decision Cards en la bandeja.                                                                                   | Se puede disparar manualmente en el demo ("Ejecutar Vigía ahora") y queda log visible con hora, modelo y costo.                                                                          |
-| M-8  | **Memoria persistente y controlable** | Financial Twin (hechos con clase de verdad) + memoria semántica (metas, preferencias, contexto) con embeddings. Pantalla "Lo que FINCH sabe de ti": ver, corregir y olvidar.                                                                                                                 | Olvidar un recuerdo lo excluye de las respuestas siguientes (test E2E).                                                                                                                  |
-| M-9  | **Privacidad por diseño**             | Consentimiento por fuente, redacción de PII antes del LLM, auditoría, export JSON, borrado del workspace.                                                                                                                                                                                    | La eval E4 incluye fuga de PII: 0 fugas de cédula o número de cuenta al proveedor (se verifica en el log del gateway).                                                                   |
-| M-10 | **Scorecard de evals**                | Harness E1–E6 con resultados publicados en README/`evals/`.                                                                                                                                                                                                                                  | Se corre en CI (subconjunto) y completo con batch inference.                                                                                                                             |
-| M-11 | **Bilingüe EN/ES**                    | UI y respuestas en el idioma del usuario; demo en inglés; formato COP `es-CO`.                                                                                                                                                                                                               | Cambio de idioma sin recargar el estado.                                                                                                                                                 |
+| Persona                                                      | Perfil                                                                                                                                 | Funciones que luce                                                                                                                          |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Laura, 29, Medellín** (`credit_card_heavy`) — **estrella** | Salario COP 4,2 M el día 30; 2 tarjetas (una cerca de la usura); crédito de libre inversión; suscripciones olvidadas; SOAT por vencer. | B1 Payday Autopilot, B3 tarjetas, C1 ¿me lo puedo permitir?, D1 compra de cartera + CDT, D2 suscripciones, E1 recibos, E2 bóveda, F2 radar. |
+| **Andrés, 34, Bogotá** (`freelancer_variable`)               | Ingresos variables en COP **y USD** (clientes del exterior); arriendo; metas.                                                          | B6 ingresos múltiples, G3 multimoneda/FX, D5 remesas, C3 modo tormenta, F5 ¿debo declarar renta?                                            |
+| **Hogar Pérez** (`household_shared`)                         | Pareja con dos ingresos; gastos comunes; meta de cuota inicial.                                                                        | F1 finanzas compartidas, C4 metas con trade-offs, B5 cierre de mes.                                                                         |
+| **Sofía, 31, segundo país** (paquete G4)                     | Persona mínima del segundo país.                                                                                                       | G4, G3.                                                                                                                                     |
 
-### SHOULD: suben mucho el puntaje
+## 4. Navegación (arquitectura de información)
 
-| ID  | Funcionalidad                   | Descripción                                                                                                                                                                                                                                                                                                            |
-| --- | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| S-1 | **Telegram**                    | Bot para preguntar, recibir alertas del Vigía y resumen semanal. Vinculación con código de un solo uso. Es el "across your daily workflows".                                                                                                                                                                           |
-| S-2 | **Documentos**                  | Subir una oferta de crédito o un extracto (PDF/imagen) → cuarentena → extracción con modelo multimodal Nemotron (si está disponible en Token Factory; si no, texto PDF + Lightning) → **confirmación humana** (queda `USER_ASSERTED`) → comparación. Constitución §4.7: un documento no confirmado no activa acciones. |
-| S-3 | **Acciones R2**                 | Borrador de carta de compra de cartera, de renegociación de tasa o de derecho de petición, en PDF, con cifras con recibo. El usuario la descarga y la envía él mismo.                                                                                                                                                  |
-| S-4 | **Servidor MCP "FINCH Skills"** | Expone las skills del motor (solo lectura y cálculo) vía MCP para agentes personales (Hermes Agent, OpenClaw/NemoClaw). Demo de 10 s en el video.                                                                                                                                                                      |
+Barra principal (5 destinos, móvil primero):
 
-### COULD: si sobra tiempo (semana 3)
+1. **Hoy** — briefing (G2), bandeja de Decision Cards (A6), próximos pagos (B4), safe-to-spend.
+2. **Dinero** — sobres (B2), tarjetas (B3), cuentas e ingresos (B6), patrimonio (B8), salud (B7).
+3. **FINCH** (botón central) — conversación con el agente: preguntar, simular (C1–C5), buscar (E3),
+   capturar (cámara E1).
+4. **Oportunidades** — mercado (D1), suscripciones (D2), anomalías (D3), gastos fijos (D4), remesas (D5).
+5. **Yo** — metas (C4), hogar compartido (F1), protección (F2), bóveda (E2), hábitos (G1),
+   pasaporte (F3), mis casos (F4), impuestos (F5), lo que FINCH sabe de ti (A7), Vigía (A11),
+   canales y ajustes (H1–H3).
 
-| ID  | Funcionalidad                                                                                                                                                                     |
-| --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| C-1 | **Inferencia privada:** Nemotron Lightning en un Nebius Serverless Endpoint propio para extracción de documentos sensibles ("tus extractos nunca salen de tu endpoint dedicado"). |
-| C-2 | **Fine-tuning LoRA** de Lightning para extracción de ofertas colombianas (post-training de Token Factory) con dataset sintético.                                                  |
-| C-3 | Notas de voz en Telegram.                                                                                                                                                         |
+Detalle transversal: **panel de recibo** deslizable desde cualquier cifra; **segunda opinión** visible
+en cada Decision Card.
 
-### WON'T (en la hackathon)
+## 5. Flujos principales
 
-Open finance o conexión bancaria real, pagos, apps nativas, multi-país, admin completo y
-autenticación con IdP definitivo (ADR-0015 sigue abierto).
-
-## 3. Flujos principales
-
-### F1: "¿Me conviene la compra de cartera?" (Slice 1 del README §83, extendido)
+### F-A. "Me llegó el sueldo" (estrella del video)
 
 ```text
-Usuario (Laura): "Mi tarjeta Visa me cobra 2,3 % mensual. Bancolombia… no, 'Banco X' me ofrece
-                  compra de cartera al 1,6 % MV a 36 meses con seguro. ¿Me conviene?"
-  → Lightning: intención = COMPARE_REFINANCE; entidades: tasas y plazo; idioma
-  → Super (agente):
-       twin.get_snapshot()                        → saldo y cuota actual de la tarjeta [OBSERVED/USER_ASSERTED]
-       market.get_reference_rate('usura_consumo') → tasa de usura vigente [PROVIDER vía Tavily, URL SFC]
-       finance.convert_rate(2.3% MV → EA)         → recibo R1
-       finance.check_usury(EA, usura)             → recibo R2
-       finance.total_cost_of_credit(oferta)       → recibo R3 (incluye seguros)
-       finance.compare_offers(actual, oferta)     → recibo R4 (ahorro total, punto de equilibrio)
-       cards.create_decision_card(...)            → Decision Card estructurada
-  → Verificador numérico: cada cifra ↔ recibo (si falla: reintento con feedback, luego plantilla)
-  → Ultra (segunda opinión): revisa supuestos y omisiones → "aprobada" o "aprobada con advertencias"
-  → UI: Decision Card con cifras clicables, badges de verdad y botón "Redactar carta al banco" (S-3)
+Laura comparte la notificación del banco (o toca "Me llegó un ingreso")
+  → L extrae monto/fecha/origen → confirmación de 1 toque
+  → budget.allocate: obligaciones → mínimos → págate primero → colchón → metas → libre
+  → S explica el plan con marcadores → verificador → U: "APPROVE_WITH_WARNINGS: la tarjeta A
+    está a 1,1 pp de la usura; considera compra de cartera"
+  → Plan del mes con recibos + checklist de ejecución + Decision Card "compra de cartera"
+  → sobres creados; calendario actualizado; briefing de mañana preparado
 ```
 
-> Nota: en el video y el demo **no** se usan nombres de bancos reales (regla de marcas de terceros).
-> Se usan "Banco A/B/C". Las ofertas de mercado reales vía Tavily se muestran con su URL como
-> fuente citada, sin logos.
+### F-B. "¿Me lo puedo permitir?"
 
-### F2: "Mi panorama de 30 días" (Slice 2)
+Texto o foto del producto → C1 → veredicto (sí / sí con ajuste / espera hasta fecha / no
+recomendado) + contado vs cuotas con intereses reales → opción "crear meta" si conviene esperar.
 
-Twin → forecast determinista con ingresos y obligaciones recurrentes → alerta de déficit (día y
-monto) → _safe-to-spend_ de hoy → Decision Card "mueve el pago X al día Y" (solo simulación).
+### F-C. Encontrar dinero
 
-### F3: "Sube una oferta" (Slice 3)
+Importar extracto o reenviar correos → D2 detecta recurrentes y una subida de precio → D3 marca un
+cargo duplicado → F4 redacta el reclamo → D1 encuentra mejor CDT para el colchón.
 
-Documento → cuarentena (tipo MIME, tamaño, sin macros) → extracción estructurada → pantalla de
-confirmación campo por campo → comparación (F1).
+### F-D. Mercado y compra de cartera (flujo original, ampliado)
 
-### F4: Vigía
+Pregunta → T trae usura vigente y ofertas → motor: conversión, costo total, usura, comparación →
+Decision Card con ahorro en pesos → U revisa → borrador de solicitud (F4).
 
-Cron diario (06:00 COT) → por workspace con consentimiento: recalcular → consultar Market Truth
-(con caché) → reglas deterministas de eventos → Decision Card + notificación (web y Telegram) → log
-de auditoría con costo.
+### F-E. Captura y bóveda
 
-### F5: Memoria
+Foto de recibo → E1 extrae → confirmar → gasto en su sobre. Foto del SOAT → E2 guarda, extrae
+vencimiento → recordatorio 30/7/1 días.
 
-"Recuerda que quiero pagar la tarjeta antes de diciembre" → `memory.remember` (el usuario lo ve en
-"Lo que FINCH sabe de ti") → se usa en F1/F2 como restricción → "olvida eso" → `memory.forget`.
+### F-F. Hogar compartido
 
-## 4. Pantallas (web, responsive)
+Pareja Pérez: cada quien decide qué comparte → gastos comunes con división proporcional al ingreso
+→ liquidación mínima → meta común de cuota inicial con trade-offs.
 
-1. **Landing / selector de persona**: logo, tagline, "Probar como Laura", "Mi espacio privado",
-   aviso de privacidad de una línea.
-2. **Inicio (Twin)**: liquidez, deudas, próximos pagos, frescura de datos y bandeja de Decision Cards.
-3. **Chat con FINCH**: respuestas con cifras subrayadas → panel lateral de recibo.
-4. **Decision Card (detalle)**: secciones de README §17, alternativas y acciones.
-5. **Recibo**: fórmula (id@versión), entradas con clase de verdad, salida, fuentes (URL y fecha) y
-   hash de entradas.
-6. **Mercado**: tasa de usura, IBR y TRM con fuente y frescura; ofertas encontradas.
-7. **Lo que FINCH sabe de ti**: hechos y recuerdos; editar, olvidar, exportar, borrar todo.
-8. **Vigía**: historial de ejecuciones (hora, eventos, modelos usados, costo) y "ejecutar ahora".
-9. **Documentos**: subida → confirmación.
-10. **Ajustes**: idioma, fuentes activadas, Telegram, consentimiento.
+### F-G. Tormenta
 
-## 5. Skills (tools del agente)
+"¿Y si me quedo sin trabajo?" → C3 runway con y sin recortes → plan semana a semana → U revisa →
+Decision Cards de acciones (pedir periodo de gracia, pausar metas).
 
-Cada skill tiene: nombre estable, versión, esquema de entrada y salida (zod → JSON Schema para
-tool calling), clase de verdad de su salida y si produce recibo.
+### F-H. Vigía y briefing
 
-| Skill                                   | Tipo                                          | Salida                                     | Recibo                     |
-| --------------------------------------- | --------------------------------------------- | ------------------------------------------ | -------------------------- |
-| `twin.get_snapshot`                     | lectura                                       | snapshot inmutable con checksum            | — (referencia al snapshot) |
-| `twin.record_fact`                      | escritura (requiere confirmación del usuario) | hecho `USER_ASSERTED`                      | —                          |
-| `finance.convert_rate`                  | cálculo                                       | tasa convertida                            | ✅                         |
-| `finance.amortization_schedule`         | cálculo                                       | tabla                                      | ✅                         |
-| `finance.total_cost_of_credit`          | cálculo                                       | costo total, tasa efectiva real            | ✅                         |
-| `finance.check_usury`                   | cálculo                                       | cumple / excede / margen                   | ✅                         |
-| `finance.compare_offers`                | cálculo                                       | ahorro, punto de equilibrio                | ✅                         |
-| `finance.forecast_30d`                  | cálculo                                       | serie diaria, déficit                      | ✅ (`ESTIMATED`)           |
-| `finance.safe_to_spend`                 | cálculo                                       | monto                                      | ✅                         |
-| `finance.debt_payoff_plan`              | cálculo                                       | plan avalancha/bola de nieve               | ✅                         |
-| `market.get_reference_rate`             | lectura externa (Tavily)                      | tasa + procedencia                         | ✅ (fuente)                |
-| `market.search_offers`                  | lectura externa (Tavily)                      | ofertas + URLs                             | ✅ (fuente)                |
-| `docs.extract_offer`                    | IA (multimodal)                               | campos `ESTIMATED` pendientes de confirmar | —                          |
-| `cards.create_decision_card`            | escritura                                     | Decision Card                              | referencia recibos         |
-| `actions.draft_letter`                  | escritura                                     | PDF borrador                               | referencia recibos         |
-| `memory.remember` / `recall` / `forget` | memoria                                       | recuerdo                                   | —                          |
-| `reminders.schedule`                    | escritura                                     | recordatorio                               | —                          |
+06:00 local → recalcula todo → consulta mercado (caché) → eventos → cards → push de la app con
+mínimo PII → briefing en "Hoy" (y por correo si el usuario lo activó).
 
-## 6. Métricas de producto que se muestran
+## 6. Skills del agente (tools)
 
-- Tiempo hasta la primera Decision Card (< 60 s desde la landing).
+Cada skill: nombre estable, versión, esquema zod → JSON Schema, clase de verdad de salida, recibo.
+
+| Grupo              | Skills                                                                                                                                                                    |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Twin y memoria     | `twin.get_snapshot` · `twin.record_fact`* · `memory.remember/recall/forget`                                                                                               |
+| Crédito (CO)       | `finance.convert_rate` · `finance.amortization_schedule` · `finance.total_cost_of_credit` · `finance.check_usury` · `finance.compare_offers` · `finance.debt_payoff_plan` |
+| Administración     | `budget.allocate` · `budget.envelope_state` · `cards.status` · `calendar.upcoming` · `month.close` · `health.score` · `networth.compute`                                  |
+| Decisión           | `purchase.afford` · `scenario.project` · `stress.runway` · `goals.plan` · `invest.project`                                                                                |
+| Mercado (T)        | `market.get_reference_rate` · `market.search_credit` · `market.search_deposits` · `market.search_plans` · `market.remittance_quotes` · `fx.rate`                          |
+| Detección          | `recurring.detect` · `anomaly.scan`                                                                                                                                       |
+| Captura            | `docs.extract_receipt`* · `docs.extract_document`* · `import.statement`* · `query.run` (DSL acotado)                                                                      |
+| Hogar y protección | `split.settle` · `protection.gaps`                                                                                                                                        |
+| Acciones R2        | `cards.create_decision_card` · `actions.draft_letter` · `passport.create_link`* · `reminders.schedule` · `cases.track`                                                    |
+| Impuestos (CO)     | `tax.co.must_file` · `tax.co.cdt_withholding`                                                                                                                             |
+
+`*` = requiere confirmación explícita del usuario antes de persistir o compartir.
+
+## 7. Métricas de producto que se muestran en el demo
+
+- Tiempo de "me llegó el sueldo" a plan del mes con recibos (< 10 s).
 - % de cifras con recibo (100 %).
-- Latencia p50/p95 por turno y costo promedio por conversación (USD) por nivel de modelo.
-- Ahorro total simulado identificado para las personas del demo (COP), **etiquetado como simulación**.
+- Ahorro anual identificado para Laura (compra de cartera + suscripciones + CDT), **etiquetado como
+  simulación**.
+- Latencia p50/p95 y costo por conversación por nivel de modelo.
+- Precisión de extracción de recibos y documentos antes de confirmación.
 
-## 7. Aviso legal (copy base, a validar)
+## 8. Aviso legal (copy base, a validar — D-07)
 
 > _FINCH ofrece información y simulaciones educativas basadas en los datos que tú proporcionas y en
-> fuentes públicas citadas. No es asesoría financiera, legal ni tributaria personalizada, ni una
-> oferta de productos. FINCH no recibe comisiones de ninguna entidad y no mueve tu dinero. Verifica
-> las condiciones finales con tu entidad financiera._
-
-Versión en inglés en el kit (06). La redacción final requiere revisión legal (07, D-07).
+> fuentes públicas citadas. No es asesoría financiera, de inversión, legal ni tributaria
+> personalizada, ni una oferta de productos. FINCH no recibe comisiones que alteren sus comparaciones
+> y no mueve tu dinero. Verifica las condiciones finales con cada entidad._

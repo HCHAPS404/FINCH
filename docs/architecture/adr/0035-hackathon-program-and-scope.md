@@ -49,7 +49,7 @@ Two new trust boundaries and one new core vendor are introduced and recorded her
 requires:
 
 - **Tavily** (public web content entering the system as untrusted data);
-- a **Telegram** webhook channel;
+- an **inbound email** channel (bank notifications, e-invoices) behind the Channel Hub (ADR-0039);
 - an optional **MCP server** (`apps/mcp`) exposing calculation-only skills.
 
 ## Alternatives considered
@@ -76,11 +76,11 @@ requires:
 
 ### Neutral / accepted trade-offs
 
-- Web plus Telegram only; the native clients (ADR-0004, ADR-0006) are deferred.
+- Installable web app (PWA) with its own push only; the native clients (ADR-0004, ADR-0006) are deferred.
 
 ## Security impact
 
-New inbound channel (Telegram webhook), new outbound dependency (Tavily) and public demo
+New inbound channel (email, ADR-0039), new outbound dependency (Tavily) and public demo
 exposure. Mitigations: signed webhook secret, content treated as data, rate limits, a credit
 guard and ephemeral demo workspaces. A threat model is required: `docs/architecture/threat-models/hackathon-demo.md`.
 

@@ -14,7 +14,8 @@ name: PR Gate
 
 on:
   pull_request:
-    branches: [main]
+    # ADR-0040: weekly stage branches integrate task branches before a milestone merge to main.
+    branches: [main, "stage/**", "area/**"]
   push:
     branches: [main]
 
