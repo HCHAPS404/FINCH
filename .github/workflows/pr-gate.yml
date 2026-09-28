@@ -14,7 +14,8 @@ name: PR Gate
 
 on:
   pull_request:
-    branches: [main]
+    # ADR-0040: weekly stage branches integrate task branches before a milestone merge to main.
+    branches: [main, "stage/**", "area/**"]
   push:
     branches: [main]
 
@@ -188,6 +189,10 @@ jobs:
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      # sbom-action writes output-file with a plain file open; the directory must exist.
+      - name: Prepare artifacts directory
+        run: mkdir -p artifacts
 
       - name: Generate SBOM
         uses: anchore/sbom-action@3ad7283483fc7af8ff2b4ea19663c2d5ca935e26 # v0.24.2

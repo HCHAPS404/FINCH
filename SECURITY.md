@@ -29,7 +29,7 @@ Out of scope at present: cloud infrastructure (not yet provisioned), payment rai
 FINCH follows OWASP ASVS 5.0.0 for application controls, OWASP API Security Top 10
 (2023) and OWASP MASVS/MASTG for mobile. Features at risk tier R1 and above carry a
 threat model; R3/R4 require independent review before general availability.
-See `README.md` §38–§39 and §74.
+See `docs/architecture/CONSTITUTION.md` §38–§39 and §74.
 
 ## Invariants we will not trade away
 

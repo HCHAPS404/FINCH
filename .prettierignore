@@ -1,7 +1,7 @@
-# README.md is the project's normative architecture authority, authored by the
+# The Constitution is the project's normative architecture authority, authored by the
 # human maintainer. Prettier must not churn it: reformatting a constitution
 # document produces noisy diffs over content nobody intended to change.
-README.md
+docs/architecture/CONSTITUTION.md
 
 node_modules/
 dist/

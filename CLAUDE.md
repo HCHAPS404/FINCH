@@ -4,8 +4,11 @@
 git authorization, architecture rules and escalation. This file adds only what is
 specific to working with Claude in this repository.
 
-`README.md` is the architecture authority. Accepted ADRs in `docs/architecture/adr/`
-supersede it where they explicitly say so.
+`docs/architecture/CONSTITUTION.md` is the architecture authority. Accepted ADRs in
+`docs/architecture/adr/` supersede it where they explicitly say so. Section references written as `README §N` anywhere in the repository refer to
+`docs/architecture/CONSTITUTION.md` §N (it was the root README until 2026-09-28, ADR-0040).
+The root `README.md` is the public product documentation; `README-DEVELOPERS.md` is the
+founders' working agreement.
 
 ---
 
@@ -40,7 +43,7 @@ change over a large plausible one.
 
 Before implementing anything non-trivial:
 
-1. Read the relevant `README.md` sections and any Accepted ADR that touches them.
+1. Read the relevant `CONSTITUTION.md` sections and any Accepted ADR that touches them.
 2. Verify current versions against the registry or official docs. Never from memory.
 3. State the risk tier (R0–R4) and what gates it implies (§74).
 4. Name the invariants the change must preserve.
