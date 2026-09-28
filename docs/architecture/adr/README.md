@@ -20,6 +20,9 @@ are explicitly marked **Outstanding** rather than filled with plausible-sounding
 An ADR that fabricates the reasoning behind a decision is worse than one that admits
 the reasoning is not yet written down.
 
+ADR-0035 to ADR-0038 are complete proposals for the hackathon program (`docs/hackathon/`),
+awaiting the founders' decision.
+
 ADR-0033 and ADR-0034 are complete records: they document decisions actually taken
 during the Foundation bootstrap, with the evidence that drove them.
 
@@ -61,6 +64,10 @@ during the Foundation bootstrap, with the evidence that drove them.
 | [ADR-0032](0032-feature-risk-tiers.md)                 | Five feature risk tiers R0 to R4                                             | Accepted | §18, §74                    |
 | [ADR-0033](0033-typescript-compiler-line.md)           | Pin TypeScript to the 6.0.x line, defer TypeScript 7                         | Accepted | §56, §57, §64               |
 | [ADR-0034](0034-node-runtime-and-toolchain-pinning.md) | Pin the Node runtime to 24.21.0 LTS and reproduce the toolchain via corepack | Accepted | §56, §81                    |
+| [ADR-0035](0035-hackathon-program-and-scope.md) | Nebius x NVIDIA hackathon as the first delivery program | Proposed | §76, §83, §84 |
+| [ADR-0036](0036-ai-runtime-nebius-token-factory-nemotron.md) | AI runtime on Nebius Token Factory with tiered NVIDIA Nemotron models | Proposed | §30, §112 |
+| [ADR-0037](0037-open-source-license.md) | Apache-2.0 license and open-core boundary | Proposed | §96 |
+| [ADR-0038](0038-hackathon-demo-deployment-topology.md) | Hackathon demo deployment topology | Proposed | §41, §79 |
 
 ## Open decisions
 
@@ -69,7 +76,7 @@ strength, not a gap:
 
 - ADR-0008 — OpenAPI 3.1.x vs 3.2.x, pending codegen compatibility testing
 - ADR-0015 — the OIDC identity provider
-- ADR-0018 — the AI runtime provider mix
+- ADR-0018 — the AI runtime provider mix (ADR-0036 proposes Nebius Token Factory + Nemotron)
 - Initial Open Finance provider, document extraction provider, payment partner
 - Temporal vs Step Functions, when the first durable workflow appears
 - Redis / OpenSearch / graph / warehouse adoption triggers
