@@ -26,9 +26,9 @@
 
 **Riesgo del Plan A:** la descripción del track menciona NemoClaw, OpenShell, Hermes Agent y Nebius
 Serverless. Dice "tools **such as**", así que no son obligatorios, pero usar al menos uno refuerza
-el encaje. Mitigación: se usa **Nebius Serverless** (Jobs para el Vigía), y como _should_ se expone
+el encaje. Mitigación: se usa **Nebius Serverless** (Jobs para el Vigía), y como perspectiva (P6) se expone
 FINCH como **servidor MCP** para que agentes personales (Hermes Agent, OpenClaw/NemoClaw) usen
-FINCH como "cerebro financiero" (ver 02, S-4). Así FINCH se integra con el ecosistema personal AI
+FINCH como "cerebro financiero" (ver 08, P6). Así FINCH se integra con el ecosistema personal AI
 de NVIDIA en lugar de competir contra él.
 
 ## 2. Posicionamiento
@@ -64,17 +64,17 @@ de NVIDIA en lugar de competir contra él.
 
 ## 3. Trazabilidad track → funcionalidad (va en el README para jurados)
 
-| Frase del Personal AI Track                      | Funcionalidad FINCH                                                                                                                                | Dónde se ve en el video |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| "always-on"                                      | **Vigía**: Serverless Job diario que recalcula el Twin, consulta usura y ofertas y genera Decision Cards proactivas; avisa por Telegram.           | Min 1:55                |
-| "private assistant"                              | Workspace por usuario, consentimiento explícito, redacción de PII antes de cualquier LLM, export/delete, "FINCH no entrena modelos con tus datos". | Min 0:20 y 2:25         |
-| "keeping your data under your control"           | Pantalla "Lo que FINCH sabe de ti": cada hecho con procedencia, editable y borrable; auditoría visible.                                            | Min 2:25                |
-| "persistent memory"                              | Financial Twin (hechos estructurados versionados) + memoria semántica de preferencias y metas (pgvector).                                          | Min 1:30                |
-| "reusable skills"                                | El motor financiero expuesto como skills versionadas (tools con esquema); también por MCP.                                                         | Min 1:05                |
-| "access to the tools and information you choose" | El usuario activa o desactiva fuentes: Tavily (web), documentos subidos, Telegram.                                                                 | Min 0:35                |
-| "carry out tasks across your daily workflows"    | Borradores de cartas, plan de pago, recordatorios, resumen semanal por Telegram.                                                                   | Min 2:05                |
-| "NVIDIA open source model"                       | Nemotron Lightning / Super / Ultra en Token Factory.                                                                                               | Todo el video           |
-| "Nebius Serverless"                              | Serverless Jobs para el Vigía (y opcionalmente un Serverless Endpoint para inferencia privada).                                                    | Min 1:55                |
+| Frase del Personal AI Track                      | Funcionalidad FINCH                                                                                                                                                    | Dónde se ve en el video |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| "always-on"                                      | **Vigía**: Serverless Job diario que recalcula el Twin, consulta usura y ofertas y genera Decision Cards proactivas y el briefing; avisa con el push de la propia app. | Min 1:55                |
+| "private assistant"                              | Workspace por usuario, consentimiento explícito, redacción de PII antes de cualquier LLM, export/delete, "FINCH no entrena modelos con tus datos".                     | Min 0:20 y 2:25         |
+| "keeping your data under your control"           | Pantalla "Lo que FINCH sabe de ti": cada hecho con procedencia, editable y borrable; auditoría visible.                                                                | Min 2:25                |
+| "persistent memory"                              | Financial Twin (hechos estructurados versionados) + memoria semántica de preferencias y metas (pgvector).                                                              | Min 1:30                |
+| "reusable skills"                                | El motor financiero expuesto como skills versionadas (tools con esquema); también por MCP.                                                                             | Min 1:05                |
+| "access to the tools and information you choose" | El usuario activa o desactiva fuentes y canales: Tavily (web), documentos y bóveda, correo de entrada, calendario.                                                     | Min 0:35                |
+| "carry out tasks across your daily workflows"    | Payday Autopilot (plan del mes y checklist), recibos por foto, bóveda con vencimientos, hogar compartido, cartas y reclamos, briefing diario.                          | Min 2:05                |
+| "NVIDIA open source model"                       | Nemotron Lightning / Super / Ultra en Token Factory.                                                                                                                   | Todo el video           |
+| "Nebius Serverless"                              | Serverless Jobs para el Vigía (y opcionalmente un Serverless Endpoint para inferencia privada).                                                                        | Min 1:55                |
 
 ## 4. Cómo se maximiza cada criterio
 
@@ -91,14 +91,14 @@ de NVIDIA en lugar de competir contra él.
 
 ### Design
 
-- Experiencia completa: onboarding → Twin → pregunta → Decision Card → recibo → acción → Vigía → Telegram.
+- Experiencia completa y autónoma: onboarding → "me llegó el sueldo" → plan del mes → decisión → recibo → acción → Vigía → push de la app.
 - Sistema de diseño con la marca (verde FINCH #0E4331), modo claro y oscuro, accesible (no depender
   solo del color: badges de clase de verdad con texto e ícono).
 - Bilingüe EN/ES, con demo en inglés para jurados y formato COP.
 
 ### Potential Impact
 
-- Audiencia concreta: adultos colombianos con crédito de consumo o tarjeta.
+- Audiencia concreta: personas asalariadas o independientes que reciben ingresos y deben administrar deudas, tarjetas y metas; profundidad en Colombia, preparado para más países.
 - El demo resuelve un caso real: "¿me conviene la compra de cartera?", con ahorro en COP calculado
   y demostrado.
 - Camino de negocio creíble (sin comisiones que sesguen el ranking, README §4.15).
@@ -117,6 +117,6 @@ de NVIDIA en lugar de competir contra él.
 - **Conexión bancaria real u open finance:** requiere contratos, certificaciones y tiempo. Se
   simula con personas sintéticas más carga de extractos (PDF/CSV) por el usuario.
 - **Movimiento de dinero (R3):** prohibido por ADR-0021 y por prudencia regulatoria.
-- **Apps nativas (Expo/Tauri):** la web responsive + Telegram cubren el "dispositivo" del video.
+- **Apps nativas (Expo/Tauri):** la PWA instalable con push propio cubre el "dispositivo" del video.
   Las apps nativas vuelven al roadmap de 2027.
 - **Infraestructura AWS de producción:** el demo usa Nebius más un hosting simple (ADR-0038).

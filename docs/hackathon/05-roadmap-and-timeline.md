@@ -1,173 +1,192 @@
 # 05 — Roadmap y cronograma
 
-**Supuesto de capacidad:** ~35–40 h/semana por fundador durante 4,5 semanas (≈ 300 h-persona en
-total). **Si alguno tiene menos de 20 h/semana**, se aplica el _corte de alcance_ del §5 desde el
-primer día. No se descubre en la semana 3.
-
-Convenciones: **H** = HELL, **N** = Nairy. Cada tarea tiene ID (`S<semana>-<n>`), responsable,
-fecha límite y "hecho cuando". Cada PR lo revisa **el otro fundador** (con dos humanos ya se cumple
-README §100: ninguna IA aprueba sus propios cambios críticos).
+Alcance: **[08-feature-catalog.md](08-feature-catalog.md)** — **45 funciones H** (todas completas); las **P**
+quedan documentadas. Convenciones: **H** = HELL, **N** = Nairy. Cada PR lo revisa **el otro
+fundador** (README §100). IDs de funciones (A1, B1…) según el catálogo.
 
 ---
 
+## 0. Capacidad vs esfuerzo (honesto)
+
+**Capacidad:** 2 personas × 8+ h/día × 6 días/semana × ~4,5 semanas (28-sep → 29-oct) ≈ **430 h**
+(≈ 500 h si trabajan también domingos). Claude y Cursor aceleran implementación y revisión, pero no
+reemplazan pruebas ni decisiones.
+
+**Esfuerzo estimado (h-persona):**
+
+| Bloque                                                                                      | h         | Dueño principal    |
+| ------------------------------------------------------------------------------------------- | --------- | ------------------ |
+| Fundación (repo, CI, deploy, licencia, créditos, walking skeleton)                          | 25        | H                  |
+| Sistema de diseño premium, app shell, navegación, PWA, onboarding                           | 45        | N                  |
+| Motor: crédito CO + finanzas personales (≈ 25 fórmulas con vectores)                        | 55        | H (+ N vectores)   |
+| AI Gateway, agente por niveles, recibos, verificador, Ultra, memoria                        | 45        | H                  |
+| Market Truth con Tavily (usura, tasas, créditos, depósitos, FX, planes, remesas, DIAN)      | 35        | H                  |
+| Captura: importación, recibos por foto, bóveda, correo de entrada                           | 40        | H + N              |
+| B — Administrar (Payday, sobres, tarjetas, calendario, cierre, ingresos, salud, patrimonio) | 55        | N (UI) + H (motor) |
+| C — Decidir (afford, ¿y si…?, tormenta, metas, inversión)                                   | 35        | N + H              |
+| D — Encontrar dinero (Opportunity, suscripciones, anomalías, gastos fijos, remesas)         | 48        | H + N              |
+| E3 buscador · F1 hogar · F2 protección · G1 hábitos · G2 briefing                           | 40        | H + N              |
+| F3 pasaporte · F4 derechos (8 casos) · F5 impuestos CO completo · G4 segundo país completo  | 55        | H + N              |
+| Vigía (Serverless Jobs), push de la app, .ics, correo completo (entrada y salida)           | 25        | H                  |
+| Privacidad, seguridad, threat model                                                         | 15        | H                  |
+| Evals (datasets, batch, Toloka, LangSmith)                                                  | 25        | N + H              |
+| Pulido, bug bash, video, README, Devpost                                                    | 35        | N + H              |
+| **Total**                                                                                   | **≈ 578** |                    |
+
+**Conclusión (honesta):** con todo en H, el esfuerzo (~580 h) supera la capacidad (430–500 h) en
+**~15–35 %**. Se vuelve viable con cuatro condiciones:
+
+1. **Trabajar 7 días** en las semanas 2 y 3 (≈ 500 h) y usar Claude/Cursor de forma intensiva para
+   implementación repetitiva (UI de catálogo, plantillas, tests), siempre con revisión humana.
+2. **Orden por valor:** el demo es enviable al final de cada semana.
+3. **Plan de contingencia (§5)** aplicado sin discusión el lunes que un hito no se cumpla: no se
+   elimina ninguna función, se **difiere su pulido** en un orden predefinido.
+4. Nada fuera del catálogo hasta el 29-oct.
+
 ## 1. Hitos
 
-| Hito                                  | Fecha                | Qué debe estar vivo en la URL pública                                                                              |
-| ------------------------------------- | -------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **H0: Walking skeleton**              | dom 4-oct            | Web + API desplegadas; `/api/health` muestra el modelo Nemotron; un chat responde vía Token Factory; CI en verde.  |
-| **H1: Primer slice con recibos**      | dom 11-oct           | Laura pregunta por la compra de cartera → respuesta con cifras clicables y recibos (tasa de usura cargada a mano). |
-| **H2: MUST completo, salvo el Vigía** | dom 18-oct           | F1, F2, F3 y F5 funcionando; Tavily en vivo; Decision Cards; segunda opinión Ultra.                                |
-| **H3: Release candidate**             | dom 25-oct           | Vigía en Nebius Serverless Jobs, Telegram, evals publicadas, pulido y README EN.                                   |
-| **H4: Code freeze**                   | mar 27-oct 18:00     | Solo cambios de bloqueo (P0).                                                                                      |
-| **H5: Envío**                         | jue 29-oct 18:00     | Devpost completo; tag `v0.1.0-hackathon`.                                                                          |
-| Deadline oficial                      | vie 30-oct 12:00 COT | Colchón.                                                                                                           |
-| Jurados                               | 01–15-dic            | Demo vivo, con créditos y monitoreado.                                                                             |
-| Ganadores                             | ~11-ene-2027         | Affidavits en ≤ 10 días hábiles.                                                                                   |
+| Hito                                 | Fecha                | Qué debe estar vivo en la URL pública                                                                                                                                                   |
+| ------------------------------------ | -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **H0: Walking skeleton**             | dom 4-oct            | App shell navegable (5 destinos), onboarding de 3 preguntas, `/api/health` con Nemotron, un turno de chat vía Token Factory, CI verde, deploy automático.                               |
+| **H1: "Me llegó el sueldo"**         | dom 11-oct           | Payday Autopilot con recibos, sobres, tarjetas, calendario, ¿me lo puedo permitir?; agente con skills y verificador. **Demo ya enviable.**                                              |
+| **H2: Mercado + captura + decisión** | dom 18-oct           | Tavily (usura, créditos, CDTs, FX), Opportunity Engine, suscripciones + anomalías, recibos por foto, importación, ¿y si…?, tormenta, metas, inversión, Decision Cards + Ultra, memoria. |
+| **H3: Release candidate**            | dom 25-oct           | Bóveda, buscador NL, hogar compartido, protección, hábitos, briefing, Vigía en Serverless Jobs, push, .ics, correo; D3–D5, F3–F5, G4 completos; evals publicadas; README EN.            |
+| **H4: Code freeze**                  | mar 27-oct 18:00     | Solo P0.                                                                                                                                                                                |
+| **H5: Envío**                        | jue 29-oct 18:00     | Devpost completo; tag `v0.1.0-hackathon`.                                                                                                                                               |
+| Deadline oficial                     | vie 30-oct 12:00 COT | Colchón.                                                                                                                                                                                |
+| Jurados                              | 01–15-dic            | Demo vivo, con créditos, monitoreado.                                                                                                                                                   |
 
 ## 2. Semana a semana
 
-### Semana 0: Fundación (lun 28-sep → dom 4-oct)
+### Semana 0 — Fundación (lun 28-sep → dom 4-oct)
 
-| ID    | Tarea                                                                                                                                                                                                                         | Resp. | Límite    | Hecho cuando                                                                                |
-| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | --------- | ------------------------------------------------------------------------------------------- |
-| S0-01 | Leer y aprobar este plan y los ADR-0035…0038 (o pedir cambios). Resolver D-01…D-04 de [07](07-risks-and-decisions.md).                                                                                                        | H+N   | lun 28    | Decisiones anotadas en 07.                                                                  |
-| S0-02 | Crear el equipo en Devpost; HELL como Representative; track Personal AI; **guardar borrador** del envío desde ya.                                                                                                             | H     | lun 28    | Borrador visible en Devpost.                                                                |
-| S0-03 | Reclamar créditos: promo Token Factory (`NEBIUS-DEVPOST-GLOBAL26`), Builders Program (TF, Tavily, LangSmith, Toloka, Academy). Nairy también se une al Builders Program (confirmar que los términos lo permiten por persona). | H+N   | mar 29    | Créditos visibles en cada consola; registrados en `docs/hackathon/credits.md` (sin llaves). |
-| S0-04 | Licencia: `LICENSE` Apache-2.0, `NOTICE`, `TRADEMARKS.md`; `package.json` → `"license": "Apache-2.0"`; `pnpm security:check` limpio; repo **público**.                                                                        | H     | mié 30    | El panel _About_ de GitHub muestra "Apache-2.0".                                            |
-| S0-05 | Llave de Token Factory; `GET /v1/models`; registrar los IDs reales de Lightning/Super/Ultra, multimodal, embeddings y guard en ADR-0036.                                                                                      | H     | mar 29    | Tabla de modelos confirmada.                                                                |
-| S0-06 | Verificar la Topología A (Serverless Jobs con o sin cron, endpoint con contenedor HTTP en CPU, Managed PostgreSQL + pgvector, costos, qué cubren los créditos). Decidir A o B.                                                | H     | vie 2-oct | ADR-0038 pasa a Accepted con la opción elegida.                                             |
-| S0-07 | **Walking skeleton**: `apps/api` (health + `/api/v1/chat` → `ai-core` mínimo → Nemotron), `apps/web` (página de chat), deploy y CI.                                                                                           | H     | dom 4     | H0 cumplido.                                                                                |
-| S0-08 | Sistema de diseño: tokens desde el logo (ver §6), tipografía, 10 wireframes (pantallas de 02 §4), inventario de componentes.                                                                                                  | N     | dom 4     | Wireframes revisados por H; `packages/design-tokens` con los tokens base.                   |
-| S0-09 | Investigación del problema: 3–5 cifras oficiales con URL y fecha; 5 entrevistas cortas (15 min) a personas con tarjeta o crédito de consumo.                                                                                  | N     | dom 4     | `docs/hackathon/research.md` con citas y notas anonimizadas.                                |
-| S0-10 | Pedir por escrito a Devpost la aclaración sobre acumulación de premios (Overall + Bonus). Agendar office hours de Nebius con la lista de VERIFICAR de 03.                                                                     | H     | mar 29    | Correo enviado; cita agendada.                                                              |
-| S0-11 | Certificación Nebius Academy (USD 1) + curso gratuito de Agentic AI.                                                                                                                                                          | H+N   | dom 4     | Badges obtenidos.                                                                           |
-| S0-12 | Agregar a Nairy como desarrolladora humana autorizada en AGENTS.md §1 y en CODEOWNERS; protección de rama con 1 revisión obligatoria.                                                                                         | H     | mar 29    | Regla activa en GitHub.                                                                     |
-| S0-13 | Librería decimal para tasas (potencias fraccionarias): evaluar y registrar como nota en ADR-0016 o ADR nuevo.                                                                                                                 | H     | jue 1-oct | Decisión registrada.                                                                        |
+| ID    | Tarea                                                                                                                                                                                           | Resp. | Límite |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ------ |
+| S0-01 | Aprobar plan, catálogo y ADR-0035…0039; resolver D-01…D-04, D-10, D-11, D-12 (07).                                                                                                              | H+N   | lun 28 |
+| S0-02 | Equipo en Devpost (HELL Representative), track Personal AI, borrador guardado.                                                                                                                  | H     | lun 28 |
+| S0-03 | Créditos: cada fundador con **su propia** cuenta (promo TF, Builders: TF, Tavily, LangSmith, Toloka, Academy). Nunca cuentas extra (00 §8). Registrar saldos en `credits.md`.                   | H+N   | mar 29 |
+| S0-04 | Licencia Apache-2.0 + NOTICE + TRADEMARKS; `security:check`; repo público (D-01).                                                                                                               | H     | mié 30 |
+| S0-05 | `GET /v1/models`: confirmar IDs L/S/U/V/E/guard en ADR-0036.                                                                                                                                    | H     | mar 29 |
+| S0-06 | Verificar topología A vs B (ADR-0038) y proveedor de correo (ADR-0039).                                                                                                                         | H     | vie 2  |
+| S0-07 | **Walking skeleton**: API health + chat Nemotron; web shell; CI; deploy.                                                                                                                        | H     | dom 4  |
+| S0-08 | **Sistema de diseño premium**: tokens (§6), tipografía, componentes base (botón, card, sheet de recibo, badges de verdad, sobres, gráficos), motion, modo oscuro; wireframes de los 5 destinos. | N     | jue 1  |
+| S0-09 | App shell + navegación + onboarding de 3 preguntas + PWA instalable (manifest, íconos del logo).                                                                                                | N     | dom 4  |
+| S0-10 | Investigación: 3–5 cifras oficiales con URL; 5 entrevistas cortas.                                                                                                                              | N     | dom 4  |
+| S0-11 | Aclaración Devpost (acumulación de premios); office hours Nebius (lista VERIFICAR).                                                                                                             | H     | mar 29 |
+| S0-12 | Nairy en AGENTS.md y CODEOWNERS; protección de rama.                                                                                                                                            | H     | mar 29 |
+| S0-13 | Librería decimal (potencias fraccionarias) — nota en ADR-0016.                                                                                                                                  | H     | jue 1  |
+| S0-14 | Esquema de DB v1 (twin, sobres, tarjetas, transacciones, documentos, recibos, cards, memorias, workspaces compartidos, auditoría) + seeds de personas.                                          | H+N   | dom 4  |
 
-### Semana 1: Motor + Gateway + Agente (lun 5-oct → dom 11-oct)
+### Semana 1 — "Me llegó el sueldo" (lun 5-oct → dom 11-oct)
 
-| ID    | Tarea                                                                                                                                                               | Resp. | Límite | Hecho cuando                                                          |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ------ | --------------------------------------------------------------------- |
-| S1-01 | `finance.convert_rate` (EA, MV, NAMV, vencida y anticipada), registrada en el Formula Registry.                                                                     | H     | mar 6  | Golden vectors en verde.                                              |
-| S1-02 | Amortización francesa y costo total (seguros, cuota de manejo, GMF parametrizable, TIR mensual → EA).                                                               | H     | mié 7  | idem                                                                  |
-| S1-03 | `check_usury`, `compare_offers` (ahorro, punto de equilibrio) y `debt_payoff_plan`.                                                                                 | H     | jue 8  | idem                                                                  |
-| S1-04 | `forecast_30d` y `safe_to_spend`.                                                                                                                                   | H     | vie 9  | idem                                                                  |
-| S1-05 | **Golden vectors independientes:** Nairy construye una hoja de cálculo con las mismas fórmulas _sin mirar el código_ (verificación independiente real, README §15). | N     | jue 8  | ≥ 40 vectores exportados a `packages/financial-engine/test/vectors/`. |
-| S1-06 | `ai-core`: tiers, cliente Token Factory, redacción de PII, prompt registry, validación zod, auditoría `ai_calls`, presupuesto y kill switch.                        | H     | vie 9  | Tests unitarios; test de "no sale PII".                               |
-| S1-07 | Agente: catálogo de skills, bucle con tool calling, `CalcReceipt`, `ProofCarryingAnswer` y verificador numérico.                                                    | H     | dom 11 | E3 (subconjunto) en verde.                                            |
-| S1-08 | Web: landing, selector de persona, Inicio (Twin), chat con panel de recibo, i18n ES/EN.                                                                             | N     | dom 11 | Navegable en móvil y desktop.                                         |
-| S1-09 | Esquema de DB mínimo + seeds de las 3 personas (datos escritos por N, esquema por H).                                                                               | H+N   | mié 7  | `pnpm dev:infra` + seed reproducible.                                 |
-| S1-10 | Threat model del demo (`docs/architecture/threat-models/hackathon-demo.md`).                                                                                        | H     | vie 9  | Revisado por N.                                                       |
+| ID    | Tarea                                                                                                                                                             | Resp.                 | Límite |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------ |
+| S1-01 | Motor crédito CO (colombia-credit.md §1–8).                                                                                                                       | H                     | mié 7  |
+| S1-02 | Motor finanzas personales: `budget.allocate`, `envelope_state`, `purchase.afford`, `health.score`, `networth.compute`, `cards.status` (personal-finance.md §1–5). | H                     | vie 9  |
+| S1-03 | **Golden vectors independientes** en hoja de cálculo (sin ver código).                                                                                            | N                     | vie 9  |
+| S1-04 | AI Gateway: tiers, redacción PII, prompt registry, zod, auditoría, presupuesto, kill switch.                                                                      | H                     | jue 8  |
+| S1-05 | Agente + skills + `CalcReceipt` + `ProofCarryingAnswer` + verificador + streaming.                                                                                | H                     | dom 11 |
+| S1-06 | UI **Hoy**, **Dinero** (sobres B2, tarjetas B3, ingresos B6, salud B7, patrimonio B8), **calendario** B4, panel de recibo.                                        | N                     | dom 11 |
+| S1-07 | **Payday Autopilot (B1)** de punta a punta: detección (botón + notificación pegada), plan, sliders, checklist.                                                    | H (motor/IA) + N (UI) | dom 11 |
+| S1-08 | **¿Me lo puedo permitir? (C1)**.                                                                                                                                  | H + N                 | dom 11 |
+| S1-09 | Threat model del demo.                                                                                                                                            | H                     | vie 9  |
 
-**H1 (dom 11-oct):** Laura → compra de cartera → respuesta con recibos en la URL pública.
+### Semana 2 — Mercado, captura y decisión (lun 12-oct festivo → dom 18-oct)
 
-### Semana 2: Market Truth + Decision Cards + Documentos + Memoria (lun 12-oct → dom 18-oct)
+| ID    | Tarea                                                                                                                                        | Resp.                 | Límite |
+| ----- | -------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------ |
+| S2-01 | Market Truth (T): usura, tasas de referencia, créditos, CDTs/ahorro, **FX (G3)**; allowlist, parseo determinista, caché, frescura, fallback. | H                     | mié 14 |
+| S2-02 | **Opportunity Engine (D1)** + `deposit.net_return` + UI Oportunidades.                                                                       | H + N                 | vie 16 |
+| S2-03 | Importación (E4) + **suscripciones (D2)** + **anomalías (D3)** con línea base por usuario.                                                   | H                     | jue 15 |
+| S2-04 | **Recibos y facturas por foto (E1)**: cámara PWA, extracción V, confirmación.                                                                | H (pipeline) + N (UI) | sáb 17 |
+| S2-05 | Decision Cards + **segunda opinión Ultra (A5)**.                                                                                             | H                     | jue 15 |
+| S2-06 | Simuladores: **¿Y si…? (C2)**, **tormenta (C3)**, **metas (C4)**, **inversión (C5)**.                                                        | N (UI) + H (motor)    | dom 18 |
+| S2-07 | Memoria (A7) + "Lo que FINCH sabe de ti".                                                                                                    | H + N                 | sáb 17 |
+| S2-08 | Datasets de evals E2/E3/E4 (incl. preguntas de E3 buscador y recibos).                                                                       | N                     | dom 18 |
+| S2-09 | **Copiloto de derechos (F4)**: 8 casos, documentos PDF, seguimiento con plazos.                                                              | N (flujos) + H (PDF)  | dom 18 |
 
-> **Lunes 12-oct es festivo en Colombia** (Día de la Raza). Semana de 4 días efectivos, salvo que decidan trabajarlo.
+### Semana 3 — Completar todas las H (lun 19-oct → dom 25-oct)
 
-| ID    | Tarea                                                                                                                                                                                                                                | Resp.                | Límite | Hecho cuando                                         |
-| ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------- | ------ | ---------------------------------------------------- |
-| S2-01 | Adapter Tavily _Market Truth_: search + extract, allowlist (`superfinanciera.gov.co`, `banrep.gov.co`, …; VERIFICAR los dominios exactos), parsers deterministas de usura/IBR/TRM, caché, frescura, doble fuente y fallback _STALE_. | H                    | mié 14 | La pantalla Mercado muestra valores con URL y fecha. |
-| S2-02 | `market.search_offers` (ofertas públicas de compra de cartera; solo lectura y cita).                                                                                                                                                 | H                    | jue 15 | Ofertas con URL en la Decision Card.                 |
-| S2-03 | Componente Decision Card (lista y detalle) + pantalla Mercado.                                                                                                                                                                       | N                    | jue 15 | Cumple la estructura de README §17.                  |
-| S2-04 | Creación de Decision Cards + segunda opinión Ultra (`APPROVE/WARN/BLOCK`).                                                                                                                                                           | H                    | vie 16 | Hallazgos visibles en la UI.                         |
-| S2-05 | Documentos (S-2): cuarentena, extracción (multimodal o texto), pantalla de confirmación.                                                                                                                                             | H (backend) + N (UI) | dom 18 | Oferta en PDF → comparación.                         |
-| S2-06 | Memoria: embeddings + pgvector + skills `remember/recall/forget`; pantalla "Lo que FINCH sabe de ti".                                                                                                                                | H + N                | sáb 17 | Test E2E de "olvidar".                               |
-| S2-07 | Datasets de evals E2 (60), E3 (20 trampas) y E4 (45 adversariales) en ES/EN.                                                                                                                                                         | N                    | dom 18 | JSONL en `evals/datasets/`.                          |
+| ID    | Tarea                                                                                                                         | Resp.                   | Límite |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- | ------ |
+| S3-01 | **Bóveda (E2)** con vencimientos y recordatorios.                                                                             | H + N                   | mar 20 |
+| S3-02 | **Buscador NL (E3)** con DSL acotado + tests de autorización.                                                                 | H                       | mar 20 |
+| S3-03 | **Hogar compartido (F1)**: membresías, qué se comparte, división, liquidación, metas comunes.                                 | H (auth/motor) + N (UI) | jue 22 |
+| S3-04 | **Radar de protección (F2)** + **hábitos (G1)** + **cierre de mes (B5)**.                                                     | N + H                   | jue 22 |
+| S3-05 | **Vigía (A11)** en Nebius Serverless Jobs + **briefing (G2)** + **push de la app (H1)** + **.ics (H2)**.                      | H + N                   | mié 21 |
+| S3-06 | **Correo (H3)**: entrada (notificaciones, facturas, documentos → E1/E2/E4) y salida (briefing, alertas, plantillas de marca). | H                       | vie 23 |
+| S3-07 | **Gastos fijos (D4)**, **remesas (D5)**, **pasaporte (F3)**, **impuestos CO (F5)**, **segundo país (G4)** — completos.        | H + N                   | sáb 24 |
+| S3-08 | Evals completas (batch) + LangSmith + **Toloka** (configurar lunes 19, resultados viernes 23) + endurecer guardrails.         | N + H                   | sáb 24 |
+| S3-09 | Operación del demo: uptime, alertas, credit guard, backups, runbook.                                                          | H                       | vie 23 |
+| S3-10 | Pulido premium (motion, estados, accesibilidad, responsive, modo oscuro).                                                     | N                       | dom 25 |
+| S3-11 | Guion y storyboard del video; README EN (borrador); THIRD_PARTY y licencias de medios.                                        | N + H                   | dom 25 |
 
-**H2 (dom 18-oct):** MUST completo salvo el Vigía.
+### Semana 4 — Freeze y envío (lun 26-oct → vie 30-oct)
 
-### Semana 3: Siempre activo + Telegram + Evals + Pulido (lun 19-oct → dom 25-oct)
+| Día    | H                                                                   | N                                                                        |
+| ------ | ------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| lun 26 | Bug bash con 5 testers en celular; P0/P1.                           | Coordina bug bash; corrige UI.                                           |
+| mar 27 | **18:00 code freeze**; tag `v0.1.0-rc`; mover Constitución si D-04. | Captura de video sobre el RC.                                            |
+| mié 28 | Voz técnica; README final; feedback de Devpost.                     | Edición, subtítulos EN, YouTube **público**; texto Devpost; screenshots. |
+| jue 29 | Checklist 00 §4; tag `v0.1.0-hackathon`; **enviar antes de 18:00**. | Verificación en incógnito.                                               |
+| vie 30 | Colchón (deadline 12:00 COT).                                       | Colchón.                                                                 |
 
-| ID    | Tarea                                                                                                                                  | Resp.                                   | Límite | Hecho cuando                                            |
-| ----- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- | ------ | ------------------------------------------------------- |
-| S3-01 | `apps/worker` Vigía: contenedor, reglas de eventos, idempotencia; despliegue en **Nebius Serverless Jobs** + programación diaria.      | H                                       | mar 20 | Corre solo a las 06:00 COT; también manual desde la UI. |
-| S3-02 | Pantalla Vigía (historial, costo, "ejecutar ahora") + notificaciones en la bandeja.                                                    | N                                       | mar 20 | —                                                       |
-| S3-03 | Telegram (S-1): vinculación por código, Q&A, alertas del Vigía y resumen semanal.                                                      | H (bot) + N (copy y diseño de mensajes) | jue 22 | Demo en el celular.                                     |
-| S3-04 | Cartas R2 en PDF (S-3), con cifras con recibo y aviso legal.                                                                           | H + N (plantilla)                       | jue 22 | Descarga desde la Decision Card.                        |
-| S3-05 | Evals completas vía **batch inference** + LangSmith; tarea **Toloka** (configurarla el lunes 19; resultados el viernes 23).            | H (runner) + N (Toloka)                 | sáb 24 | `evals/RESULTS.md` con números reales.                  |
-| S3-06 | Endurecer guardrails según los fallos de E4.                                                                                           | H                                       | sáb 24 | E4 ≥ 95 % o documentar la brecha.                       |
-| S3-07 | **Servidor MCP (S-4)**, solo si todo lo MUST está verde el miércoles 21.                                                               | H                                       | sáb 24 | Hermes Agent u OpenClaw llama `finance.compare_offers`. |
-| S3-08 | Pulido: modo oscuro, accesibilidad (teclado, contraste, lector de pantalla), estados vacío/error/_stale_, responsive.                  | N                                       | dom 25 | Checklist de accesibilidad de README §35.               |
-| S3-09 | Operación del demo: monitor de uptime, alertas a ambos, _credit guard_, backups, runbook `docs/operations/runbooks/hackathon-demo.md`. | H                                       | vie 23 | Alerta de prueba recibida.                              |
-| S3-10 | Storyboard y guion del video (06 §2); ensayo de capturas.                                                                              | N                                       | dom 25 | Guion cronometrado ≤ 2:50.                              |
-| S3-11 | README para jurados (EN) — borrador.                                                                                                   | H                                       | dom 25 | Revisado por N.                                         |
-| S3-12 | `THIRD_PARTY.md` (licencias de dependencias y modelos) + `media-licenses.md`.                                                          | N                                       | dom 25 | —                                                       |
-
-**H3 (dom 25-oct):** release candidate.
-
-### Semana 4: Freeze y envío (lun 26-oct → vie 30-oct)
-
-| Día        | H                                                                                               | N                                                                                              |
-| ---------- | ----------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| **lun 26** | _Bug bash_: 5 testers externos en celular; corregir P0/P1.                                      | Coordina el bug bash; recoge feedback; corrige UI.                                             |
-| **mar 27** | **18:00 code freeze.** Tag `v0.1.0-rc`. Constitución → `docs/architecture/` si se aprueba D-04. | Graba las capturas del video en el RC.                                                         |
-| **mié 28** | Voz en off de la parte técnica; README final; sección de feedback de Devpost.                   | Edición del video, subtítulos EN, subida **pública** a YouTube; screenshots; texto de Devpost. |
-| **jue 29** | Checklist de 00 §4 punto por punto; tag `v0.1.0-hackathon`; **enviar antes de las 18:00**.      | Verificación en incógnito: video, repo, demo y licencia.                                       |
-| **vie 30** | Colchón. Nada nuevo. Deadline 12:00 COT.                                                        | Colchón.                                                                                       |
-
-## 3. Ruta crítica y dependencias
+## 3. Ruta crítica
 
 ```text
-S0-05 (IDs modelos) → S0-07 (skeleton) → S1-06 (gateway) → S1-07 (agente+recibos) → S2-04 (cards+Ultra)
-S1-01..04 (motor) ─────────────────────────────────────┘
-S0-06 (topología) → S3-01 (Vigía en Serverless Jobs)
-S2-01 (Tavily) → S2-02 → S3-01
-S2-07 (datasets) → S3-05 (evals) → S3-06 → README/Video
-S3-10 (guion) → sem 4 video
+S0-05 → S0-07 → S1-04 → S1-05 (agente+recibos) → S1-07 (Payday) → S2-05 (cards+Ultra)
+S1-01/S1-02 (motor) ──────────────────────────┘
+S2-01 (Tavily) → S2-02 (Opportunity) → S3-05 (Vigía)
+S0-14 (DB) → S3-03 (hogar compartido: autorización)
+S2-08 (datasets) → S3-08 (evals) → README / video
 ```
 
-Lo que más riesgo tiene de retrasarse: **S1-07** (agente + verificador) y **S2-01** (parseo de
-fuentes oficiales). Ambos tienen plan B: plantillas deterministas y tasas cargadas a mano con
-fuente citada.
+Riesgos de retraso: S1-05 (verificador), S2-01 (fuentes oficiales), S2-04 (calidad de extracción
+multimodal), S3-03 (autorización compartida). Todos tienen plan B documentado en 07.
 
 ## 4. Después del envío
 
-| Periodo         | Qué                                                                                                                                                                                                                     | Resp.                                   |
-| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------- |
-| 31-oct → 30-nov | `main` congelado en `v0.1.0-hackathon` hasta el 15-dic (excepción temporal a ADR-0026, registrada en ADR-0035). El desarrollo sigue en la rama `next`. El demo se despliega **solo** desde el tag.                      | H                                       |
-| Noviembre       | Descubrimiento de clientes: 30 entrevistas; landing con lista de espera; pitch deck; constitución de la S.A.S. y búsqueda de marca en la SIC (D-05, D-09); política de datos (Ley 1581 de 2012, VERIFICAR con abogado). | N (research, deck) + H (legal, técnico) |
-| Noviembre       | Postular a programas de apoyo a startups (p. ej. NVIDIA Inception y programas de Nebius para startups; VERIFICAR requisitos y fechas).                                                                                  | H                                       |
-| 01–15-dic       | Guardia de jurados: revisión diaria de salud y créditos; responder dudas si Devpost las canaliza.                                                                                                                       | Rotación H/N                            |
-| 16-dic → 10-ene | Merge `next` → `main`; retomar el programa de producto.                                                                                                                                                                 | H+N                                     |
-| ~11-ene-2027    | Anuncio; affidavits y formularios fiscales en ≤ 10 días hábiles.                                                                                                                                                        | H (Representative)                      |
+| Periodo         | Qué                                                                                                                                                                                       | Resp.    |
+| --------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
+| 31-oct → 15-dic | `main` congelado en `v0.1.0-hackathon` (excepción a ADR-0026, ADR-0035); desarrollo en `next`; demo solo desde el tag.                                                                    | H        |
+| Noviembre       | 30 entrevistas; landing con lista de espera; pitch deck; S.A.S. y marca (D-05, D-09); política de datos (VERIFICAR con abogado); inicio de trámites WhatsApp Business (H6) tras la S.A.S. | N + H    |
+| Noviembre       | Programas de startups (NVIDIA Inception, Nebius; VERIFICAR requisitos).                                                                                                                   | H        |
+| 01–15-dic       | Guardia de jurados diaria.                                                                                                                                                                | Rotación |
+| 16-dic → 10-ene | Merge `next` → `main`; P1 apps nativas arranca.                                                                                                                                           | H + N    |
+| ~11-ene-2027    | Ganadores; affidavits ≤ 10 días hábiles.                                                                                                                                                  | H        |
 
-## 5. Corte de alcance (en este orden, si el tiempo no alcanza)
+## 5. Plan de contingencia (si un hito no se cumple)
 
-1. C-1, C-2, C-3 (ya son opcionales).
-2. S-4 MCP → se menciona como _What's next_.
-3. S-3 cartas PDF → un botón "copiar texto".
-4. S-2 documentos → solo PDF con texto (sin multimodal).
-5. S-1 Telegram → notificaciones solo en la web (debilita "across daily workflows"; recortarlo de último).
+Ninguna función sale del alcance. Si un domingo el hito no está en verde, el lunes se aplica el
+siguiente paso de esta lista (y solo ese) y se re-evalúa el domingo siguiente:
 
-**Nunca se recortan:** M-5 (recibos), M-7 (Vigía), M-3 (Tavily), M-10 (evals) ni la estabilidad
-del demo. Son los que ganan puntos.
+1. **G4** segundo país: se entrega con persona demo y FX/remesas, dejando productos locales de D1 para
+   la semana 4.
+2. **D4** gastos fijos: 3 categorías en vez de todas.
+3. **F5** estimador de renta: se muestra como simulación de la cédula general sin deducciones avanzadas.
+4. **F4** copiloto: 5 casos pulidos, 3 casos con plantilla estándar.
+5. Pulido visual avanzado (motion, ilustraciones) de pantallas secundarias pasa a la semana 4.
+
+**Intocables:** A1–A11, B1–B3, C1, D1, D2, E1, E2, F1, H1 y la estabilidad del demo.
 
 ## 6. Tokens de marca (derivados del logo)
 
-| Token             | Hex       | Uso                                          | Contraste medido                           |
-| ----------------- | --------- | -------------------------------------------- | ------------------------------------------ |
-| `brand.green.900` | `#0E4331` | Logo, texto de marca, primario en tema claro | 11,25:1 sobre `#FFFFFF`                    |
-| `brand.green.950` | `#053F2B` | Fondo de marca (logo invertido)              | 11,48:1 con `#FAFAFA`                      |
-| `brand.green.600` | `#1F7A55` | Botón primario (tema claro)                  | 5,29:1 sobre blanco (AA para texto normal) |
-| `brand.green.300` | `#6FCF97` | Acento en tema oscuro                        | 6,3:1 sobre `#053F2B`                      |
-| `surface.dark`    | `#0B1A14` | Fondo del tema oscuro                        | `#A7E3C1` sobre él: 12,29:1                |
+| Token             | Hex       | Uso                                          | Contraste medido                      |
+| ----------------- | --------- | -------------------------------------------- | ------------------------------------- |
+| `brand.green.900` | `#0E4331` | Logo, texto de marca, primario en tema claro | 11,25:1 sobre `#FFFFFF`               |
+| `brand.green.950` | `#053F2B` | Fondo de marca (logo invertido)              | 11,48:1 con `#FAFAFA`                 |
+| `brand.green.600` | `#1F7A55` | Botón primario (tema claro)                  | 5,29:1 sobre blanco (AA texto normal) |
+| `brand.green.300` | `#6FCF97` | Acento en tema oscuro                        | 6,3:1 sobre `#053F2B`                 |
+| `surface.dark`    | `#0B1A14` | Fondo del tema oscuro                        | `#A7E3C1` sobre él: 12,29:1           |
 
-Los tokens semánticos (`positive`, `negative`, `warning`, `verified`, `estimated`, `stale`, `pending`)
-se definen en S0-08 con **ícono y texto además del color** (README §34–35). Logos fuente en `assets/brand/`.
+Tokens semánticos (`positive`, `negative`, `warning`, `verified`, `estimated`, `stale`, `pending`)
+con ícono y texto además del color (README §34–35). Logos en `assets/brand/`.
 
-## 7. Roadmap de empresa 2027 (después de la hackathon)
+## 7. Roadmap de empresa 2027
 
-El programa de 24 semanas (README §84) se retoma **a partir del estado que deje la hackathon**.
-Varias de sus semanas ya quedan adelantadas: motor (sem 8–10), segunda opinión (11–13) y
-documentos/IA (14–16).
-
-| Trimestre   | Objetivo                                                | Gate (README §106)                                | Entregables clave                                                                                                                                                                                    |
-| ----------- | ------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Q1 2027** | Alpha cerrada (≈ 50 usuarios reales)                    | **A: Foundation** + **B: Financial Intelligence** | IdP definitivo (ADR-0015), tenancy completa, decisión de nube de producción (AWS según ADR-0012 vs Nebius, con datos de costo reales), app Expo (shell), fórmulas auditadas por un tercero.          |
-| **Q2 2027** | Beta cerrada (≈ 500 usuarios) + ronda pre-semilla       | **C: External Data** + **D: Closed Beta**         | Primer proveedor de datos real (open finance o agregador; VERIFICAR el estado regulatorio de open finance en Colombia), extractos automáticos, experimento de suscripción, métricas de retención.    |
-| **Q3 2027** | Acciones externas con socios                            | **E: External Actions**                           | Flujo R2 con aliado (solicitud de compra de cartera), revisión legal del modelo de ingresos sin sesgo de ranking (Constitución §4.15), app desktop (Tauri), readiness ISO 27001/SOC 2 (README §123). |
-| **Q4 2027** | Lanzamiento público en Colombia; preparar ronda semilla | —                                                 | Crecimiento, soporte, SLOs de producción; evaluación de un segundo país (`jurisdictions/`).                                                                                                          |
-
-**R3/R4 (mover dinero o custodia)** siguen fuera de alcance hasta pasar los Gates F y G. Requieren
-socio regulado y revisión externa (ADR-0021).
+| Trimestre   | Objetivo                           | Gate (README §106) | Entregables clave                                                                                                                                                                                               |
+| ----------- | ---------------------------------- | ------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Q1 2027** | Alpha cerrada (≈ 50 usuarios)      | A + B              | IdP definitivo (ADR-0015), nube de producción (ADR-0012 vs Nebius con datos), **apps nativas (P1)**, endurecimiento de producción de las 45 funciones, fórmulas auditadas por tercero, WhatsApp y SMS (H5, H6). |
+| **Q2 2027** | Beta cerrada (≈ 500) + pre-semilla | C + D              | **Open finance/agregador (P2)**, suscripción FINCH Premium (D-12), retención, tercer país, MCP (P6).                                                                                                            |
+| **Q3 2027** | Acciones con socios                | E                  | Flujos R2 con aliados (compra de cartera, CDTs), microempresas (P10), retiro (P4), readiness ISO 27001/SOC 2.                                                                                                   |
+| **Q4 2027** | Lanzamiento público; ronda semilla | —                  | Crecimiento, SLOs; evaluación de **ejecución con socio regulado (P3)** hacia Gates F/G.                                                                                                                         |

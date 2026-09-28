@@ -1,7 +1,7 @@
 /**
  * FINCH architecture fitness functions.
  *
- * Normative source: README.md §8 (Architecture boundaries), §14 (Financial Engine),
+ * Normative source: docs/architecture/CONSTITUTION.md (README §N) §8 (Architecture boundaries), §14 (Financial Engine),
  * §20 (Bounded Contexts), §27 (Provider Architecture), §64 (Architecture Fitness Functions).
  *
  * These rules are executable architecture. A violation is a build failure, not a warning
