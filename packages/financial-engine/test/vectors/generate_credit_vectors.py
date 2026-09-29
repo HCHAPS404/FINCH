@@ -191,6 +191,186 @@ def french_vectors():
     return vectors
 
 
+# ---------------------------------------------------------------------------
+# credit.total_cost@1 — colombia-credit.md §3
+# Monthly cash flows from the borrower's side. The reference solves the IRR with Newton's
+# method to 1e-50 (the engine uses bisection, a different algorithm, so the two can only
+# agree if both are right). Expected rates are recorded with 20 significant digits and
+# the engine is checked within tolerance: 1e-11 monthly, 1e-9 effective annual.
+# ---------------------------------------------------------------------------
+def total_cost(principal, rate, n, upfront=0, insurance=("NONE", None), handling=0, other=0, gmf="0"):
+    if upfront < 0 or handling < 0 or other < 0 or upfront >= principal:
+        raise ValueError("INVALID_CHARGES")
+    g = D(gmf)
+    if g < 0 or g >= 1:
+        raise ValueError("RATE_OUT_OF_DOMAIN")
+    basis, value = insurance
+    if basis in ("OUTSTANDING", "ORIGINAL") and D(value) < 0:
+        raise ValueError("INVALID_CHARGES")
+    if basis == "FIXED" and value < 0:
+        raise ValueError("INVALID_CHARGES")
+    instalment, rows = french(principal, rate, n)
+    balance = principal
+    outflows = []
+    tot = {"interest": 0, "insurance": 0, "fees": 0, "gmf": 0}
+    for r in rows:
+        if basis == "NONE":
+            ins = 0
+        elif basis == "OUTSTANDING":
+            ins = round_minor(D(value) * D(balance))  # balance before this payment
+        elif basis == "ORIGINAL":
+            ins = round_minor(D(value) * D(principal))
+        else:
+            ins = value
+        debit = r["payment"] + ins + handling + other
+        tax = round_minor(g * D(debit))
+        outflows.append(debit + tax)
+        tot["interest"] += r["interest"]
+        tot["insurance"] += ins
+        tot["fees"] += handling + other
+        tot["gmf"] += tax
+        balance = r["balance"]
+    net = principal - upfront
+
+    def npv(x):
+        return D(net) - sum(D(o) / (1 + x) ** k for k, o in enumerate(outflows, start=1))
+
+    def dnpv(x):
+        return sum(D(k) * D(o) / (1 + x) ** (k + 1) for k, o in enumerate(outflows, start=1))
+
+    x = D(rate) if D(rate) > 0 else D("0.01")
+    if D(net) == sum(D(o) for o in outflows):
+        x = D(0)
+    else:
+        for _ in range(200):
+            step = npv(x) / dnpv(x)
+            x -= step
+            if abs(step) < D("1e-50"):
+                break
+        else:
+            raise AssertionError("Newton did not converge")
+    total_paid = sum(outflows)
+    return {
+        "monthlyIrr": sig(x, 20),
+        "effectiveAnnualRate": sig((1 + x) ** 12 - 1, 20),
+        "instalment": str(instalment),
+        "netDisbursement": str(net),
+        "totalPaid": str(total_paid),
+        "totalInterest": str(tot["interest"]),
+        "totalInsurance": str(tot["insurance"]),
+        "totalFees": str(tot["fees"]),
+        "totalGmf": str(tot["gmf"]),
+        "upfrontCosts": str(upfront),
+        "totalCost": str(total_paid - net),
+    }
+
+
+TOTAL_COST_CASES = [
+    ("no charges: the IRR equals the loan rate up to minor-unit rounding",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36}),
+    ("life insurance on the outstanding balance (0.12 % monthly)",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36, "insurance": ("OUTSTANDING", "0.0012")}),
+    ("life insurance on the original amount (0.12 % monthly)",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36, "insurance": ("ORIGINAL", "0.0012")}),
+    ("fixed insurance plus monthly handling fee",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36, "insurance": ("FIXED", 1_500_000), "handling": 1_200_000}),
+    ("upfront costs (credit study, 2 %) reduce the net disbursement",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36, "upfront": 20_000_000}),
+    ("GMF 4 x 1,000 on every debit, with insurance and fees",
+     {"principal": 1_000_000_000, "rate": "0.016", "n": 36, "insurance": ("OUTSTANDING", "0.0012"),
+      "handling": 1_200_000, "other": 300_000, "gmf": "0.004"}),
+    ("zero-rate loan with an upfront fee still has a positive real rate",
+     {"principal": 120_000_000, "rate": "0", "n": 12, "upfront": 3_000_000}),
+]
+
+
+def encode_total_cost_inputs(c):
+    basis, value = c.get("insurance", ("NONE", None))
+    inputs = {
+        "principal": str(c["principal"]),
+        "currency": "COP",
+        "rate": c["rate"],
+        "periods": str(c["n"]),
+        "upfrontCosts": str(c.get("upfront", 0)),
+        "insuranceBasis": basis,
+        "handlingFee": str(c.get("handling", 0)),
+        "otherCharges": str(c.get("other", 0)),
+        "gmfRate": c.get("gmf", "0"),
+    }
+    if basis in ("OUTSTANDING", "ORIGINAL"):
+        inputs["insuranceRate"] = value
+    if basis == "FIXED":
+        inputs["insuranceAmount"] = str(value)
+    return inputs
+
+
+def total_cost_vectors():
+    vectors = []
+    for d, c in TOTAL_COST_CASES:
+        expected = total_cost(c["principal"], c["rate"], c["n"], c.get("upfront", 0), c.get("insurance", ("NONE", None)),
+                              c.get("handling", 0), c.get("other", 0), c.get("gmf", "0"))
+        vectors.append({"description": d, "inputs": encode_total_cost_inputs(c), "expected": expected})
+    for d, c, code in [
+        ("error: upfront costs equal to the principal leave nothing disbursed",
+         {"principal": 1_000_000, "rate": "0.01", "n": 12, "upfront": 1_000_000}, "INVALID_CHARGES"),
+        ("error: a GMF rate of 100 % is out of domain",
+         {"principal": 1_000_000, "rate": "0.01", "n": 12, "gmf": "1"}, "RATE_OUT_OF_DOMAIN"),
+    ]:
+        try:
+            total_cost(c["principal"], c["rate"], c["n"], c.get("upfront", 0), ("NONE", None), 0, 0, c.get("gmf", "0"))
+            raise AssertionError("expected " + code)
+        except ValueError as error:
+            assert str(error) == code
+        vectors.append({"description": d, "inputs": encode_total_cost_inputs(c), "expected": {"error": code}})
+    return vectors
+
+
+# ---------------------------------------------------------------------------
+# credit.usury_check@1 — colombia-credit.md §4
+# Compares the agreed remunerative rate (EA) with the certified usury rate (EA). The
+# certification is valid for [validFrom, validTo]; outside it the source is STALE and the
+# result says so rather than silently using an expired ceiling.
+# ---------------------------------------------------------------------------
+def usury(agreed: str, usury_rate: str, valid_from: str, valid_to: str, as_of: str):
+    a, u = D(agreed), D(usury_rate)
+    if a < 0 or u <= 0:
+        raise ValueError("RATE_OUT_OF_DOMAIN")
+    if valid_from > valid_to:
+        raise ValueError("INVALID_VALIDITY_PERIOD")
+    return {
+        "status": "BELOW" if a < u else "AT_OR_ABOVE",
+        "marginPp": format(((a - u) * 100).normalize(), "f"),
+        "sourceStatus": "CURRENT" if valid_from <= as_of <= valid_to else "STALE",
+    }
+
+
+USURY_CASES = [
+    ("below the usury rate", "0.2400", "0.2862", "2026-10-01", "2026-10-31", "2026-10-15"),
+    ("exactly at the usury rate counts as AT_OR_ABOVE", "0.2862", "0.2862", "2026-10-01", "2026-10-31", "2026-10-01"),
+    ("above the usury rate", "0.3137344983996021269289886802331443", "0.2862", "2026-10-01", "2026-10-31", "2026-10-31"),
+    ("certification expired: result is marked STALE", "0.2400", "0.2862", "2026-09-01", "2026-09-30", "2026-10-15"),
+]
+
+
+def usury_vectors():
+    vectors = [
+        {
+            "description": d,
+            "inputs": {"agreedRateEA": a, "usuryRateEA": u, "validFrom": f, "validTo": t, "asOf": o},
+            "expected": usury(a, u, f, t, o),
+        }
+        for d, a, u, f, t, o in USURY_CASES
+    ]
+    vectors.append(
+        {
+            "description": "error: a validity period that ends before it starts",
+            "inputs": {"agreedRateEA": "0.2", "usuryRateEA": "0.28", "validFrom": "2026-10-31", "validTo": "2026-10-01", "asOf": "2026-10-15"},
+            "expected": {"error": "INVALID_VALIDITY_PERIOD"},
+        }
+    )
+    return vectors
+
+
 def write(formula_id: str, version: int, vectors: list) -> None:
     doc = {
         "formulaId": formula_id,
@@ -208,3 +388,5 @@ def write(formula_id: str, version: int, vectors: list) -> None:
 if __name__ == "__main__":
     write("rate.convert", 1, rate_vectors())
     write("amortization.french", 1, french_vectors())
+    write("credit.total_cost", 1, total_cost_vectors())
+    write("credit.usury_check", 1, usury_vectors())

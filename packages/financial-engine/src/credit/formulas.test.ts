@@ -11,6 +11,8 @@ import { Money } from '../money.js';
 import './formulas.js';
 import { frenchAmortization } from './french.js';
 import { convertRate, parseQuote } from './rate.js';
+import { totalCost } from './total-cost.js';
+import { usuryCheck } from './usury.js';
 
 function outcome(compute: () => string): string {
   try {
@@ -46,6 +48,54 @@ describe('credit formula registry entries', () => {
             periodicRate: decimal(rate),
             periods: Number(periods),
           }).instalment.minorUnits.toString(),
+        ),
+        v.description,
+      ).toBe(v.expected);
+    }
+  });
+
+  it('credit.total_cost@1 vectors reproduce', () => {
+    for (const v of getFormula('credit.total_cost', 1).testVectors) {
+      const {
+        principal = '',
+        currency = '',
+        rate = '',
+        periods = '',
+        upfrontCosts = '0',
+      } = v.inputs;
+      expect(
+        outcome(() =>
+          totalCost({
+            principal: Money.fromMinorUnits(BigInt(principal), currency),
+            monthlyRate: decimal(rate),
+            periods: Number(periods),
+            upfrontCosts: Money.fromMinorUnits(BigInt(upfrontCosts), currency),
+          }).totalCost.minorUnits.toString(),
+        ),
+        v.description,
+      ).toBe(v.expected);
+    }
+  });
+
+  it('credit.usury_check@1 vectors reproduce', () => {
+    for (const v of getFormula('credit.usury_check', 1).testVectors) {
+      const {
+        agreedRateEA = '',
+        usuryRateEA = '',
+        validFrom = '',
+        validTo = '',
+        asOf = '',
+      } = v.inputs;
+      expect(
+        outcome(
+          () =>
+            usuryCheck({
+              agreedRateEA: decimal(agreedRateEA),
+              usuryRateEA: decimal(usuryRateEA),
+              validFrom,
+              validTo,
+              asOf,
+            }).status,
         ),
         v.description,
       ).toBe(v.expected);

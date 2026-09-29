@@ -35,3 +35,12 @@ export type {
   FrenchAmortizationResult,
   FrenchScheduleRow,
 } from './credit/french.js';
+export {
+  totalCost,
+  solveMonthlyIrr,
+  IRR_TOLERANCE,
+  IRR_MAX_ITERATIONS,
+} from './credit/total-cost.js';
+export type { TotalCostInput, TotalCostResult, InsuranceSpec } from './credit/total-cost.js';
+export { usuryCheck } from './credit/usury.js';
+export type { UsuryCheckInput, UsuryCheckResult } from './credit/usury.js';

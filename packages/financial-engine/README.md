@@ -22,7 +22,12 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
   - `rate.convert@1` — `convertRate` / `parseQuote` / `QUOTES` (EA, MV, NAMV, …) between
     effective or nominal, any supported frequency, in arrears or in advance;
   - `amortization.french@1` — `frenchAmortization`: fixed instalment and full schedule in
-    `Money`, half-even per period, last instalment clears the balance.
+    `Money`, half-even per period, last instalment clears the balance;
+  - `credit.total_cost@1` — `totalCost`: insurance (on balance, on original, fixed), fees,
+    upfront costs and GMF; monthly IRR by bisection (`solveMonthlyIrr`) and the real
+    effective annual rate;
+  - `credit.usury_check@1` — `usuryCheck`: agreed EA vs certified usury EA, margin in
+    percentage points, and `STALE` when the certification window does not cover the date.
 
 ## Does not own
 
@@ -40,12 +45,15 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 - `money.allocate` conserves the total exactly.
 - A French schedule repays exactly the principal and ends at a zero balance; a higher rate
   never lowers total interest.
+- Total cost decomposes exactly into interest + insurance + fees + GMF + upfront costs; no
+  added charge ever lowers the real effective rate.
 
 ## Failure modes
 
 Formula-domain errors throw `FinancialInputError` with a stable `code`
 (`RATE_OUT_OF_DOMAIN`, `UNSUPPORTED_QUOTE`, `INVALID_TERM`, `INVALID_PRINCIPAL`,
-`UNAMORTIZABLE_IN_MINOR_UNITS`), which the API maps to `FINCH_FINANCIAL_<code>`.
+`UNAMORTIZABLE_IN_MINOR_UNITS`, `INVALID_CHARGES`, `IRR_NOT_FOUND`, `INVALID_DATE`,
+`INVALID_VALIDITY_PERIOD`), which the API maps to `FINCH_FINANCIAL_<code>`.
 Other invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
 currency, a fractional minor unit, too many decimals for the currency, division by zero,
 a non-plain decimal string, invalid decimal places. The engine never returns a
@@ -61,7 +69,8 @@ in a `CalcReceipt`.
 `pnpm --filter @finch/financial-engine test` and `pnpm financial:verify` (JSON artifact).
 Golden vectors live in `test/vectors/<formulaId>@<version>.json` and are produced by
 `test/vectors/generate_credit_vectors.py`, an independent implementation with Python's
-`decimal` module at 60 digits that never runs this code; re-run it with `python3` after
+`decimal` module at 60 digits that never runs this code (the reference IRR uses Newton's
+method, the engine bisection, so they agree only if both are right); re-run it with `python3` after
 changing a case. The founders' spreadsheet (task S1-03) re-derives a subset before a
 formula informs a recommendation (README §15). Every vector recorded in the registry is
 recomputed by `src/credit/formulas.test.ts`, so the registry cannot drift from the code.

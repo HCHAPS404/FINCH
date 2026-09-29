@@ -61,8 +61,9 @@ instalment would repay the whole principal before period `n` (amounts too small 
 whole minor units, e.g. 6 minor units over 8 periods at 0 %), the formula rejects the input with
 `UNAMORTIZABLE_IN_MINOR_UNITS` instead of producing a negative balance.
 
-**Implementation status (S1-01):** §1 and §2 are implemented in `packages/financial-engine/src/credit/`
-(`rate.ts`, `french.ts`), registered as `rate.convert@1` and `amortization.french@1`, and tested
+**Implementation status (S1-01):** §1–§4 are implemented in `packages/financial-engine/src/credit/`
+(`rate.ts`, `french.ts`, `total-cost.ts`, `usury.ts`), registered as `rate.convert@1`,
+`amortization.french@1`, `credit.total_cost@1` and `credit.usury_check@1`, and tested
 against golden vectors in `packages/financial-engine/test/vectors/` produced by an independent
 Python `decimal` implementation. The negative-rate flag of §1 is `allowNegative`.
 
@@ -95,6 +96,9 @@ t=k : − (C_k + insurance_k + handling_fee_k + other_k + gmf_k)   k = 1..n
   Tavily, effective date) and freshness.
 - Compares the **agreed remunerative interest rate, in EA**, with the usury rate. Outputs:
   `status ∈ {BELOW, AT_OR_ABOVE}` and `margin_pp`.
+- The certification window (`validFrom`, `validTo`) and the evaluation date are inputs: the engine
+  has no clock. A date outside the window yields `sourceStatus = STALE`; the comparison is still
+  reported, and the caller must show that the ceiling may be out of date.
 - **Explicit assumption:** which charges count for usury purposes is a legal matter. The engine
   reports agreed rate vs usury and the total cost (§3) separately. It never states that a charge is
   illegal: it says "the agreed rate exceeds the current certified usury rate", with the source.

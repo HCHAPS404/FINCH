@@ -112,3 +112,164 @@ registerFormula({
     },
   ],
 });
+
+registerFormula({
+  formulaId: 'credit.total_cost',
+  version: 1,
+  purpose:
+    'Total cost of a fixed-instalment credit including insurance, fees, upfront costs and ' +
+    'GMF, and its real effective annual rate (IRR of the borrower’s monthly cash flows).',
+  inputs: [
+    { name: 'principal', unit: 'minor units', description: 'Amount lent.' },
+    { name: 'currency', unit: 'ISO 4217', description: 'Currency of every amount.' },
+    { name: 'rate', unit: 'fraction per month', description: 'Effective monthly loan rate.' },
+    { name: 'periods', unit: 'months', description: 'Number of monthly instalments.' },
+    { name: 'upfrontCosts', unit: 'minor units', description: 'Deducted from the disbursement.' },
+    {
+      name: 'insuranceBasis',
+      unit: 'enum',
+      description: 'NONE | OUTSTANDING (rate × balance before payment) | ORIGINAL | FIXED.',
+    },
+    { name: 'handlingFee', unit: 'minor units', description: 'Charged every month.' },
+    { name: 'otherCharges', unit: 'minor units', description: 'Charged every month.' },
+    { name: 'gmfRate', unit: 'fraction', description: 'Tax on each debit; defaults to 0.' },
+  ],
+  outputUnit: 'minor units (totals); fraction (monthly IRR, effective annual rate)',
+  rounding:
+    'Instalment and interest as amortization.french@1; insurance and GMF HALF_EVEN to the ' +
+    'minor unit per period. IRR by bisection to a bracket width of 1e−12 (≤ 200 iterations).',
+  assumptions: [
+    'Monthly periods; the effective annual rate is (1 + r)^12 − 1.',
+    'Upfront costs are paid at disbursement (t = 0); every other charge at each instalment.',
+    'GMF applies to the whole debit when the caller supplies a rate; exemptions are a ' +
+      'jurisdiction decision made before calling (spec §3, VERIFY).',
+  ],
+  reference: `${SPEC} §3; internal rate of return of a loan's cash flows.`,
+  edgeCases: [
+    'No charges: the IRR equals the loan rate up to minor-unit rounding.',
+    'Zero rate and no charges: IRR exactly 0.',
+    'Upfront costs ≥ principal, negative charges or insurance rates: INVALID_CHARGES.',
+    'GMF rate outside [0, 1): RATE_OUT_OF_DOMAIN.',
+  ],
+  implementationPath: 'packages/financial-engine/src/credit/total-cost.ts#totalCost',
+  testVectors: [
+    {
+      description: 'no charges: total cost equals total interest',
+      inputs: { principal: '1000000000', currency: 'COP', rate: '0.016', periods: '36' },
+      expected: '323259857',
+    },
+    {
+      description: 'upfront costs of 2 %: total cost',
+      inputs: {
+        principal: '1000000000',
+        currency: 'COP',
+        rate: '0.016',
+        periods: '36',
+        upfrontCosts: '20000000',
+      },
+      expected: '343259857',
+    },
+    {
+      description: 'zero-rate loan with an upfront fee: total cost',
+      inputs: {
+        principal: '120000000',
+        currency: 'COP',
+        rate: '0',
+        periods: '12',
+        upfrontCosts: '3000000',
+      },
+      expected: '3000000',
+    },
+    {
+      description: 'upfront costs equal to the principal are rejected',
+      inputs: {
+        principal: '1000000',
+        currency: 'COP',
+        rate: '0.01',
+        periods: '12',
+        upfrontCosts: '1000000',
+      },
+      expected: 'INVALID_CHARGES',
+    },
+  ],
+});
+
+registerFormula({
+  formulaId: 'credit.usury_check',
+  version: 1,
+  purpose:
+    'Compare the agreed remunerative rate with the certified usury rate, both effective ' +
+    'annual, and report whether the certification applies on the evaluation date.',
+  inputs: [
+    { name: 'agreedRateEA', unit: 'fraction', description: 'Agreed rate, effective annual.' },
+    {
+      name: 'usuryRateEA',
+      unit: 'fraction',
+      description: 'Certified usury rate for the credit type, with its source.',
+    },
+    { name: 'validFrom', unit: 'date', description: 'Certification start, YYYY-MM-DD.' },
+    { name: 'validTo', unit: 'date', description: 'Certification end, YYYY-MM-DD.' },
+    { name: 'asOf', unit: 'date', description: 'Evaluation date, YYYY-MM-DD.' },
+  ],
+  outputUnit: 'status (BELOW | AT_OR_ABOVE), percentage points, CURRENT | STALE',
+  rounding: 'None: the margin is exact; display rounding is the caller’s decision.',
+  assumptions: [
+    'Both rates are effective annual (convert with rate.convert@1 first).',
+    'Which charges count for usury purposes is a legal question; this formula compares ' +
+      'rates only and never states that a charge is illegal (spec §4, D-07).',
+  ],
+  reference: `${SPEC} §4; Commercial Code art. 884 (usury = 1.5 × certified banking rate).`,
+  edgeCases: [
+    'A rate equal to the usury rate is AT_OR_ABOVE.',
+    'An evaluation date outside the certification window yields STALE, not an error.',
+    'A window that ends before it starts: INVALID_VALIDITY_PERIOD.',
+    'A non-calendar date: INVALID_DATE.',
+  ],
+  implementationPath: 'packages/financial-engine/src/credit/usury.ts#usuryCheck',
+  testVectors: [
+    {
+      description: 'below the usury rate',
+      inputs: {
+        agreedRateEA: '0.24',
+        usuryRateEA: '0.2862',
+        validFrom: '2026-10-01',
+        validTo: '2026-10-31',
+        asOf: '2026-10-15',
+      },
+      expected: 'BELOW',
+    },
+    {
+      description: 'equal to the usury rate',
+      inputs: {
+        agreedRateEA: '0.2862',
+        usuryRateEA: '0.2862',
+        validFrom: '2026-10-01',
+        validTo: '2026-10-31',
+        asOf: '2026-10-01',
+      },
+      expected: 'AT_OR_ABOVE',
+    },
+    {
+      description: 'above the usury rate',
+      inputs: {
+        agreedRateEA: '0.3137',
+        usuryRateEA: '0.2862',
+        validFrom: '2026-10-01',
+        validTo: '2026-10-31',
+        asOf: '2026-10-31',
+      },
+      expected: 'AT_OR_ABOVE',
+    },
+    {
+      description: 'inverted validity window is rejected',
+      inputs: {
+        agreedRateEA: '0.2',
+        usuryRateEA: '0.28',
+        validFrom: '2026-10-31',
+        validTo: '2026-10-01',
+        asOf: '2026-10-15',
+      },
+      expected: 'INVALID_VALIDITY_PERIOD',
+    },
+  ],
+});

@@ -1,0 +1,84 @@
+{
+  "formulaId": "credit.usury_check",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "below the usury rate",
+      "inputs": {
+        "agreedRateEA": "0.2400",
+        "usuryRateEA": "0.2862",
+        "validFrom": "2026-10-01",
+        "validTo": "2026-10-31",
+        "asOf": "2026-10-15"
+      },
+      "expected": {
+        "status": "BELOW",
+        "marginPp": "-4.62",
+        "sourceStatus": "CURRENT"
+      }
+    },
+    {
+      "description": "exactly at the usury rate counts as AT_OR_ABOVE",
+      "inputs": {
+        "agreedRateEA": "0.2862",
+        "usuryRateEA": "0.2862",
+        "validFrom": "2026-10-01",
+        "validTo": "2026-10-31",
+        "asOf": "2026-10-01"
+      },
+      "expected": {
+        "status": "AT_OR_ABOVE",
+        "marginPp": "0",
+        "sourceStatus": "CURRENT"
+      }
+    },
+    {
+      "description": "above the usury rate",
+      "inputs": {
+        "agreedRateEA": "0.3137344983996021269289886802331443",
+        "usuryRateEA": "0.2862",
+        "validFrom": "2026-10-01",
+        "validTo": "2026-10-31",
+        "asOf": "2026-10-31"
+      },
+      "expected": {
+        "status": "AT_OR_ABOVE",
+        "marginPp": "2.75344983996021269289886802331443",
+        "sourceStatus": "CURRENT"
+      }
+    },
+    {
+      "description": "certification expired: result is marked STALE",
+      "inputs": {
+        "agreedRateEA": "0.2400",
+        "usuryRateEA": "0.2862",
+        "validFrom": "2026-09-01",
+        "validTo": "2026-09-30",
+        "asOf": "2026-10-15"
+      },
+      "expected": {
+        "status": "BELOW",
+        "marginPp": "-4.62",
+        "sourceStatus": "STALE"
+      }
+    },
+    {
+      "description": "error: a validity period that ends before it starts",
+      "inputs": {
+        "agreedRateEA": "0.2",
+        "usuryRateEA": "0.28",
+        "validFrom": "2026-10-31",
+        "validTo": "2026-10-01",
+        "asOf": "2026-10-15"
+      },
+      "expected": {
+        "error": "INVALID_VALIDITY_PERIOD"
+      }
+    }
+  ]
+}

@@ -19,6 +19,14 @@ export const FINANCIAL_INPUT_ERROR_CODES = [
    * schedule cannot be expressed in whole minor units (amounts too small for the term).
    */
   'UNAMORTIZABLE_IN_MINOR_UNITS',
+  /** A charge (fee, insurance, upfront cost) that is negative, or upfront costs ≥ principal. */
+  'INVALID_CHARGES',
+  /** The internal rate of return could not be bracketed (no sign change in the NPV). */
+  'IRR_NOT_FOUND',
+  /** A date that is not a real calendar date in `YYYY-MM-DD` form. */
+  'INVALID_DATE',
+  /** A validity period that ends before it starts. */
+  'INVALID_VALIDITY_PERIOD',
 ] as const;
 
 export type FinancialInputErrorCode = (typeof FINANCIAL_INPUT_ERROR_CODES)[number];
