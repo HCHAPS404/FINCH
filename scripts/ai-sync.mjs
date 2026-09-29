@@ -23,7 +23,7 @@ import {
   writeFileSync,
   readdirSync,
   mkdirSync,
-  existsSync,
+  renameSync,
   rmSync,
   statSync,
 } from 'node:fs';
@@ -234,10 +234,38 @@ if (targets.codex) {
 // ---------------------------------------------------------------------------
 // Stale generated files (in managed dirs, carrying the marker, no longer expected)
 // ---------------------------------------------------------------------------
+// File access never checks-then-acts (CodeQL js/file-system-race): read and handle
+// ENOENT instead of testing existence first, and write through a temp file + rename so
+// an interrupted run never leaves a half-written adapter.
+function isMissing(error) {
+  return error instanceof Error && 'code' in error && error.code === 'ENOENT';
+}
+
+function readIfExists(abs) {
+  try {
+    return readFileSync(abs, 'utf8');
+  } catch (error) {
+    if (isMissing(error)) return null;
+    throw error;
+  }
+}
+
+function writeAtomic(abs, content) {
+  mkdirSync(dirname(abs), { recursive: true });
+  const tmp = `${abs}.${process.pid}.tmp`;
+  writeFileSync(tmp, content, { flag: 'wx' });
+  renameSync(tmp, abs);
+}
+
 function walk(dir) {
-  const abs = join(ROOT, dir);
-  if (!existsSync(abs)) return [];
-  return readdirSync(abs, { withFileTypes: true }).flatMap((e) =>
+  let entries;
+  try {
+    entries = readdirSync(join(ROOT, dir), { withFileTypes: true });
+  } catch (error) {
+    if (isMissing(error)) return [];
+    throw error;
+  }
+  return entries.flatMap((e) =>
     e.isDirectory() ? walk(`${dir}/${e.name}`) : [`${dir}/${e.name}`],
   );
 }
@@ -251,17 +279,14 @@ const stale = managedDirs
 const problems = [];
 for (const [rel, content] of files) {
   const abs = join(ROOT, rel);
-  const current = existsSync(abs) ? readFileSync(abs, 'utf8') : null;
+  const current = readIfExists(abs);
   if (current === content) continue;
   if (CHECK) problems.push(current === null ? `missing: ${rel}` : `out of date: ${rel}`);
-  else {
-    mkdirSync(dirname(abs), { recursive: true });
-    writeFileSync(abs, content);
-  }
+  else writeAtomic(abs, content);
 }
 for (const rel of stale) {
   if (CHECK) problems.push(`stale: ${rel}`);
-  else rmSync(join(ROOT, rel));
+  else rmSync(join(ROOT, rel), { force: true });
 }
 
 const summary = `${rules.length} rules · ${skills.length} skills · ${files.size} adapter files`;
