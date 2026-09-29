@@ -1,6 +1,9 @@
 # ADR-0038: Hackathon demo deployment topology
 
 - **Status:** Proposed. Becomes Accepted with option A or B after task S0-06 (deadline 2026-10-02).
+  Verification record and recommendation: [`docs/delivery/S0-06-deploy-topology-verification.md`](../../delivery/S0-06-deploy-topology-verification.md)
+  (2026-09-29): endpoints accept CPU HTTP containers; Jobs have no native schedule flag; cost and
+  public-without-token access remain for the founders to confirm in the console.
 - **Date:** 2026-09-28
 - **Deciders:** HELL, Nairy
 - **Supersedes:** none. A **scoped exception** to ADR-0012 (AWS primary) and ADR-0013 (compute
