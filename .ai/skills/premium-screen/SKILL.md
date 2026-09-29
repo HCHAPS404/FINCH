@@ -1,0 +1,42 @@
+---
+name: premium-screen
+description: Build a complete, premium FINCH screen or flow on web (then desktop/mobile) from its Figma frame — tokens only, all states, receipts on numbers, bilingual, accessible, animated with purpose. Use for any new or redesigned screen.
+---
+
+# Skill: premium screen
+
+Read first: `docs/design/DESIGN-PRINCIPLES.md`, `docs/design/FRONTEND-ARCHITECTURE.md`,
+rule `finch-frontend-design`.
+
+## Inputs
+
+Figma frame URL(s) for every state · catalog feature ID · API endpoints (or the `api-endpoint`
+skill first).
+
+## Steps
+
+1. **Read the design through Figma MCP** (not screenshots). List: layout grid, components used,
+   tokens used, states present, missing states. Missing state → ask the designer before building.
+2. **Compose from `packages/ui-web`**. Missing component → `ui-component` skill first; never inline
+   a one-off styled div that should be a component.
+3. **Route** in `apps/web/src/app/(app)/<route>/` with `page.tsx` (server component for data) +
+   feature folder `apps/web/src/features/<feature>/` (components, hooks, copy, tests).
+4. **Data**: server fetch via `packages/api-client`; TanStack Query for client refresh; optimistic UI
+   only for reversible, non-financial interactions.
+5. **Numbers**: `<Amount>` / `<Rate>` components (tabular figures, locale formatting) wrapped in
+   `<ReceiptTrigger>`; truth badge beside estimated/stale values.
+6. **All states**: loading skeleton shaped like the content, empty with a clear first action, error
+   with retry and what happened, offline, stale, permission denied.
+7. **Copy** in `messages/{es-CO,en}.json`; no hardcoded strings.
+8. **Motion** with tokens only (enter 200 ms, number transitions, sheet slides); honour
+   `prefers-reduced-motion`.
+9. **Accessibility**: landmarks, headings order, focus management on sheets/dialogs, labels,
+   keyboard path, contrast from tokens.
+10. **Tests**: Playwright E2E happy + failure path; axe scan; screenshots light/dark at 390 px and
+    1440 px.
+11. Run the `design-critique` skill on your own screenshots and fix findings before the PR.
+
+## Done when
+
+Matches the Figma frame (spacing, type, states), passes axe with 0 serious issues, E2E green, PR
+contains Figma link + 4 screenshots (light/dark × mobile/desktop).

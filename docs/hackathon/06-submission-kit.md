@@ -1,11 +1,11 @@
-# 06 — Kit de envío (Devpost, video, README y feedback)
+# 06 — Submission kit (Devpost, video, README and feedback)
 
-Todo lo que ve el jurado va **en inglés** (regla de idioma). Los textos entre `[corchetes]` se
-llenan con datos **reales** medidos o investigados. Nunca se completan con cifras inventadas.
+Everything the judges see is **in English** (language rule). Text in `[brackets]` is filled with
+**real** measured or researched data. It is never completed with invented figures.
 
 ---
 
-## 1. Texto de Devpost (borrador en inglés)
+## 1. Devpost text (English draft)
 
 **Project name:** FINCH: your private, always-on personal CFO
 
@@ -122,56 +122,56 @@ All data in demo personas is synthetic.
 
 ---
 
-## 2. Guion del video (2:50, inglés, UI en inglés con cambio a español en un momento)
+## 2. Video script (2:50, English, English UI with one switch to Spanish)
 
-| Tiempo    | Imagen                                                                                                                                                 | Voz (EN)                                                                                                                                                                                                                                                             |
-| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0:00–0:12 | Logo → notificación bancaria "Recibiste $4.200.000"                                                                                                    | "Payday. Now what? Bills, cards, debts, savings — most of us improvise. And AI chatbots invent numbers. Meet FINCH: a private, always-on personal CFO."                                                                                                              |
-| 0:12–0:40 | Laura toca "Me llegó el sueldo" → plan del mes se construye en vivo (sobres, fechas, checklist)                                                        | "FINCH detects the paycheck and plans the whole month in seconds: bills by due date, card payments, emergency fund, goals. Nemotron 3.5 Lightning reads the notification; Nemotron 3 Super orchestrates our deterministic financial skills on Nebius Token Factory." |
-| 0:40–1:00 | Toque en una cifra → panel del recibo (fórmula@versión, entradas, fuente)                                                                              | "Here's the trick: the model isn't allowed to write numbers. It cites receipts. Every figure is computed, versioned and sourced."                                                                                                                                    |
-| 1:00–1:20 | Tarjetas: "pagar el mínimo te cuesta X" → banner de Ultra: "tarjeta a 1,1 pp de la usura" → Oportunidades: compra de cartera y CDT con URLs vía Tavily | "Nemotron 3 Ultra audits every recommendation. It flagged a card close to the legal cap, and Tavily brought live refinancing and deposit options from official and public sources."                                                                                  |
-| 1:20–1:40 | "¿Me lo puedo permitir?" audífonos → "Espera al día 12" · simulador "¿Y si…?"                                                                          | "Before you spend, FINCH shows the real impact — and what happens if you lose your income, buy a motorbike or change jobs."                                                                                                                                          |
-| 1:40–2:00 | Foto de recibo → gasto registrado · SOAT en la bóveda → recordatorio · detective de suscripciones                                                      | "Snap a receipt, drop your insurance in the vault, and FINCH tracks expiry dates and subscriptions you forgot."                                                                                                                                                      |
-| 2:00–2:15 | Hogar Pérez: gastos compartidos y liquidación · "Lo que FINCH sabe de ti"                                                                              | "Share finances with your partner — each person chooses what to share. And you control everything FINCH remembers."                                                                                                                                                  |
-| 2:15–2:30 | Vigía → push de la app en el celular · briefing de la mañana · cambio a español y a USD                                                                | "It's always on: a Nebius Serverless Job re-checks everything daily and notifies you in the app. Multi-currency, live FX, and it speaks your language."                                                                                                              |
-| 2:30–2:45 | Tabla de evals                                                                                                                                         | "We measured it: zero ungrounded numbers, [X]% safety on adversarial tests, and tiered routing at [Y]% of the cost of a single large model."                                                                                                                         |
-| 2:45–2:50 | Logo + tagline + URL                                                                                                                                   | "FINCH. Nemotron explains. Math decides. Every number comes with a receipt."                                                                                                                                                                                         |
+| Time      | Picture                                                                                                                                                  | Voice (EN)                                                                                                                                                                                                                                                           |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0:00–0:12 | Logo → bank notification "You received $4,200,000"                                                                                                       | "Payday. Now what? Bills, cards, debts, savings — most of us improvise. And AI chatbots invent numbers. Meet FINCH: a private, always-on personal CFO."                                                                                                              |
+| 0:12–0:40 | Laura taps "My paycheck arrived" → the month plan builds live (envelopes, dates, checklist)                                                              | "FINCH detects the paycheck and plans the whole month in seconds: bills by due date, card payments, emergency fund, goals. Nemotron 3.5 Lightning reads the notification; Nemotron 3 Super orchestrates our deterministic financial skills on Nebius Token Factory." |
+| 0:40–1:00 | Tap on a figure → receipt panel (formula@version, inputs, source)                                                                                        | "Here's the trick: the model isn't allowed to write numbers. It cites receipts. Every figure is computed, versioned and sourced."                                                                                                                                    |
+| 1:00–1:20 | Cards: "paying the minimum costs you X" → Ultra banner: "card 1.1 pp below the usury cap" → Opportunities: balance transfer and CDT with URLs via Tavily | "Nemotron 3 Ultra audits every recommendation. It flagged a card close to the legal cap, and Tavily brought live refinancing and deposit options from official and public sources."                                                                                  |
+| 1:20–1:40 | "Can I afford it?" headphones → "Wait until the 12th" · "What if…?" simulator                                                                            | "Before you spend, FINCH shows the real impact — and what happens if you lose your income, buy a motorbike or change jobs."                                                                                                                                          |
+| 1:40–2:00 | Receipt photo → expense recorded · SOAT in the vault → reminder · subscription detective                                                                 | "Snap a receipt, drop your insurance in the vault, and FINCH tracks expiry dates and subscriptions you forgot."                                                                                                                                                      |
+| 2:00–2:15 | Pérez household: shared expenses and settlement · "What FINCH knows about you"                                                                           | "Share finances with your partner — each person chooses what to share. And you control everything FINCH remembers."                                                                                                                                                  |
+| 2:15–2:30 | Watcher → app push on the phone · morning briefing · switch to Spanish and to USD                                                                        | "It's always on: a Nebius Serverless Job re-checks everything daily and notifies you in the app. Multi-currency, live FX, and it speaks your language."                                                                                                              |
+| 2:30–2:45 | Evals table                                                                                                                                              | "We measured it: zero ungrounded numbers, [X]% safety on adversarial tests, and tiered routing at [Y]% of the cost of a single large model."                                                                                                                         |
+| 2:45–2:50 | Logo + tagline + URL                                                                                                                                     | "FINCH. Nemotron explains. Math decides. Every number comes with a receipt."                                                                                                                                                                                         |
 
-**Reglas de producción:** grabar en 1080p; sin logos de bancos ni marcas de terceros (salvo
-mencionar Nebius, NVIDIA y Tavily como tecnologías usadas); música libre de regalías con licencia
-anotada, o sin música; subtítulos EN incrustados; título en YouTube: _"FINCH: private, always-on
-personal CFO | Nebius x NVIDIA Global AI Hackathon"_; visibilidad **Pública**.
+**Production rules:** record in 1080p; no bank logos or third-party marks (other than naming Nebius,
+NVIDIA and Tavily as technologies used); royalty-free music with its license recorded, or no music;
+burned-in English subtitles; YouTube title: _"FINCH: private, always-on personal CFO | Nebius x
+NVIDIA Global AI Hackathon"_; visibility **Public**.
 
-## 3. README para jurados (estructura)
+## 3. README for judges (structure)
 
-El README raíz en inglés debe tener, en este orden:
+The English root README must contain, in this order:
 
-1. Logo + tagline + badges (license, CI) + enlaces: **Demo · Video · Devpost**.
-2. _What is FINCH_ (3 líneas) + GIF de 10 s.
-3. **How we use NVIDIA Nemotron and Nebius** (tabla modelo → uso → porcentaje de llamadas → costo),
-   _where Token Factory accelerated our workflow_ (batch evals, structured outputs, cambiar de
-   modelo sin reescribir código) y _other Nebius services_ (Serverless Jobs, …).
-4. **Personal AI track mapping** (tabla de 01 §3).
-5. Architecture (diagrama de 03 §1).
-6. **Quickstart** (≤ 10 comandos): `nvm use`, `corepack enable`, `pnpm install`, `cp .env.example .env`,
+1. Logo + tagline + badges (license, CI) + links: **Demo · Video · Devpost**.
+2. _What is FINCH_ (3 lines) + a 10-second GIF.
+3. **How we use NVIDIA Nemotron and Nebius** (table model → use → share of calls → cost), _where
+   Token Factory accelerated our workflow_ (batch evals, structured outputs, switching models without
+   rewriting code) and _other Nebius services_ (Serverless Jobs, …).
+4. **Personal AI track mapping** (table from 01 §3).
+5. Architecture (diagram from 03 §1).
+6. **Quickstart** (≤ 10 commands): `nvm use`, `corepack enable`, `pnpm install`, `cp .env.example .env`,
    `pnpm dev:infra`, `pnpm db:seed`, `pnpm dev`.
-7. Evals: cómo correrlas y resultados.
+7. Evals: how to run them and the results.
 8. Safety & privacy.
 9. License (Apache-2.0) + Trademarks + Third-party notices.
-10. Enlace a la Constitución de ingeniería (el documento en español).
+10. Link to the engineering Constitution (`docs/architecture/CONSTITUTION.md`).
 
-## 4. Feedback para Nebius/NVIDIA (compite por _Most Valuable Feedback_)
+## 4. Feedback for Nebius/NVIDIA (competes for _Most Valuable Feedback_)
 
-Llevar un **log de fricción** desde el día 1 (`docs/hackathon/feedback-log.md`): fecha, qué se
-intentó, qué pasó, cuánto tiempo costó y la sugerencia. El 28-oct se condensa en:
+Keep a **friction log** from day 1 (`docs/hackathon/feedback-log.md`): date, what was attempted, what
+happened, how much time it cost and the suggestion. On 28 Oct it is condensed into:
 
-- **Token Factory:** onboarding, descubrimiento de IDs de modelos, calidad del tool calling de
-  cada Nemotron en español, structured outputs, latencias observadas, experiencia con batch,
-  claridad de precios y consumo de créditos, límites de tasa.
-- **AI Cloud:** Serverless Jobs (programación, logs, cold start), endpoints y CLI.
-- **Multimodal:** calidad de extracción de recibos y documentos colombianos (con números de E1).
-- **NVIDIA models:** comparación Lightning vs Super vs Ultra en tareas reales (con números de las
-  evals), y la calidad en español colombiano.
-- **Sugerencias concretas y priorizadas**, cada una con su impacto.
+- **Token Factory:** onboarding, model-ID discovery, tool-calling quality of each Nemotron in
+  Spanish, structured outputs, observed latencies, batch experience, pricing clarity and credit
+  consumption, rate limits.
+- **AI Cloud:** Serverless Jobs (scheduling, logs, cold start), endpoints and CLI.
+- **Multimodal:** extraction quality on Colombian receipts and documents (with E1 numbers).
+- **NVIDIA models:** Lightning vs Super vs Ultra on real tasks (with eval numbers), and quality in
+  Colombian Spanish.
+- **Concrete, prioritized suggestions**, each with its impact.
 
-"Completeness, viability, potential impact" es el criterio: feedback con datos y reproducible.
+"Completeness, viability, potential impact" is the criterion: feedback with data, reproducible.

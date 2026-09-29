@@ -1,0 +1,58 @@
+{
+  "$description": "FINCH semantic tokens — dark theme. Same names as light; only values change.",
+  "color": {
+    "$type": "color",
+    "surface": {
+      "canvas": { "$value": "{color.neutral.950}" },
+      "default": { "$value": "{color.neutral.925}" },
+      "raised": { "$value": "{color.neutral.900}" },
+      "sunken": { "$value": "{color.neutral.975}" },
+      "inverse": { "$value": "{color.neutral.mist}" },
+      "brand": { "$value": "{color.green.950}" }
+    },
+    "text": {
+      "primary": { "$value": "{color.neutral.mist}" },
+      "secondary": { "$value": "{color.neutral.300}" },
+      "tertiary": { "$value": "{color.neutral.400}" },
+      "link": { "$value": "{color.green.300}" },
+      "inverse": { "$value": "{color.neutral.ink}" },
+      "onBrand": { "$value": "{color.neutral.mist}" }
+    },
+    "border": {
+      "subtle": { "$value": "{color.neutral.850}" },
+      "default": { "$value": "{color.neutral.800}" },
+      "strong": { "$value": "{color.neutral.500}" },
+      "focus": { "$value": "{color.green.300}" }
+    },
+    "action": {
+      "primary": { "$value": "{color.green.300}" },
+      "primaryHover": { "$value": "{color.green.200}" },
+      "primaryText": { "$value": "{color.green.950}" },
+      "secondary": { "$value": "{color.neutral.850}" },
+      "secondaryHover": { "$value": "{color.neutral.800}" },
+      "secondaryText": { "$value": "{color.neutral.mist}" }
+    },
+    "feedback": {
+      "positiveFg": { "$value": "{color.green.300}" },
+      "positiveBg": { "$value": "{color.greenTint.950}" },
+      "negativeFg": { "$value": "{color.red.300}" },
+      "negativeBg": { "$value": "{color.red.950}" },
+      "warningFg": { "$value": "{color.amber.300}" },
+      "warningBg": { "$value": "{color.amber.950}" },
+      "infoFg": { "$value": "{color.blue.300}" },
+      "infoBg": { "$value": "{color.blue.950}" }
+    },
+    "truth": {
+      "verifiedFg": { "$value": "{color.green.300}" },
+      "verifiedBg": { "$value": "{color.greenTint.950}" },
+      "declaredFg": { "$value": "{color.blue.300}" },
+      "declaredBg": { "$value": "{color.blue.950}" },
+      "calculatedFg": { "$value": "{color.green.200}" },
+      "calculatedBg": { "$value": "{color.neutral.850}" },
+      "estimatedFg": { "$value": "{color.brass.300}" },
+      "estimatedBg": { "$value": "{color.brass.950}" },
+      "staleFg": { "$value": "{color.neutral.300}" },
+      "staleBg": { "$value": "{color.slate.900}" }
+    }
+  }
+}

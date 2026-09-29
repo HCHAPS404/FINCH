@@ -2,8 +2,8 @@
   "name": "finch",
   "version": "0.0.0",
   "private": true,
-  "description": "FINCH \u2014 Financial Decision & Action OS. Root workspace.",
-  "license": "UNLICENSED",
+  "description": "FINCH — Financial Decision & Action OS. Root workspace.",
+  "license": "Apache-2.0",
   "type": "module",
   "engines": {
     "node": ">=24.21.0 <25.0.0",
@@ -17,8 +17,8 @@
     "dev:infra": "docker compose -f infra/docker/compose.yaml up -d",
     "dev:infra:down": "docker compose -f infra/docker/compose.yaml down",
     "build": "turbo run build",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint": "turbo run build --output-logs=errors-only && eslint .",
+    "lint:fix": "turbo run build --output-logs=errors-only && eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "turbo run typecheck",
@@ -26,13 +26,15 @@
     "test:integration": "turbo run test:integration",
     "financial:verify": "turbo run financial:verify --filter=@finch/financial-engine",
     "ai:eval": "node scripts/ai-eval.mjs",
+    "ai:sync": "node scripts/ai-sync.mjs",
+    "ai:check": "node scripts/ai-sync.mjs --check",
     "architecture:check": "node scripts/architecture-check.mjs --self-test",
     "security:check": "node scripts/security-check.mjs --self-test",
     "db:migrate": "turbo run db:migrate --filter=@finch/db",
     "db:seed": "turbo run db:seed --filter=@finch/db",
     "openapi:generate": "turbo run openapi:generate --filter=@finch/api",
     "release:verify": "node scripts/release-verify.mjs",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm architecture:check && pnpm security:check && pnpm test"
+    "check": "pnpm ai:check && pnpm lint && pnpm format:check && pnpm typecheck && pnpm architecture:check && pnpm security:check && pnpm test"
   },
   "devDependencies": {
     "@finch/eslint-config": "workspace:*",

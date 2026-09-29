@@ -1,0 +1,15 @@
+{
+  // Editor + ESLint view of this package: includes tests and local config files so
+  // type-aware lint rules actually cover them. `rootDir` is widened to the package
+  // root (and emission disabled) because vitest.config.ts sits outside src/ — the
+  // build config below keeps rootDir at src/ so tests never reach dist/.
+  "extends": "./tsconfig.build.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "composite": false,
+    "incremental": false,
+    "rootDir": "."
+  },
+  "include": ["src/**/*.ts", "src/**/*.json", "*.config.ts"],
+  "exclude": ["dist", "node_modules"]
+}

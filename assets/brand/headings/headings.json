@@ -1,0 +1,44 @@
+{
+  "$comment": "Section heading images for README.md and README-DEVELOPERS.md (all in English). Regenerate with: python3 assets/brand/tools/render_headings.py (requires Pillow).",
+  "public": [
+    ["what-is-finch", "What is FINCH", "A private, always-on personal CFO"],
+    ["features", "Features", "45 capabilities, one calm product"],
+    ["how-it-works", "How it works", "Nemotron explains. Math decides."],
+    [
+      "nemotron-nebius",
+      "Built on NVIDIA Nemotron & Nebius",
+      "Tiered models on Token Factory, always-on on Serverless"
+    ],
+    ["architecture", "Architecture", "Modular monolith · hexagonal modules · pure engine"],
+    ["quickstart", "Quickstart", "From clone to green checks"],
+    ["quality", "Quality & evaluation", "Every claim measured, every number receipted"],
+    ["security", "Security & privacy", "Your data under your control"],
+    ["roadmap", "Roadmap", "Web → Windows → Android → macOS & iOS"],
+    ["team", "Team", "Built by its two founders"],
+    ["license", "License & trademarks", "Open core, protected brand"]
+  ],
+  "developers": [
+    ["dev-index", "Contents", "The founders' working agreement"],
+    ["dev-01", "Order of authority", "Which document wins"],
+    ["dev-02", "Team, roles and responsibilities", "Who does what"],
+    ["dev-03", "Obligations and duties", "What we commit to"],
+    ["dev-04", "Development environment", "Exact toolchain and variables"],
+    ["dev-05", "Commands", "Checks that test themselves"],
+    ["dev-06", "Branches, stages and milestones", "main ← stage ← area ← task"],
+    ["dev-07", "Workflow", "From story to merge"],
+    ["dev-08", "Method", "XP · Agile · CRISP-ML(Q)"],
+    ["dev-09", "Ready and Done", "When to start and when it is finished"],
+    ["dev-10", "Coding standards", "Strict types, exact money, tokens"],
+    ["dev-11", "AI in the product and as a tool", "Nemotron at runtime · agents as tools"],
+    ["dev-12", "Security, secrets and data", "Hardened front end and back end"],
+    ["dev-13", "Credits and costs", "Budget and the judging reserve"],
+    ["dev-14", "Demo operations and on-call", "Always up until 15 Dec"],
+    ["dev-15", "Decisions and escalation", "STOP → EXPLAIN → PROPOSE → WAIT"],
+    ["dev-16", "Documentation map", "Where everything lives"],
+    [
+      "dev-17",
+      "Agents, rules, skills and Figma",
+      "One system for Claude, Cursor, Codex and Antigravity"
+    ]
+  ]
+}

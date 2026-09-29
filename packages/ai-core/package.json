@@ -2,9 +2,32 @@
   "name": "@finch/ai-core",
   "version": "0.0.0",
   "private": true,
-  "description": "AI Gateway: policy, PII classification, prompt registry, schema validation, cost limits. README \u00a730, \u00a731.",
+  "description": "AI Gateway: policy, PII classification, prompt registry, schema validation, cost limits. README §30, §31.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
   "dependencies": {
-    "@finch/contracts": "workspace:*"
+    "@finch/contracts": "workspace:*",
+    "zod": "4.6.5"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
   }
 }

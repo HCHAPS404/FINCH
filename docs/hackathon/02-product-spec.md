@@ -1,148 +1,151 @@
-# 02 — Especificación de producto: FINCH, CFO personal premium
+# 02 — Product specification: FINCH, the premium personal CFO
 
-> Alcance funcional completo y niveles (H / P): **[08-feature-catalog.md](08-feature-catalog.md)**.
-> Este documento describe la **experiencia**: visión, principios premium, personas, navegación,
-> flujos y skills.
+> Full functional scope and levels (H / P): **[08-feature-catalog.md](08-feature-catalog.md)**.
+> This document describes the **experience**: vision, premium principles, personas, navigation,
+> flows and skills.
 
-Nivel de riesgo (README §18): R0–R1 y **R2 acotada** (borradores, checklists, enlaces compartibles).
-**FINCH nunca mueve dinero.** Capacidad regulatoria (README §37): `INFORMATION`, `COMPARISON`,
-`SIMULATION`; lo personalizado se presenta como simulación educativa con supuestos explícitos
-(decisión D-07).
+Risk tier (README §18): R0–R1 and a **bounded R2** (drafts, checklists, shareable links).
+**FINCH never moves money.** Regulatory capability (README §37): `INFORMATION`, `COMPARISON`,
+`SIMULATION`; personalized content is presented as educational simulation with explicit assumptions
+(decision D-07).
 
 ---
 
-## 1. Visión
+## 1. Vision
 
-**FINCH es la app que administra tu vida financiera como lo haría un CFO personal**: sabe cuándo te
-llega el dinero, lo reparte con criterio, controla tus tarjetas, te frena antes de una mala compra,
-encuentra dinero que estás perdiendo, busca mejores productos en el mercado real y protege a tu
-hogar — y **cada número que te muestra viene con su recibo**.
+**FINCH is the app that runs your financial life the way a personal CFO would**: it knows when your
+money arrives, allocates it with judgement, controls your cards, stops you before a bad purchase,
+finds money you are losing, searches the real market for better products and protects your
+household — and **every number it shows you comes with its receipt**.
 
-- **Autónoma:** todo ocurre dentro de FINCH (bandeja, push, calendario, bóveda). Correo, SMS,
-  WhatsApp o Telegram son extras opcionales para traer o enviar información (ADR-0039).
-- **Global-ready, Colombia-deep:** multimoneda y FX en vivo para todos; reglas colombianas a fondo;
-  un segundo país en mínimo viable demuestra la escalabilidad.
-- **Personal AI de verdad:** siempre activa, privada, con memoria controlable y skills reutilizables.
+- **Autonomous:** everything happens inside FINCH (inbox, push, calendar, vault). Email, SMS,
+  WhatsApp or Telegram are optional extras to bring information in or send it out (ADR-0039).
+- **Global-ready, Colombia-deep:** multi-currency and live FX for everyone; Colombian rules in depth;
+  a complete second-country pack proves the architecture scales.
+- **Personal AI for real:** always-on, private, with controllable memory and reusable skills.
 
-## 2. Principios premium (criterios de aceptación de diseño para todas las pantallas)
+## 2. Premium principles (design acceptance criteria for every screen)
 
-| Principio                    | Criterio verificable                                                                                                                   |
-| ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Confianza visible**        | Toda cifra es clicable → recibo; badges de verdad con texto + ícono (Verificado · Declarado · Calculado · Estimado · Desactualizado).  |
-| **Velocidad**                | Interacciones locales < 100 ms (UI optimista); primer token de IA < 1,5 s (streaming); Lighthouse ≥ 90 en performance y accesibilidad. |
-| **Calma por defecto**        | Máximo 1 notificación push diaria salvo alertas críticas; horario silencioso; cada notificación responde "¿qué gano con abrirla?".     |
-| **Primer valor en 60 s**     | Onboarding de 3 preguntas (ingreso, fecha de pago, deuda principal) → primer plan del mes.                                             |
-| **Identidad**                | Verde FINCH, tipografía editorial, microanimaciones de 150–250 ms, ilustración con el motivo del pájaro, modo oscuro de primera clase. |
-| **Estados diseñados**        | Vacío, cargando (skeletons), error, sin conexión, desactualizado — diseñados para cada pantalla.                                       |
-| **Accesibilidad**            | Navegación por teclado, lector de pantalla, contraste AA, nada comunicado solo por color (README §34–35).                              |
-| **Criterio**                 | FINCH dice "vas bien, no hagas nada" cuando corresponde.                                                                               |
-| **Privacidad como producto** | "Lo que FINCH sabe de ti", exportar/borrar en un clic, sin publicidad ni venta de datos.                                               |
+| Principle                | Verifiable criterion                                                                                                                |
+| ------------------------ | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **Visible trust**        | Every figure is clickable → receipt; truth badges with text + icon (Verified · Declared · Calculated · Estimated · Stale).          |
+| **Speed**                | Local interactions < 100 ms (optimistic UI); first AI token < 1.5 s (streaming); Lighthouse ≥ 90 for performance and accessibility. |
+| **Calm by default**      | At most 1 push per day except critical alerts; quiet hours; every notification answers "what do I gain by opening it?".             |
+| **First value in 60 s**  | 3-question onboarding (income, payday, main debt) → first month plan.                                                               |
+| **Identity**             | FINCH green, editorial typography, 150–250 ms micro-animations, illustration built from the bird motif, first-class dark mode.      |
+| **Designed states**      | Empty, loading (skeletons), error, offline, stale — designed for every screen.                                                      |
+| **Accessibility**        | Keyboard navigation, screen readers, AA contrast, nothing conveyed by color alone (README §34–35).                                  |
+| **Judgement**            | FINCH says "you're doing fine, do nothing" when that is the right answer.                                                           |
+| **Privacy as a product** | "What FINCH knows about you", one-tap export/delete, no ads, no data sales.                                                         |
 
-## 3. Personas del demo (sintéticas, README §80)
+## 3. Demo personas (synthetic, README §80)
 
-| Persona                                                      | Perfil                                                                                                                                 | Funciones que luce                                                                                                                          |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Laura, 29, Medellín** (`credit_card_heavy`) — **estrella** | Salario COP 4,2 M el día 30; 2 tarjetas (una cerca de la usura); crédito de libre inversión; suscripciones olvidadas; SOAT por vencer. | B1 Payday Autopilot, B3 tarjetas, C1 ¿me lo puedo permitir?, D1 compra de cartera + CDT, D2 suscripciones, E1 recibos, E2 bóveda, F2 radar. |
-| **Andrés, 34, Bogotá** (`freelancer_variable`)               | Ingresos variables en COP **y USD** (clientes del exterior); arriendo; metas.                                                          | B6 ingresos múltiples, G3 multimoneda/FX, D5 remesas, C3 modo tormenta, F5 ¿debo declarar renta?                                            |
-| **Hogar Pérez** (`household_shared`)                         | Pareja con dos ingresos; gastos comunes; meta de cuota inicial.                                                                        | F1 finanzas compartidas, C4 metas con trade-offs, B5 cierre de mes.                                                                         |
-| **Sofía, 31, segundo país** (paquete G4)                     | Persona mínima del segundo país.                                                                                                       | G4, G3.                                                                                                                                     |
+| Persona                                                  | Profile                                                                                                                         | Features it showcases                                                                                                                        |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Laura, 29, Medellín** (`credit_card_heavy`) — **star** | COP 4.2 M salary on the 30th; 2 cards (one near the usury cap); a personal loan; forgotten subscriptions; SOAT about to expire. | B1 Payday Autopilot, B3 cards, C1 can I afford it?, D1 balance transfer + CDT, D2 subscriptions, E1 receipts, E2 vault, F2 protection radar. |
+| **Andrés, 34, Bogotá** (`freelancer_variable`)           | Variable income in COP **and USD** (foreign clients); rent; goals.                                                              | B6 multiple incomes, G3 multi-currency/FX, D5 remittances, C3 storm mode, F5 must I file taxes?                                              |
+| **Pérez household** (`household_shared`)                 | Couple with two incomes; shared expenses; down-payment goal.                                                                    | F1 household finances, C4 goals with trade-offs, B5 month-end close.                                                                         |
+| **Sofía, 31, second country** (G4 pack)                  | Persona for the second country.                                                                                                 | G4, G3, D1 local products.                                                                                                                   |
 
-## 4. Navegación (arquitectura de información)
+## 4. Navigation (information architecture)
 
-Barra principal (5 destinos, móvil primero):
+Main bar (5 destinations, mobile first):
 
-1. **Hoy** — briefing (G2), bandeja de Decision Cards (A6), próximos pagos (B4), safe-to-spend.
-2. **Dinero** — sobres (B2), tarjetas (B3), cuentas e ingresos (B6), patrimonio (B8), salud (B7).
-3. **FINCH** (botón central) — conversación con el agente: preguntar, simular (C1–C5), buscar (E3),
-   capturar (cámara E1).
-4. **Oportunidades** — mercado (D1), suscripciones (D2), anomalías (D3), gastos fijos (D4), remesas (D5).
-5. **Yo** — metas (C4), hogar compartido (F1), protección (F2), bóveda (E2), hábitos (G1),
-   pasaporte (F3), mis casos (F4), impuestos (F5), lo que FINCH sabe de ti (A7), Vigía (A11),
-   canales y ajustes (H1–H3).
+1. **Today** — briefing (G2), Decision Card inbox (A6), upcoming payments (B4), safe-to-spend.
+2. **Money** — envelopes (B2), cards (B3), accounts and income (B6), net worth (B8), health (B7).
+3. **FINCH** (center button) — conversation with the agent: ask, simulate (C1–C5), search (E3),
+   capture (camera, E1).
+4. **Opportunities** — market (D1), subscriptions (D2), anomalies (D3), fixed costs (D4),
+   remittances (D5).
+5. **Me** — goals (C4), household (F1), protection (F2), vault (E2), habits (G1), passport (F3), my
+   cases (F4), taxes (F5), what FINCH knows about you (A7), Watcher (A11), channels and settings
+   (H1–H3).
 
-Detalle transversal: **panel de recibo** deslizable desde cualquier cifra; **segunda opinión** visible
-en cada Decision Card.
+Cross-cutting: a **receipt panel** slides in from any figure; the **second opinion** is visible on
+every Decision Card.
 
-## 5. Flujos principales
+## 5. Main flows
 
-### F-A. "Me llegó el sueldo" (estrella del video)
+### F-A. "My paycheck arrived" (video star)
 
 ```text
-Laura comparte la notificación del banco (o toca "Me llegó un ingreso")
-  → L extrae monto/fecha/origen → confirmación de 1 toque
-  → budget.allocate: obligaciones → mínimos → págate primero → colchón → metas → libre
-  → S explica el plan con marcadores → verificador → U: "APPROVE_WITH_WARNINGS: la tarjeta A
-    está a 1,1 pp de la usura; considera compra de cartera"
-  → Plan del mes con recibos + checklist de ejecución + Decision Card "compra de cartera"
-  → sobres creados; calendario actualizado; briefing de mañana preparado
+Laura shares the bank notification (or taps "Income arrived")
+  → L extracts amount/date/source → one-tap confirmation
+  → budget.allocate: obligations → minimums → pay-yourself-first → buffer → goals → free
+  → S explains the plan with placeholders → verifier → U: "APPROVE_WITH_WARNINGS: card A is
+    1.1 pp below the usury cap; consider a balance transfer"
+  → Month plan with receipts + execution checklist + "balance transfer" Decision Card
+  → envelopes created; calendar updated; tomorrow's briefing prepared
 ```
 
-### F-B. "¿Me lo puedo permitir?"
+### F-B. "Can I afford it?"
 
-Texto o foto del producto → C1 → veredicto (sí / sí con ajuste / espera hasta fecha / no
-recomendado) + contado vs cuotas con intereses reales → opción "crear meta" si conviene esperar.
+Text or photo of the product → C1 → verdict (yes / yes with adjustment / wait until a date / not
+recommended) + cash vs instalments with real interest → "create a goal" when waiting is better.
 
-### F-C. Encontrar dinero
+### F-C. Find money
 
-Importar extracto o reenviar correos → D2 detecta recurrentes y una subida de precio → D3 marca un
-cargo duplicado → F4 redacta el reclamo → D1 encuentra mejor CDT para el colchón.
+Import a statement or forward emails → D2 finds recurring charges and a price rise → D3 flags a
+duplicate charge → F4 drafts the claim → D1 finds a better CDT for the buffer.
 
-### F-D. Mercado y compra de cartera (flujo original, ampliado)
+### F-D. Market and balance transfer (original flow, extended)
 
-Pregunta → T trae usura vigente y ofertas → motor: conversión, costo total, usura, comparación →
-Decision Card con ahorro en pesos → U revisa → borrador de solicitud (F4).
+Question → T brings the current usury cap and offers → engine: conversion, total cost, usury,
+comparison → Decision Card with savings in pesos → U reviews → draft request (F4).
 
-### F-E. Captura y bóveda
+### F-E. Capture and vault
 
-Foto de recibo → E1 extrae → confirmar → gasto en su sobre. Foto del SOAT → E2 guarda, extrae
-vencimiento → recordatorio 30/7/1 días.
+Receipt photo → E1 extracts → confirm → expense lands in its envelope. SOAT photo → E2 stores it and
+extracts the expiry date → reminders 30/7/1 days before.
 
-### F-F. Hogar compartido
+### F-F. Household
 
-Pareja Pérez: cada quien decide qué comparte → gastos comunes con división proporcional al ingreso
-→ liquidación mínima → meta común de cuota inicial con trade-offs.
+The Pérez couple: each person decides what to share → shared expenses split proportionally to income
+→ minimal settlement → shared down-payment goal with trade-offs.
 
-### F-G. Tormenta
+### F-G. Storm
 
-"¿Y si me quedo sin trabajo?" → C3 runway con y sin recortes → plan semana a semana → U revisa →
-Decision Cards de acciones (pedir periodo de gracia, pausar metas).
+"What if I lose my job?" → C3 runway with and without cuts → week-by-week plan → U reviews → action
+Decision Cards (ask for a grace period, pause goals).
 
-### F-H. Vigía y briefing
+### F-H. Watcher and briefing
 
-06:00 local → recalcula todo → consulta mercado (caché) → eventos → cards → push de la app con
-mínimo PII → briefing en "Hoy" (y por correo si el usuario lo activó).
+06:00 local → recompute everything → check the market (cached) → events → cards → in-app push with
+minimal PII → briefing on "Today" (and by email if the user enabled it).
 
-## 6. Skills del agente (tools)
+## 6. Agent skills (tools)
 
-Cada skill: nombre estable, versión, esquema zod → JSON Schema, clase de verdad de salida, recibo.
+Every skill: stable name, version, zod schema → JSON Schema, output truth class, receipt.
 
-| Grupo              | Skills                                                                                                                                                                    |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Twin y memoria     | `twin.get_snapshot` · `twin.record_fact`* · `memory.remember/recall/forget`                                                                                               |
-| Crédito (CO)       | `finance.convert_rate` · `finance.amortization_schedule` · `finance.total_cost_of_credit` · `finance.check_usury` · `finance.compare_offers` · `finance.debt_payoff_plan` |
-| Administración     | `budget.allocate` · `budget.envelope_state` · `cards.status` · `calendar.upcoming` · `month.close` · `health.score` · `networth.compute`                                  |
-| Decisión           | `purchase.afford` · `scenario.project` · `stress.runway` · `goals.plan` · `invest.project`                                                                                |
-| Mercado (T)        | `market.get_reference_rate` · `market.search_credit` · `market.search_deposits` · `market.search_plans` · `market.remittance_quotes` · `fx.rate`                          |
-| Detección          | `recurring.detect` · `anomaly.scan`                                                                                                                                       |
-| Captura            | `docs.extract_receipt`* · `docs.extract_document`* · `import.statement`* · `query.run` (DSL acotado)                                                                      |
-| Hogar y protección | `split.settle` · `protection.gaps`                                                                                                                                        |
-| Acciones R2        | `cards.create_decision_card` · `actions.draft_letter` · `passport.create_link`* · `reminders.schedule` · `cases.track`                                                    |
-| Impuestos (CO)     | `tax.co.must_file` · `tax.co.cdt_withholding`                                                                                                                             |
+| Group                    | Skills                                                                                                                                                                    |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Twin and memory          | `twin.get_snapshot` · `twin.record_fact`* · `memory.remember/recall/forget`                                                                                               |
+| Credit (CO)              | `finance.convert_rate` · `finance.amortization_schedule` · `finance.total_cost_of_credit` · `finance.check_usury` · `finance.compare_offers` · `finance.debt_payoff_plan` |
+| Money management         | `budget.allocate` · `budget.envelope_state` · `cards.status` · `calendar.upcoming` · `month.close` · `health.score` · `networth.compute`                                  |
+| Decisions                | `purchase.afford` · `scenario.project` · `stress.runway` · `goals.plan` · `invest.project`                                                                                |
+| Market (T)               | `market.get_reference_rate` · `market.search_credit` · `market.search_deposits` · `market.search_plans` · `market.remittance_quotes` · `fx.rate`                          |
+| Detection                | `recurring.detect` · `anomaly.scan`                                                                                                                                       |
+| Capture                  | `docs.extract_receipt`* · `docs.extract_document`* · `import.statement`* · `query.run` (bounded DSL)                                                                      |
+| Household and protection | `split.settle` · `protection.gaps`                                                                                                                                        |
+| R2 actions               | `cards.create_decision_card` · `actions.draft_letter` · `passport.create_link`* · `reminders.schedule` · `cases.track`                                                    |
+| Taxes (CO)               | `tax.co.must_file` · `tax.co.cdt_withholding`                                                                                                                             |
 
-`*` = requiere confirmación explícita del usuario antes de persistir o compartir.
+`*` = requires explicit user confirmation before persisting or sharing.
 
-## 7. Métricas de producto que se muestran en el demo
+## 7. Product metrics shown in the demo
 
-- Tiempo de "me llegó el sueldo" a plan del mes con recibos (< 10 s).
-- % de cifras con recibo (100 %).
-- Ahorro anual identificado para Laura (compra de cartera + suscripciones + CDT), **etiquetado como
-  simulación**.
-- Latencia p50/p95 y costo por conversación por nivel de modelo.
-- Precisión de extracción de recibos y documentos antes de confirmación.
+- Time from "my paycheck arrived" to a month plan with receipts (< 10 s).
+- Share of figures with a receipt (100 %).
+- Annual savings identified for Laura (balance transfer + subscriptions + CDT), **labelled as a
+  simulation**.
+- p50/p95 latency and cost per conversation by model tier.
+- Extraction accuracy for receipts and documents before confirmation.
 
-## 8. Aviso legal (copy base, a validar — D-07)
+## 8. Legal notice (base copy, to validate — D-07)
 
-> _FINCH ofrece información y simulaciones educativas basadas en los datos que tú proporcionas y en
-> fuentes públicas citadas. No es asesoría financiera, de inversión, legal ni tributaria
-> personalizada, ni una oferta de productos. FINCH no recibe comisiones que alteren sus comparaciones
-> y no mueve tu dinero. Verifica las condiciones finales con cada entidad._
+> _FINCH provides information and educational simulations based on the data you provide and on cited
+> public sources. It is not personalized financial, investment, legal or tax advice, nor an offer of
+> products. FINCH receives no commissions that alter its comparisons and never moves your money.
+> Confirm final terms with each institution._
+
+The Spanish (es-CO) version lives with the product copy in the web app's message files.
