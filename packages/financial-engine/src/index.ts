@@ -14,3 +14,11 @@ export { COP, USD, EUR, CURRENCIES, getCurrency } from './currency.js';
 export type { Currency } from './currency.js';
 export { registerFormula, getFormula, listFormulas } from './formula-registry.js';
 export type { FormulaDefinition, FormulaTestVector } from './formula-registry.js';
+export {
+  DECIMAL_PRECISION,
+  decimal,
+  roundDecimal,
+  moneyToDecimal,
+  decimalToMoney,
+} from './decimal.js';
+export type { Decimal } from './decimal.js';

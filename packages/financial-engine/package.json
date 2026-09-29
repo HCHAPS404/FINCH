@@ -2,7 +2,7 @@
   "name": "@finch/financial-engine",
   "version": "0.0.0",
   "private": true,
-  "description": "Pure deterministic financial mathematics. No framework, no I/O, no infrastructure. README \u00a714.",
+  "description": "Pure deterministic financial mathematics. No framework, no I/O, no infrastructure. README §14.",
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,6 +21,9 @@
     "test": "vitest run",
     "financial:verify": "vitest run --reporter=json --outputFile=../../artifacts/financial-correctness.json",
     "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "dependencies": {
+    "decimal.js": "10.6.0"
   },
   "devDependencies": {
     "typescript": "6.0.3",
