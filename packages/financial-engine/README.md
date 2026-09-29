@@ -18,6 +18,27 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 - The formula registry (`formulaId@version`): purpose, inputs, rounding, assumptions,
   reference, edge cases and test vectors for every formula.
 - Currency definitions (COP, USD, EUR with their ISO exponents).
+- The credit engine (`src/credit/`, task S1-01, spec `docs/financial-formulas/colombia-credit.md`):
+  - `rate.convert@1` — `convertRate` / `parseQuote` / `QUOTES` (EA, MV, NAMV, …) between
+    effective or nominal, any supported frequency, in arrears or in advance;
+  - `amortization.french@1` — `frenchAmortization`: fixed instalment and full schedule in
+    `Money`, half-even per period, last instalment clears the balance;
+  - `credit.total_cost@1` — `totalCost`: insurance (on balance, on original, fixed), fees,
+    upfront costs and GMF; monthly IRR by bisection (`solveMonthlyIrr`) and the real
+    effective annual rate;
+  - `credit.usury_check@1` — `usuryCheck`: agreed EA vs certified usury EA, margin in
+    percentage points, and `STALE` when the certification window does not cover the date;
+  - `credit.compare_refinance@1` — `compareRefinance`: instalment delta, nominal and PV
+    savings, break-even month, longer-term alert, conservative truth propagation;
+  - `debt.payoff_plan@1` — `payoffPlan`: AVALANCHE and SNOWBALL side by side, months to
+    debt-free, total interest and payoff order.
+- The cash-flow engine (`src/cashflow/`, same spec §7–§8): `cashflow.forecast_30d@1`
+  (`forecast30d`, business-day shifts from a calendar parameter, nearest-rank P25 for
+  variable income) and `cashflow.safe_to_spend@1` (`safeToSpend`), over clock-free civil
+  dates (`toDayNumber`, `toIsoDate`).
+
+Dependencies: `decimal.js` and, among workspace packages, only `@finch/contracts` (for
+`TruthClass`), as dependency-cruiser enforces.
 
 ## Does not own
 
@@ -33,10 +54,18 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 - Rounding is never implicit.
 - A formula change creates a new version; registered versions are never edited (§14.2).
 - `money.allocate` conserves the total exactly.
+- A French schedule repays exactly the principal and ends at a zero balance; a higher rate
+  never lowers total interest.
+- Total cost decomposes exactly into interest + insurance + fees + GMF + upfront costs; no
+  added charge ever lowers the real effective rate.
 
 ## Failure modes
 
-Invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
+Formula-domain errors throw `FinancialInputError` with a stable `code`
+(`RATE_OUT_OF_DOMAIN`, `UNSUPPORTED_QUOTE`, `INVALID_TERM`, `INVALID_PRINCIPAL`,
+`UNAMORTIZABLE_IN_MINOR_UNITS`, `INVALID_CHARGES`, `IRR_NOT_FOUND`, `INVALID_DATE`,
+`INVALID_VALIDITY_PERIOD`, `INVALID_DEBT`, `DEBT_NEVER_AMORTIZES`, `UNTRUSTED_INPUT`, `INVALID_INCOME_HISTORY`), which the API maps to `FINCH_FINANCIAL_<code>`.
+Other invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
 currency, a fractional minor unit, too many decimals for the currency, division by zero,
 a non-plain decimal string, invalid decimal places. The engine never returns a
 partially valid number.
@@ -48,7 +77,11 @@ in a `CalcReceipt`.
 
 ## Tests
 
-`pnpm --filter @finch/financial-engine test` (76 tests) and `pnpm financial:verify`
-(JSON artifact). Decimal reference values were computed independently with Python's
-`decimal` module; formula golden vectors are verified in an independent spreadsheet
-(task S1-03) before a formula informs a recommendation (README §15).
+`pnpm --filter @finch/financial-engine test` and `pnpm financial:verify` (JSON artifact).
+Golden vectors live in `test/vectors/<formulaId>@<version>.json` and are produced by
+`test/vectors/generate_credit_vectors.py`, an independent implementation with Python's
+`decimal` module at 60 digits that never runs this code (the reference IRR uses Newton's
+method, the engine bisection, so they agree only if both are right); re-run it with `python3` after
+changing a case. The founders' spreadsheet (task S1-03) re-derives a subset before a
+formula informs a recommendation (README §15). Every vector recorded in the registry is
+recomputed by `src/credit/formulas.test.ts`, so the registry cannot drift from the code.

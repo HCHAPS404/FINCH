@@ -1,0 +1,716 @@
+{
+  "formulaId": "cashflow.forecast_30d",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "no deficit: salary covers every obligation",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "150000000",
+        "buffer": "20000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-10-20",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          },
+          {
+            "id": "salary",
+            "kind": "INCOME",
+            "date": "2026-10-30",
+            "shift": "NONE",
+            "amount": "420000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "card",
+            "kind": "OBLIGATION",
+            "date": "2026-11-05",
+            "shift": "NONE",
+            "amount": "60000000",
+            "truth": "OBSERVED"
+          }
+        ]
+      },
+      "expected": {
+        "series": [
+          {
+            "date": "2026-10-15",
+            "balance": "150000000"
+          },
+          {
+            "date": "2026-10-16",
+            "balance": "150000000"
+          },
+          {
+            "date": "2026-10-17",
+            "balance": "150000000"
+          },
+          {
+            "date": "2026-10-18",
+            "balance": "150000000"
+          },
+          {
+            "date": "2026-10-19",
+            "balance": "150000000"
+          },
+          {
+            "date": "2026-10-20",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-21",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-22",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-23",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-24",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-25",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-26",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-27",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-28",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-29",
+            "balance": "60000000"
+          },
+          {
+            "date": "2026-10-30",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-10-31",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-11-01",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-11-02",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-11-03",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-11-04",
+            "balance": "480000000"
+          },
+          {
+            "date": "2026-11-05",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-06",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-07",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-08",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-09",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-10",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-11",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-12",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-13",
+            "balance": "420000000"
+          },
+          {
+            "date": "2026-11-14",
+            "balance": "420000000"
+          }
+        ],
+        "firstDeficit": "none",
+        "minimum": {
+          "date": "2026-10-20",
+          "balance": "60000000"
+        },
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "deficit: rent and card land before the salary",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "80000000",
+        "buffer": "20000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-10-20",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          },
+          {
+            "id": "card",
+            "kind": "OBLIGATION",
+            "date": "2026-10-25",
+            "shift": "NONE",
+            "amount": "60000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "salary",
+            "kind": "INCOME",
+            "date": "2026-10-30",
+            "shift": "NONE",
+            "amount": "420000000",
+            "truth": "OBSERVED"
+          }
+        ]
+      },
+      "expected": {
+        "series": [
+          {
+            "date": "2026-10-15",
+            "balance": "80000000"
+          },
+          {
+            "date": "2026-10-16",
+            "balance": "80000000"
+          },
+          {
+            "date": "2026-10-17",
+            "balance": "80000000"
+          },
+          {
+            "date": "2026-10-18",
+            "balance": "80000000"
+          },
+          {
+            "date": "2026-10-19",
+            "balance": "80000000"
+          },
+          {
+            "date": "2026-10-20",
+            "balance": "-10000000"
+          },
+          {
+            "date": "2026-10-21",
+            "balance": "-10000000"
+          },
+          {
+            "date": "2026-10-22",
+            "balance": "-10000000"
+          },
+          {
+            "date": "2026-10-23",
+            "balance": "-10000000"
+          },
+          {
+            "date": "2026-10-24",
+            "balance": "-10000000"
+          },
+          {
+            "date": "2026-10-25",
+            "balance": "-70000000"
+          },
+          {
+            "date": "2026-10-26",
+            "balance": "-70000000"
+          },
+          {
+            "date": "2026-10-27",
+            "balance": "-70000000"
+          },
+          {
+            "date": "2026-10-28",
+            "balance": "-70000000"
+          },
+          {
+            "date": "2026-10-29",
+            "balance": "-70000000"
+          },
+          {
+            "date": "2026-10-30",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-10-31",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-01",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-02",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-03",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-04",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-05",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-06",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-07",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-08",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-09",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-10",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-11",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-12",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-13",
+            "balance": "350000000"
+          },
+          {
+            "date": "2026-11-14",
+            "balance": "350000000"
+          }
+        ],
+        "firstDeficit": {
+          "date": "2026-10-20",
+          "shortfall": "30000000"
+        },
+        "minimum": {
+          "date": "2026-10-25",
+          "balance": "-70000000"
+        },
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "holiday and weekend shifts: a payment due on a holiday moves to the next business day, a salary due on a Saturday moves to the previous one",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "100000000",
+        "buffer": "10000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "loan",
+            "kind": "OBLIGATION",
+            "date": "2026-11-02",
+            "shift": "NEXT_BUSINESS_DAY",
+            "amount": "70000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "salary",
+            "kind": "INCOME",
+            "date": "2026-10-31",
+            "shift": "PREVIOUS_BUSINESS_DAY",
+            "amount": "300000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "gym",
+            "kind": "OBLIGATION",
+            "date": "2026-10-18",
+            "shift": "NEXT_BUSINESS_DAY",
+            "amount": "12000000",
+            "truth": "USER_ASSERTED"
+          }
+        ]
+      },
+      "expected": {
+        "series": [
+          {
+            "date": "2026-10-15",
+            "balance": "100000000"
+          },
+          {
+            "date": "2026-10-16",
+            "balance": "100000000"
+          },
+          {
+            "date": "2026-10-17",
+            "balance": "100000000"
+          },
+          {
+            "date": "2026-10-18",
+            "balance": "100000000"
+          },
+          {
+            "date": "2026-10-19",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-20",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-21",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-22",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-23",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-24",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-25",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-26",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-27",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-28",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-29",
+            "balance": "88000000"
+          },
+          {
+            "date": "2026-10-30",
+            "balance": "388000000"
+          },
+          {
+            "date": "2026-10-31",
+            "balance": "388000000"
+          },
+          {
+            "date": "2026-11-01",
+            "balance": "388000000"
+          },
+          {
+            "date": "2026-11-02",
+            "balance": "388000000"
+          },
+          {
+            "date": "2026-11-03",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-04",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-05",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-06",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-07",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-08",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-09",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-10",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-11",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-12",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-13",
+            "balance": "318000000"
+          },
+          {
+            "date": "2026-11-14",
+            "balance": "318000000"
+          }
+        ],
+        "firstDeficit": "none",
+        "minimum": {
+          "date": "2026-10-19",
+          "balance": "88000000"
+        },
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "variable income: 25th percentile of six months, series becomes ESTIMATED",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "40000000",
+        "buffer": "15000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "freelance",
+            "kind": "INCOME",
+            "date": "2026-10-28",
+            "shift": "NONE",
+            "history": [
+              "210000000",
+              "95000000",
+              "180000000",
+              "130000000",
+              "260000000",
+              "120000000"
+            ]
+          },
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-11-01",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          }
+        ]
+      },
+      "expected": {
+        "series": [
+          {
+            "date": "2026-10-15",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-16",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-17",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-18",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-19",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-20",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-21",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-22",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-23",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-24",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-25",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-26",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-27",
+            "balance": "40000000"
+          },
+          {
+            "date": "2026-10-28",
+            "balance": "160000000"
+          },
+          {
+            "date": "2026-10-29",
+            "balance": "160000000"
+          },
+          {
+            "date": "2026-10-30",
+            "balance": "160000000"
+          },
+          {
+            "date": "2026-10-31",
+            "balance": "160000000"
+          },
+          {
+            "date": "2026-11-01",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-02",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-03",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-04",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-05",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-06",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-07",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-08",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-09",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-10",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-11",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-12",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-13",
+            "balance": "70000000"
+          },
+          {
+            "date": "2026-11-14",
+            "balance": "70000000"
+          }
+        ],
+        "firstDeficit": "none",
+        "minimum": {
+          "date": "2026-10-15",
+          "balance": "40000000"
+        },
+        "truthClass": "ESTIMATED"
+      }
+    }
+  ]
+}

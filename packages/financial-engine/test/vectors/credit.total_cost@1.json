@@ -1,0 +1,238 @@
+{
+  "formulaId": "credit.total_cost",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "no charges: the IRR equals the loan rate up to minor-unit rounding",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "0",
+        "insuranceBasis": "NONE",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0"
+      },
+      "expected": {
+        "monthlyIrr": "0.016000000048514241955",
+        "effectiveAnnualRate": "0.20983040720231794551",
+        "instalment": "36757218",
+        "netDisbursement": "1000000000",
+        "totalPaid": "1323259857",
+        "totalInterest": "323259857",
+        "totalInsurance": "0",
+        "totalFees": "0",
+        "totalGmf": "0",
+        "upfrontCosts": "0",
+        "totalCost": "323259857"
+      }
+    },
+    {
+      "description": "life insurance on the outstanding balance (0.12 % monthly)",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "0",
+        "insuranceBasis": "OUTSTANDING",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0",
+        "insuranceRate": "0.0012"
+      },
+      "expected": {
+        "monthlyIrr": "0.017200000042860511419",
+        "effectiveAnnualRate": "0.22708943875798194601",
+        "instalment": "36757218",
+        "netDisbursement": "1000000000",
+        "totalPaid": "1347504346",
+        "totalInterest": "323259857",
+        "totalInsurance": "24244489",
+        "totalFees": "0",
+        "totalGmf": "0",
+        "upfrontCosts": "0",
+        "totalCost": "347504346"
+      }
+    },
+    {
+      "description": "life insurance on the original amount (0.12 % monthly)",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "0",
+        "insuranceBasis": "ORIGINAL",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0",
+        "insuranceRate": "0.0012"
+      },
+      "expected": {
+        "monthlyIrr": "0.017956992222990851236",
+        "effectiveAnnualRate": "0.23809268592637461071",
+        "instalment": "36757218",
+        "netDisbursement": "1000000000",
+        "totalPaid": "1366459857",
+        "totalInterest": "323259857",
+        "totalInsurance": "43200000",
+        "totalFees": "0",
+        "totalGmf": "0",
+        "upfrontCosts": "0",
+        "totalCost": "366459857"
+      }
+    },
+    {
+      "description": "fixed insurance plus monthly handling fee",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "0",
+        "insuranceBasis": "FIXED",
+        "handlingFee": "1200000",
+        "otherCharges": "0",
+        "gmfRate": "0",
+        "insuranceAmount": "1500000"
+      },
+      "expected": {
+        "monthlyIrr": "0.020355543495211614792",
+        "effectiveAnnualRate": "0.27355686039652189067",
+        "instalment": "36757218",
+        "netDisbursement": "1000000000",
+        "totalPaid": "1420459857",
+        "totalInterest": "323259857",
+        "totalInsurance": "54000000",
+        "totalFees": "43200000",
+        "totalGmf": "0",
+        "upfrontCosts": "0",
+        "totalCost": "420459857"
+      }
+    },
+    {
+      "description": "upfront costs (credit study, 2 %) reduce the net disbursement",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "20000000",
+        "insuranceBasis": "NONE",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0"
+      },
+      "expected": {
+        "monthlyIrr": "0.017227473454660230353",
+        "effectiveAnnualRate": "0.22748720527595007821",
+        "instalment": "36757218",
+        "netDisbursement": "980000000",
+        "totalPaid": "1323259857",
+        "totalInterest": "323259857",
+        "totalInsurance": "0",
+        "totalFees": "0",
+        "totalGmf": "0",
+        "upfrontCosts": "20000000",
+        "totalCost": "343259857"
+      }
+    },
+    {
+      "description": "GMF 4 x 1,000 on every debit, with insurance and fees",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36",
+        "upfrontCosts": "0",
+        "insuranceBasis": "OUTSTANDING",
+        "handlingFee": "1200000",
+        "otherCharges": "300000",
+        "gmfRate": "0.004",
+        "insuranceRate": "0.0012"
+      },
+      "expected": {
+        "monthlyIrr": "0.019877157211882096447",
+        "effectiveAnnualRate": "0.26641013334819183714",
+        "instalment": "36757218",
+        "netDisbursement": "1000000000",
+        "totalPaid": "1407110364",
+        "totalInterest": "323259857",
+        "totalInsurance": "24244489",
+        "totalFees": "54000000",
+        "totalGmf": "5606018",
+        "upfrontCosts": "0",
+        "totalCost": "407110364"
+      }
+    },
+    {
+      "description": "zero-rate loan with an upfront fee still has a positive real rate",
+      "inputs": {
+        "principal": "120000000",
+        "currency": "COP",
+        "rate": "0",
+        "periods": "12",
+        "upfrontCosts": "3000000",
+        "insuranceBasis": "NONE",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0"
+      },
+      "expected": {
+        "monthlyIrr": "0.0039167047565113518063",
+        "effectiveAnnualRate": "0.048026270919010933466",
+        "instalment": "10000000",
+        "netDisbursement": "117000000",
+        "totalPaid": "120000000",
+        "totalInterest": "0",
+        "totalInsurance": "0",
+        "totalFees": "0",
+        "totalGmf": "0",
+        "upfrontCosts": "3000000",
+        "totalCost": "3000000"
+      }
+    },
+    {
+      "description": "error: upfront costs equal to the principal leave nothing disbursed",
+      "inputs": {
+        "principal": "1000000",
+        "currency": "COP",
+        "rate": "0.01",
+        "periods": "12",
+        "upfrontCosts": "1000000",
+        "insuranceBasis": "NONE",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "0"
+      },
+      "expected": {
+        "error": "INVALID_CHARGES"
+      }
+    },
+    {
+      "description": "error: a GMF rate of 100 % is out of domain",
+      "inputs": {
+        "principal": "1000000",
+        "currency": "COP",
+        "rate": "0.01",
+        "periods": "12",
+        "upfrontCosts": "0",
+        "insuranceBasis": "NONE",
+        "handlingFee": "0",
+        "otherCharges": "0",
+        "gmfRate": "1"
+      },
+      "expected": {
+        "error": "RATE_OUT_OF_DOMAIN"
+      }
+    }
+  ]
+}

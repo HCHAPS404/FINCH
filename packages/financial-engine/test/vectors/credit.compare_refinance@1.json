@@ -1,0 +1,185 @@
+{
+  "formulaId": "credit.compare_refinance",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "lower rate, same term, no switching costs: savings from month 1",
+      "inputs": {
+        "balance": "800000000",
+        "currency": "COP",
+        "currentRate": "0.025",
+        "currentPeriods": "24",
+        "currentCharges": "0",
+        "offerRate": "0.017",
+        "offerPeriods": "24",
+        "offerCharges": "0",
+        "switchingCosts": "0",
+        "opportunityRate": "0.008",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "USER_ASSERTED"
+      },
+      "expected": {
+        "currentInstalment": "44730256",
+        "offerInstalment": "40873138",
+        "instalmentDelta": "-3857118",
+        "totalCurrent": "1073526156",
+        "totalOffer": "980955323",
+        "nominalSavings": "92570833",
+        "pvSavings": "83922410",
+        "breakEvenMonth": "1",
+        "longerTermAlert": "false",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "lower rate with switching costs: break-even after a few months",
+      "inputs": {
+        "balance": "800000000",
+        "currency": "COP",
+        "currentRate": "0.025",
+        "currentPeriods": "24",
+        "currentCharges": "0",
+        "offerRate": "0.017",
+        "offerPeriods": "24",
+        "offerCharges": "0",
+        "switchingCosts": "25000000",
+        "opportunityRate": "0.008",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "USER_ASSERTED"
+      },
+      "expected": {
+        "currentInstalment": "44730256",
+        "offerInstalment": "40873138",
+        "instalmentDelta": "-3857118",
+        "totalCurrent": "1073526156",
+        "totalOffer": "1005955323",
+        "nominalSavings": "67570833",
+        "pvSavings": "58922410",
+        "breakEvenMonth": "7",
+        "longerTermAlert": "false",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "longer term: lower instalment but more paid in total (alert)",
+      "inputs": {
+        "balance": "800000000",
+        "currency": "COP",
+        "currentRate": "0.02",
+        "currentPeriods": "12",
+        "currentCharges": "0",
+        "offerRate": "0.018",
+        "offerPeriods": "48",
+        "offerCharges": "0",
+        "switchingCosts": "0",
+        "opportunityRate": "0.008",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "USER_ASSERTED"
+      },
+      "expected": {
+        "currentInstalment": "75647677",
+        "offerInstalment": "25031457",
+        "instalmentDelta": "-50616220",
+        "totalCurrent": "907772128",
+        "totalOffer": "1201509931",
+        "nominalSavings": "-293737803",
+        "pvSavings": "-132180719",
+        "breakEvenMonth": "1",
+        "longerTermAlert": "true",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "worse offer: never breaks even",
+      "inputs": {
+        "balance": "500000000",
+        "currency": "COP",
+        "currentRate": "0.015",
+        "currentPeriods": "18",
+        "currentCharges": "0",
+        "offerRate": "0.019",
+        "offerPeriods": "18",
+        "offerCharges": "500000",
+        "switchingCosts": "5000000",
+        "opportunityRate": "0.008",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "USER_ASSERTED"
+      },
+      "expected": {
+        "currentInstalment": "31902891",
+        "offerInstalment": "33558537",
+        "instalmentDelta": "1655646",
+        "totalCurrent": "574252037",
+        "totalOffer": "609053670",
+        "nominalSavings": "-34801633",
+        "pvSavings": "-32652604",
+        "breakEvenMonth": "none",
+        "longerTermAlert": "false",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "monthly charges on the current debt make the offer cheaper",
+      "inputs": {
+        "balance": "300000000",
+        "currency": "COP",
+        "currentRate": "0.02",
+        "currentPeriods": "36",
+        "currentCharges": "1800000",
+        "offerRate": "0.02",
+        "offerPeriods": "36",
+        "offerCharges": "0",
+        "switchingCosts": "2000000",
+        "opportunityRate": "0.008",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "USER_ASSERTED"
+      },
+      "expected": {
+        "currentInstalment": "13569856",
+        "offerInstalment": "11769856",
+        "instalmentDelta": "-1800000",
+        "totalCurrent": "488514807",
+        "totalOffer": "425714807",
+        "nominalSavings": "62800000",
+        "pvSavings": "54110223",
+        "breakEvenMonth": "2",
+        "longerTermAlert": "false",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "estimated opportunity rate makes the whole result ESTIMATED",
+      "inputs": {
+        "balance": "800000000",
+        "currency": "COP",
+        "currentRate": "0.025",
+        "currentPeriods": "24",
+        "currentCharges": "0",
+        "offerRate": "0.017",
+        "offerPeriods": "24",
+        "offerCharges": "0",
+        "switchingCosts": "25000000",
+        "opportunityRate": "0.01",
+        "currentTruth": "OBSERVED",
+        "opportunityRateTruth": "ESTIMATED"
+      },
+      "expected": {
+        "currentInstalment": "44730256",
+        "offerInstalment": "40873138",
+        "instalmentDelta": "-3857118",
+        "totalCurrent": "1073526156",
+        "totalOffer": "1005955323",
+        "nominalSavings": "67570833",
+        "pvSavings": "56938252",
+        "breakEvenMonth": "7",
+        "longerTermAlert": "false",
+        "truthClass": "ESTIMATED"
+      }
+    }
+  ]
+}

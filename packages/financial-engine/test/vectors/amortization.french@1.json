@@ -1,0 +1,306 @@
+{
+  "formulaId": "amortization.french",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "COP 10,000,000 at 1.6 % MV over 36 months (colombia-credit.md §2)",
+      "inputs": {
+        "principal": "1000000000",
+        "currency": "COP",
+        "rate": "0.016",
+        "periods": "36"
+      },
+      "expected": {
+        "instalment": "36757218",
+        "lastPayment": "36757227",
+        "totalInterest": "323259857",
+        "totalPaid": "1323259857"
+      }
+    },
+    {
+      "description": "zero rate: principal split evenly, residue in the last instalment",
+      "inputs": {
+        "principal": "10000000",
+        "currency": "COP",
+        "rate": "0",
+        "periods": "3"
+      },
+      "expected": {
+        "instalment": "3333333",
+        "lastPayment": "3333334",
+        "totalInterest": "0",
+        "totalPaid": "10000000",
+        "schedule": [
+          {
+            "period": "1",
+            "payment": "3333333",
+            "interest": "0",
+            "principal": "3333333",
+            "balance": "6666667"
+          },
+          {
+            "period": "2",
+            "payment": "3333333",
+            "interest": "0",
+            "principal": "3333333",
+            "balance": "3333334"
+          },
+          {
+            "period": "3",
+            "payment": "3333334",
+            "interest": "0",
+            "principal": "3333334",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    {
+      "description": "single period: one payment of principal plus interest",
+      "inputs": {
+        "principal": "50000000",
+        "currency": "COP",
+        "rate": "0.02",
+        "periods": "1"
+      },
+      "expected": {
+        "instalment": "51000000",
+        "lastPayment": "51000000",
+        "totalInterest": "1000000",
+        "totalPaid": "51000000",
+        "schedule": [
+          {
+            "period": "1",
+            "payment": "51000000",
+            "interest": "1000000",
+            "principal": "50000000",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    {
+      "description": "small amount where rounding residue matters",
+      "inputs": {
+        "principal": "1000",
+        "currency": "COP",
+        "rate": "0.031",
+        "periods": "7"
+      },
+      "expected": {
+        "instalment": "161",
+        "lastPayment": "163",
+        "totalInterest": "129",
+        "totalPaid": "1129",
+        "schedule": [
+          {
+            "period": "1",
+            "payment": "161",
+            "interest": "31",
+            "principal": "130",
+            "balance": "870"
+          },
+          {
+            "period": "2",
+            "payment": "161",
+            "interest": "27",
+            "principal": "134",
+            "balance": "736"
+          },
+          {
+            "period": "3",
+            "payment": "161",
+            "interest": "23",
+            "principal": "138",
+            "balance": "598"
+          },
+          {
+            "period": "4",
+            "payment": "161",
+            "interest": "19",
+            "principal": "142",
+            "balance": "456"
+          },
+          {
+            "period": "5",
+            "payment": "161",
+            "interest": "14",
+            "principal": "147",
+            "balance": "309"
+          },
+          {
+            "period": "6",
+            "payment": "161",
+            "interest": "10",
+            "principal": "151",
+            "balance": "158"
+          },
+          {
+            "period": "7",
+            "payment": "163",
+            "interest": "5",
+            "principal": "158",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    {
+      "description": "mortgage-length term (360 months, 0.95 % MV)",
+      "inputs": {
+        "principal": "25000000000",
+        "currency": "COP",
+        "rate": "0.0095",
+        "periods": "360"
+      },
+      "expected": {
+        "instalment": "245667153",
+        "lastPayment": "245668402",
+        "totalInterest": "63440176329",
+        "totalPaid": "88440176329"
+      }
+    },
+    {
+      "description": "USD 1,000.00 at 1 % monthly over 12 months: last instalment below C",
+      "inputs": {
+        "principal": "100000",
+        "currency": "USD",
+        "rate": "0.01",
+        "periods": "12"
+      },
+      "expected": {
+        "instalment": "8885",
+        "lastPayment": "8884",
+        "totalInterest": "6619",
+        "totalPaid": "106619",
+        "schedule": [
+          {
+            "period": "1",
+            "payment": "8885",
+            "interest": "1000",
+            "principal": "7885",
+            "balance": "92115"
+          },
+          {
+            "period": "2",
+            "payment": "8885",
+            "interest": "921",
+            "principal": "7964",
+            "balance": "84151"
+          },
+          {
+            "period": "3",
+            "payment": "8885",
+            "interest": "842",
+            "principal": "8043",
+            "balance": "76108"
+          },
+          {
+            "period": "4",
+            "payment": "8885",
+            "interest": "761",
+            "principal": "8124",
+            "balance": "67984"
+          },
+          {
+            "period": "5",
+            "payment": "8885",
+            "interest": "680",
+            "principal": "8205",
+            "balance": "59779"
+          },
+          {
+            "period": "6",
+            "payment": "8885",
+            "interest": "598",
+            "principal": "8287",
+            "balance": "51492"
+          },
+          {
+            "period": "7",
+            "payment": "8885",
+            "interest": "515",
+            "principal": "8370",
+            "balance": "43122"
+          },
+          {
+            "period": "8",
+            "payment": "8885",
+            "interest": "431",
+            "principal": "8454",
+            "balance": "34668"
+          },
+          {
+            "period": "9",
+            "payment": "8885",
+            "interest": "347",
+            "principal": "8538",
+            "balance": "26130"
+          },
+          {
+            "period": "10",
+            "payment": "8885",
+            "interest": "261",
+            "principal": "8624",
+            "balance": "17506"
+          },
+          {
+            "period": "11",
+            "payment": "8885",
+            "interest": "175",
+            "principal": "8710",
+            "balance": "8796"
+          },
+          {
+            "period": "12",
+            "payment": "8884",
+            "interest": "88",
+            "principal": "8796",
+            "balance": "0"
+          }
+        ]
+      }
+    },
+    {
+      "description": "error: zero periods",
+      "inputs": {
+        "principal": "100000",
+        "currency": "COP",
+        "rate": "0.01",
+        "periods": "0"
+      },
+      "expected": {
+        "error": "INVALID_TERM"
+      }
+    },
+    {
+      "description": "error: non-positive principal",
+      "inputs": {
+        "principal": "0",
+        "currency": "COP",
+        "rate": "0.01",
+        "periods": "12"
+      },
+      "expected": {
+        "error": "INVALID_PRINCIPAL"
+      }
+    },
+    {
+      "description": "error: instalment rounding repays the principal before the last period",
+      "inputs": {
+        "principal": "6",
+        "currency": "COP",
+        "rate": "0",
+        "periods": "8"
+      },
+      "expected": {
+        "error": "UNAMORTIZABLE_IN_MINOR_UNITS"
+      }
+    }
+  ]
+}

@@ -1,0 +1,187 @@
+{
+  "formulaId": "rate.convert",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "MV → EA (2.3 % MV, colombia-credit.md §1)",
+      "inputs": {
+        "rate": "0.023",
+        "from": "EFFECTIVE/12/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "0.3137344983996021269289886802331443"
+      }
+    },
+    {
+      "description": "EA → MV (24 % EA, fractional power)",
+      "inputs": {
+        "rate": "0.24",
+        "from": "EFFECTIVE/1/ARREARS",
+        "to": "EFFECTIVE/12/ARREARS"
+      },
+      "expected": {
+        "rate": "0.0180875824835106745313530841617514"
+      }
+    },
+    {
+      "description": "NAMV → MV (24 % NAMV = 2 % MV)",
+      "inputs": {
+        "rate": "0.24",
+        "from": "NOMINAL/12/ARREARS",
+        "to": "EFFECTIVE/12/ARREARS"
+      },
+      "expected": {
+        "rate": "0.02"
+      }
+    },
+    {
+      "description": "NAMV → EA (24 % NAMV)",
+      "inputs": {
+        "rate": "0.24",
+        "from": "NOMINAL/12/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "0.268241794562545318301696"
+      }
+    },
+    {
+      "description": "monthly in advance → in arrears (2 %)",
+      "inputs": {
+        "rate": "0.02",
+        "from": "EFFECTIVE/12/ADVANCE",
+        "to": "EFFECTIVE/12/ARREARS"
+      },
+      "expected": {
+        "rate": "0.02040816326530612244897959183673469"
+      }
+    },
+    {
+      "description": "EA → monthly in advance (26.8 % EA)",
+      "inputs": {
+        "rate": "0.268",
+        "from": "EFFECTIVE/1/ARREARS",
+        "to": "EFFECTIVE/12/ADVANCE"
+      },
+      "expected": {
+        "rate": "0.01959226527337021583887964631552605"
+      }
+    },
+    {
+      "description": "EA → quarterly in arrears (30 % EA)",
+      "inputs": {
+        "rate": "0.30",
+        "from": "EFFECTIVE/1/ARREARS",
+        "to": "EFFECTIVE/4/ARREARS"
+      },
+      "expected": {
+        "rate": "0.06778997237244084316861183441916046"
+      }
+    },
+    {
+      "description": "quarterly nominal → EA (20 % NATV)",
+      "inputs": {
+        "rate": "0.20",
+        "from": "NOMINAL/4/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "0.21550625"
+      }
+    },
+    {
+      "description": "EA → EA is the identity",
+      "inputs": {
+        "rate": "0.1875",
+        "from": "EFFECTIVE/1/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "0.1875"
+      }
+    },
+    {
+      "description": "zero rate stays zero",
+      "inputs": {
+        "rate": "0",
+        "from": "EFFECTIVE/12/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "0"
+      }
+    },
+    {
+      "description": "high rate above 100 % EA (8 % MV)",
+      "inputs": {
+        "rate": "0.08",
+        "from": "EFFECTIVE/12/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "rate": "1.518170116818978404827136"
+      }
+    },
+    {
+      "description": "EA → daily (365) nominal",
+      "inputs": {
+        "rate": "0.25",
+        "from": "EFFECTIVE/1/ARREARS",
+        "to": "NOMINAL/365/ARREARS"
+      },
+      "expected": {
+        "rate": "0.2232117748663647982128847654863691"
+      }
+    },
+    {
+      "description": "semiannual effective → MV (12 % ES)",
+      "inputs": {
+        "rate": "0.12",
+        "from": "EFFECTIVE/2/ARREARS",
+        "to": "EFFECTIVE/12/ARREARS"
+      },
+      "expected": {
+        "rate": "0.01906762306052134002260820385329653"
+      }
+    },
+    {
+      "description": "error: a rate in advance of 100 % or more has no arrears equivalent",
+      "inputs": {
+        "rate": "1",
+        "from": "EFFECTIVE/12/ADVANCE",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "error": "RATE_OUT_OF_DOMAIN"
+      }
+    },
+    {
+      "description": "error: negative rates are rejected in version 1",
+      "inputs": {
+        "rate": "-0.01",
+        "from": "EFFECTIVE/12/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "error": "RATE_OUT_OF_DOMAIN"
+      }
+    },
+    {
+      "description": "error: unsupported compounding frequency",
+      "inputs": {
+        "rate": "0.02",
+        "from": "EFFECTIVE/7/ARREARS",
+        "to": "EFFECTIVE/1/ARREARS"
+      },
+      "expected": {
+        "error": "UNSUPPORTED_QUOTE"
+      }
+    }
+  ]
+}

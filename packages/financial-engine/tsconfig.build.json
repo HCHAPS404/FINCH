@@ -7,5 +7,7 @@
     "tsBuildInfoFile": "dist/.tsbuildinfo"
   },
   "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.test.ts"]
+  "exclude": ["src/**/*.test.ts"],
+  // The only workspace dependency the engine may have (dependency-cruiser enforces it).
+  "references": [{ "path": "../contracts/tsconfig.build.json" }]
 }

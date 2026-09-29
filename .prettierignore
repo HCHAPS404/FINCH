@@ -22,3 +22,7 @@ reports/
 .claude/skills/
 .cursor/rules/
 .agent/
+# Golden vectors are written byte-for-byte by their independent generator
+# (packages/financial-engine/test/vectors/generate_credit_vectors.py); re-running it must
+# reproduce the committed file exactly, so no formatter may rewrite them.
+packages/financial-engine/test/vectors/*.json

@@ -1,0 +1,147 @@
+{
+  "formulaId": "cashflow.safe_to_spend",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "positive: the lowest balance before payday stays above the buffer",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "150000000",
+        "buffer": "20000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-10-20",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          },
+          {
+            "id": "salary",
+            "kind": "INCOME",
+            "date": "2026-10-30",
+            "shift": "NONE",
+            "amount": "420000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "card",
+            "kind": "OBLIGATION",
+            "date": "2026-11-05",
+            "shift": "NONE",
+            "amount": "60000000",
+            "truth": "OBSERVED"
+          }
+        ]
+      },
+      "expected": {
+        "safeToSpend": "40000000",
+        "windowEnd": "2026-10-30",
+        "nextIncomeKnown": "true",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "zero: obligations before payday exceed what is available",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "80000000",
+        "buffer": "20000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-10-20",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          },
+          {
+            "id": "card",
+            "kind": "OBLIGATION",
+            "date": "2026-10-25",
+            "shift": "NONE",
+            "amount": "60000000",
+            "truth": "OBSERVED"
+          },
+          {
+            "id": "salary",
+            "kind": "INCOME",
+            "date": "2026-10-30",
+            "shift": "NONE",
+            "amount": "420000000",
+            "truth": "OBSERVED"
+          }
+        ]
+      },
+      "expected": {
+        "safeToSpend": "0",
+        "windowEnd": "2026-10-30",
+        "nextIncomeKnown": "true",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    },
+    {
+      "description": "no known next income: the whole horizon is used",
+      "inputs": {
+        "today": "2026-10-15",
+        "currency": "COP",
+        "startingBalance": "200000000",
+        "buffer": "30000000",
+        "weekend": [
+          6,
+          7
+        ],
+        "holidays": [
+          "2026-11-02"
+        ],
+        "events": [
+          {
+            "id": "rent",
+            "kind": "OBLIGATION",
+            "date": "2026-10-20",
+            "shift": "NONE",
+            "amount": "90000000",
+            "truth": "USER_ASSERTED"
+          },
+          {
+            "id": "card",
+            "kind": "OBLIGATION",
+            "date": "2026-11-10",
+            "shift": "NONE",
+            "amount": "50000000",
+            "truth": "OBSERVED"
+          }
+        ]
+      },
+      "expected": {
+        "safeToSpend": "30000000",
+        "windowEnd": "2026-11-14",
+        "nextIncomeKnown": "false",
+        "truthClass": "DERIVED_DETERMINISTIC"
+      }
+    }
+  ]
+}

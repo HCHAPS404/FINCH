@@ -56,6 +56,19 @@ last instalment adjusts the residue so that `balance_n = 0`.
 
 Illustrative example: `P` = COP 10,000,000, `i` = 1.6 % MV, `n` = 36 → `C` ≈ COP 367,572.18.
 
+Edge cases: `n` must be an integer in `1..1200`; `P > 0`; `i ≥ 0` in version 1. When the rounded
+instalment would repay the whole principal before period `n` (amounts too small for the term in
+whole minor units, e.g. 6 minor units over 8 periods at 0 %), the formula rejects the input with
+`UNAMORTIZABLE_IN_MINOR_UNITS` instead of producing a negative balance.
+
+**Implementation status (S1-01):** §1–§8 are implemented in `packages/financial-engine/src/credit/`
+(`rate.ts`, `french.ts`, `total-cost.ts`, `usury.ts`, `refinance.ts`, `payoff.ts`), registered as
+`rate.convert@1`, `amortization.french@1`, `credit.total_cost@1`, `credit.usury_check@1`,
+`credit.compare_refinance@1` and `debt.payoff_plan@1` (and §7–§8 in `src/cashflow/` as
+`cashflow.forecast_30d@1` and `cashflow.safe_to_spend@1`), and tested
+against golden vectors in `packages/financial-engine/test/vectors/` produced by an independent
+Python `decimal` implementation. The negative-rate flag of §1 is `allowNegative`.
+
 ## 3. Total cost and real effective rate — `credit.total_cost@1`
 
 Monthly cash flows from the borrower's perspective:
@@ -85,6 +98,9 @@ t=k : − (C_k + insurance_k + handling_fee_k + other_k + gmf_k)   k = 1..n
   Tavily, effective date) and freshness.
 - Compares the **agreed remunerative interest rate, in EA**, with the usury rate. Outputs:
   `status ∈ {BELOW, AT_OR_ABOVE}` and `margin_pp`.
+- The certification window (`validFrom`, `validTo`) and the evaluation date are inputs: the engine
+  has no clock. A date outside the window yields `sourceStatus = STALE`; the comparison is still
+  reported, and the caller must show that the ceiling may be out of date.
 - **Explicit assumption:** which charges count for usury purposes is a legal matter. The engine
   reports agreed rate vs usury and the total cost (§3) separately. It never states that a charge is
   illegal: it says "the agreed rate exceeds the current certified usury rate", with the source.
@@ -107,12 +123,25 @@ insurance, switching costs).
 Output with truth class `DERIVED_DETERMINISTIC`, **unless** any input is `ESTIMATED`, in which case the
 output inherits `ESTIMATED` (conservative propagation).
 
+Resolved definitions (version 1): the offer refinances exactly the outstanding balance; each side
+is a French schedule plus a fixed monthly charge; the instalments compared are the first-month
+outflows; `pv_savings` is computed at 40 digits and rounded `HALF_EVEN` once; break-even uses
+undiscounted cumulative savings, and months past the end of a schedule count as 0. A
+`GENERATED_NARRATIVE` input is refused (`UNTRUSTED_INPUT`).
+
 ## 6. Debt payoff plan — `debt.payoff_plan@1`
 
 Strategies: `AVALANCHE` (highest EA first) and `SNOWBALL` (smallest balance first). Monthly
 simulation with minimum payments plus a surplus `extra`. Outputs: months until debt-free, total
 interest and payment order. Both strategies are included so the user can compare; FINCH does not hide
 the alternative.
+
+Resolved definitions (version 1): constant monthly budget `B = Σ minimums + extra`, so the minimums
+of cleared debts roll over; each month, interest accrues (`HALF_EVEN` per debt), minimums are paid
+(capped at the balance), and the rest of `B` goes to the priority debt, cascading when it clears.
+SNOWBALL orders by the current balance; ties keep the input order. If `B` does not exceed the first
+month's interest, or the debt is not cleared within 1,200 months, the plan fails with
+`DEBT_NEVER_AMORTIZES` and an explanation instead of a payoff date that cannot happen.
 
 ## 7. 30-day cash-flow forecast — `cashflow.forecast_30d@1`
 
@@ -124,12 +153,25 @@ the alternative.
 - Colombian holidays and business days (`jurisdictions/CO/calendar`) to shift payment dates.
 - Outputs: daily series, `first_deficit {day, amount}` (balance < `buffer`) and projected minimum.
 
+Resolved definitions (version 1): `balance_{today−1}` is the starting balance before today's events and
+every point is an end-of-day balance (31 points). Each event has a shift rule (`NONE`,
+`NEXT_BUSINESS_DAY`, `PREVIOUS_BUSINESS_DAY`); the weekend weekdays and the holidays are parameters
+with their source, never hard-coded. The 25th percentile is the nearest rank, the ⌈0.25·n⌉-th
+smallest of 3–6 past amounts, so the estimate is an amount that actually happened. `first_deficit`
+reports the shortfall `buffer − balance`; the minimum reports its first occurrence. Dates are civil
+day numbers with no clock and no time zone.
+
 ## 8. Safe to spend today — `cashflow.safe_to_spend@1`
 
 `STS = max(0, min_{d ∈ [today, next_income]} projected_balance_d − buffer)`
 
 Conservative by design: what will be needed before the next income cannot be spent today. `buffer`
 is a user preference (a `CONSTRAINT` memory).
+
+Resolved definitions (version 1): `next_income` is the first day strictly after today with an income
+event in the forecast, and the window includes it. With no known next income inside the horizon, the
+window is the whole 30 days and the result carries `nextIncomeKnown = false`. The truth class is the
+forecast's.
 
 ## 9. Required golden vectors (minimum per formula)
 
