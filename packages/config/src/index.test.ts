@@ -105,3 +105,44 @@ describe('redactedConfig', () => {
     expect(serialized).not.toContain('postgresql://');
   });
 });
+
+describe('AI provider configuration (README §30, ADR-0036)', () => {
+  it('defaults to the Token Factory endpoint with no model assumed', () => {
+    const config = loadConfig(VALID);
+    expect(config.ai.provider).toBe('nebius-token-factory');
+    expect(config.ai.baseUrl).toBe('https://api.tokenfactory.nebius.com/v1/');
+    // Model IDs must be confirmed with GET /v1/models (task S0-05); none is invented.
+    expect(config.ai.models).toEqual({});
+    expect(config.secrets.nebiusApiKey).toBeUndefined();
+  });
+
+  it('reads model IDs per tier and treats an empty tier as unconfigured', () => {
+    const config = loadConfig({
+      ...VALID,
+      NEBIUS_MODEL_FAST: 'fast-model-id',
+      NEBIUS_MODEL_AGENT: 'agent-model-id',
+      NEBIUS_MODEL_DEEP: '   ',
+    });
+    expect(config.ai.models).toEqual({ FAST: 'fast-model-id', AGENT: 'agent-model-id' });
+  });
+
+  it('rejects a malformed provider URL and out-of-range limits', () => {
+    expect(() => loadConfig({ ...VALID, NEBIUS_BASE_URL: 'not a url' })).toThrow(
+      /Invalid FINCH configuration/,
+    );
+    expect(() => loadConfig({ ...VALID, AI_REQUEST_TIMEOUT_MS: '10' })).toThrow(
+      /Invalid FINCH configuration/,
+    );
+    expect(() => loadConfig({ ...VALID, AI_TURNS_PER_MINUTE: '0' })).toThrow(
+      /Invalid FINCH configuration/,
+    );
+  });
+
+  it('redacts the provider API key', () => {
+    const serialized = JSON.stringify(
+      redactedConfig(loadConfig({ ...VALID, NEBIUS_API_KEY: 'tf-key-must-not-leak' })),
+    );
+    expect(serialized).not.toContain('tf-key-must-not-leak');
+    expect(serialized).toContain('[REDACTED]');
+  });
+});
