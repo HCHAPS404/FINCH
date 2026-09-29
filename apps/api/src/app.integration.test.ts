@@ -59,16 +59,20 @@ beforeAll(async () => {
   await app.getHttpAdapter().getInstance().ready();
 }, 180_000);
 
+// Teardown tolerates a failed setup so the setup error is the one reported.
 afterAll(async () => {
-  await app.close();
-  await reader.close();
-  provider.closeAllConnections();
-  await new Promise<void>((resolve) => {
-    provider.close(() => {
-      resolve();
+  await (app as NestFastifyApplication | undefined)?.close();
+  await (reader as DatabaseHandle | undefined)?.close();
+  const server = provider as Server | undefined;
+  if (server !== undefined) {
+    server.closeAllConnections();
+    await new Promise<void>((resolve) => {
+      server.close(() => {
+        resolve();
+      });
     });
-  });
-  await container.stop();
+  }
+  await (container as StartedPostgreSqlContainer | undefined)?.stop();
 });
 
 describe('API with PostgreSQL', () => {
