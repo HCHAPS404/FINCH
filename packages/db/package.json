@@ -2,10 +2,40 @@
   "name": "@finch/db",
   "version": "0.0.0",
   "private": true,
-  "description": "Drizzle schema, migrations and seeds. The only package permitted to touch the database driver. README \u00a724.",
+  "description": "Drizzle schema, migrations and seeds. The only package permitted to touch the database driver. README §24.",
   "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "migrations"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "test:integration": "vitest run --config vitest.integration.config.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "node --env-file-if-exists=../../.env dist/cli.js migrate",
+    "db:seed": "node --env-file-if-exists=../../.env dist/cli.js seed",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
   "dependencies": {
     "@finch/contracts": "workspace:*",
-    "drizzle-orm": "0.45.2"
+    "drizzle-orm": "0.45.3",
+    "postgres": "3.4.9"
+  },
+  "devDependencies": {
+    "@testcontainers/postgresql": "12.1.0",
+    "@types/node": "24.10.1",
+    "drizzle-kit": "0.31.11",
+    "typescript": "6.0.3",
+    "vitest": "5.0.1"
   }
 }

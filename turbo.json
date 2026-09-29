@@ -28,8 +28,19 @@
       "dependsOn": ["^build"],
       "outputs": ["openapi.json"]
     },
-    "db:migrate": { "cache": false, "persistent": false },
-    "db:seed": { "cache": false, "persistent": false },
-    "dev": { "cache": false, "persistent": true }
+    "db:migrate": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": false
+    },
+    "db:seed": {
+      "dependsOn": ["build"],
+      "cache": false,
+      "persistent": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }
