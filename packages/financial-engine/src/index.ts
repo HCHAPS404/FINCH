@@ -58,3 +58,18 @@ export type {
   PayoffStrategy,
   PayoffStrategyResult,
 } from './credit/payoff.js';
+
+// Cash-flow formulas (S1-01). Importing './cashflow/formulas.js' registers them.
+import './cashflow/formulas.js';
+export { forecast30d, conservativeIncome, FORECAST_HORIZON_DAYS } from './cashflow/forecast.js';
+export type {
+  BusinessCalendar,
+  CashflowEvent,
+  DateShift,
+  ForecastInput,
+  ForecastPoint,
+  ForecastResult,
+} from './cashflow/forecast.js';
+export { safeToSpend } from './cashflow/safe-to-spend.js';
+export type { SafeToSpendResult } from './cashflow/safe-to-spend.js';
+export { toDayNumber, toIsoDate, isoWeekday } from './cashflow/civil-date.js';

@@ -32,6 +32,10 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
     savings, break-even month, longer-term alert, conservative truth propagation;
   - `debt.payoff_plan@1` — `payoffPlan`: AVALANCHE and SNOWBALL side by side, months to
     debt-free, total interest and payoff order.
+- The cash-flow engine (`src/cashflow/`, same spec §7–§8): `cashflow.forecast_30d@1`
+  (`forecast30d`, business-day shifts from a calendar parameter, nearest-rank P25 for
+  variable income) and `cashflow.safe_to_spend@1` (`safeToSpend`), over clock-free civil
+  dates (`toDayNumber`, `toIsoDate`).
 
 Dependencies: `decimal.js` and, among workspace packages, only `@finch/contracts` (for
 `TruthClass`), as dependency-cruiser enforces.
@@ -60,7 +64,7 @@ Dependencies: `decimal.js` and, among workspace packages, only `@finch/contracts
 Formula-domain errors throw `FinancialInputError` with a stable `code`
 (`RATE_OUT_OF_DOMAIN`, `UNSUPPORTED_QUOTE`, `INVALID_TERM`, `INVALID_PRINCIPAL`,
 `UNAMORTIZABLE_IN_MINOR_UNITS`, `INVALID_CHARGES`, `IRR_NOT_FOUND`, `INVALID_DATE`,
-`INVALID_VALIDITY_PERIOD`, `INVALID_DEBT`, `DEBT_NEVER_AMORTIZES`, `UNTRUSTED_INPUT`), which the API maps to `FINCH_FINANCIAL_<code>`.
+`INVALID_VALIDITY_PERIOD`, `INVALID_DEBT`, `DEBT_NEVER_AMORTIZES`, `UNTRUSTED_INPUT`, `INVALID_INCOME_HISTORY`), which the API maps to `FINCH_FINANCIAL_<code>`.
 Other invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
 currency, a fractional minor unit, too many decimals for the currency, division by zero,
 a non-plain decimal string, invalid decimal places. The engine never returns a

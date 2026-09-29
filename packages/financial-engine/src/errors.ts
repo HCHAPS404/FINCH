@@ -33,6 +33,8 @@ export const FINANCIAL_INPUT_ERROR_CODES = [
   'DEBT_NEVER_AMORTIZES',
   /** An input whose truth class may not feed a formula (GENERATED_NARRATIVE, §4.2). */
   'UNTRUSTED_INPUT',
+  /** A variable income without 3 to 6 past amounts. */
+  'INVALID_INCOME_HISTORY',
 ] as const;
 
 export type FinancialInputErrorCode = (typeof FINANCIAL_INPUT_ERROR_CODES)[number];

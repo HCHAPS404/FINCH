@@ -61,10 +61,11 @@ instalment would repay the whole principal before period `n` (amounts too small 
 whole minor units, e.g. 6 minor units over 8 periods at 0 %), the formula rejects the input with
 `UNAMORTIZABLE_IN_MINOR_UNITS` instead of producing a negative balance.
 
-**Implementation status (S1-01):** §1–§6 are implemented in `packages/financial-engine/src/credit/`
+**Implementation status (S1-01):** §1–§8 are implemented in `packages/financial-engine/src/credit/`
 (`rate.ts`, `french.ts`, `total-cost.ts`, `usury.ts`, `refinance.ts`, `payoff.ts`), registered as
 `rate.convert@1`, `amortization.french@1`, `credit.total_cost@1`, `credit.usury_check@1`,
-`credit.compare_refinance@1` and `debt.payoff_plan@1`, and tested
+`credit.compare_refinance@1` and `debt.payoff_plan@1` (and §7–§8 in `src/cashflow/` as
+`cashflow.forecast_30d@1` and `cashflow.safe_to_spend@1`), and tested
 against golden vectors in `packages/financial-engine/test/vectors/` produced by an independent
 Python `decimal` implementation. The negative-rate flag of §1 is `allowNegative`.
 
@@ -152,12 +153,25 @@ month's interest, or the debt is not cleared within 1,200 months, the plan fails
 - Colombian holidays and business days (`jurisdictions/CO/calendar`) to shift payment dates.
 - Outputs: daily series, `first_deficit {day, amount}` (balance < `buffer`) and projected minimum.
 
+Resolved definitions (version 1): `balance_{today−1}` is the starting balance before today's events and
+every point is an end-of-day balance (31 points). Each event has a shift rule (`NONE`,
+`NEXT_BUSINESS_DAY`, `PREVIOUS_BUSINESS_DAY`); the weekend weekdays and the holidays are parameters
+with their source, never hard-coded. The 25th percentile is the nearest rank, the ⌈0.25·n⌉-th
+smallest of 3–6 past amounts, so the estimate is an amount that actually happened. `first_deficit`
+reports the shortfall `buffer − balance`; the minimum reports its first occurrence. Dates are civil
+day numbers with no clock and no time zone.
+
 ## 8. Safe to spend today — `cashflow.safe_to_spend@1`
 
 `STS = max(0, min_{d ∈ [today, next_income]} projected_balance_d − buffer)`
 
 Conservative by design: what will be needed before the next income cannot be spent today. `buffer`
 is a user preference (a `CONSTRAINT` memory).
+
+Resolved definitions (version 1): `next_income` is the first day strictly after today with an income
+event in the forecast, and the window includes it. With no known next income inside the horizon, the
+window is the whole 30 days and the result carries `nextIncomeKnown = false`. The truth class is the
+forecast's.
 
 ## 9. Required golden vectors (minimum per formula)
 

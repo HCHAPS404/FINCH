@@ -11,7 +11,9 @@ until then each file records `verifiedBy: ["python-decimal-reference"]`.
 
 Usage: python3 packages/financial-engine/test/vectors/generate_credit_vectors.py
 """
+import datetime as dt
 import json
+import math
 from decimal import ROUND_HALF_EVEN, Decimal as D, getcontext
 from pathlib import Path
 
@@ -555,6 +557,160 @@ def payoff_vectors():
     return vectors
 
 
+# ---------------------------------------------------------------------------
+# cashflow.forecast_30d@1 — colombia-credit.md §7
+# End-of-day balances for d = today .. today + 30. Events may shift off non-business days
+# (weekend and holidays are parameters, never hard-coded). A variable income is the
+# conservative 25th percentile of its history by nearest rank (the ceil(0.25 n)-th
+# smallest value), which makes the series ESTIMATED.
+# ---------------------------------------------------------------------------
+def business(day, weekend, holidays):
+    return day.isoweekday() not in weekend and day.isoformat() not in holidays
+
+
+def shift(day, rule, weekend, holidays):
+    step = {"NONE": 0, "NEXT_BUSINESS_DAY": 1, "PREVIOUS_BUSINESS_DAY": -1}[rule]
+    while step and not business(day, weekend, holidays):
+        day += dt.timedelta(days=step)
+    return day
+
+
+def p25(history):
+    ordered = sorted(history)
+    return ordered[math.ceil(len(ordered) * 0.25) - 1]
+
+
+def forecast(today, start, buffer, weekend, holidays, events, start_truth="OBSERVED"):
+    t0 = dt.date.fromisoformat(today)
+    days = [t0 + dt.timedelta(days=k) for k in range(31)]
+    delta = {d: 0 for d in days}
+    truths = [start_truth]
+    for e in events:
+        amount = p25(e["history"]) if "history" in e else e["amount"]
+        truth = "ESTIMATED" if "history" in e else e["truth"]
+        day = shift(dt.date.fromisoformat(e["date"]), e.get("shift", "NONE"), weekend, holidays)
+        if day in delta:
+            delta[day] += amount if e["kind"] == "INCOME" else -amount
+            truths.append(truth)
+    balance = start
+    series = []
+    for d in days:
+        balance += delta[d]
+        series.append({"date": d.isoformat(), "balance": str(balance)})
+    first_deficit = next(({"date": x["date"], "shortfall": str(buffer - int(x["balance"]))}
+                          for x in series if int(x["balance"]) < buffer), None)
+    low = min(series, key=lambda x: int(x["balance"]))  # first occurrence of the minimum
+    return {
+        "series": series,
+        "firstDeficit": first_deficit if first_deficit else "none",
+        "minimum": low,
+        "truthClass": "ESTIMATED" if "ESTIMATED" in truths else "DERIVED_DETERMINISTIC",
+    }
+
+
+# Synthetic calendar parameters for the vectors (the real calendar lives in
+# jurisdictions/CO/calendar with its source): Saturday/Sunday weekend and one holiday.
+WEEKEND = [6, 7]
+HOLIDAYS = ["2026-11-02"]
+
+FORECAST_CASES = [
+    ("no deficit: salary covers every obligation",
+     dict(today="2026-10-15", start=150_000_000, buffer=20_000_000, events=[
+         {"id": "rent", "kind": "OBLIGATION", "date": "2026-10-20", "amount": 90_000_000, "truth": "USER_ASSERTED"},
+         {"id": "salary", "kind": "INCOME", "date": "2026-10-30", "amount": 420_000_000, "truth": "OBSERVED"},
+         {"id": "card", "kind": "OBLIGATION", "date": "2026-11-05", "amount": 60_000_000, "truth": "OBSERVED"},
+     ])),
+    ("deficit: rent and card land before the salary",
+     dict(today="2026-10-15", start=80_000_000, buffer=20_000_000, events=[
+         {"id": "rent", "kind": "OBLIGATION", "date": "2026-10-20", "amount": 90_000_000, "truth": "USER_ASSERTED"},
+         {"id": "card", "kind": "OBLIGATION", "date": "2026-10-25", "amount": 60_000_000, "truth": "OBSERVED"},
+         {"id": "salary", "kind": "INCOME", "date": "2026-10-30", "amount": 420_000_000, "truth": "OBSERVED"},
+     ])),
+    ("holiday and weekend shifts: a payment due on a holiday moves to the next business day, "
+     "a salary due on a Saturday moves to the previous one",
+     dict(today="2026-10-15", start=100_000_000, buffer=10_000_000, events=[
+         {"id": "loan", "kind": "OBLIGATION", "date": "2026-11-02", "amount": 70_000_000, "truth": "OBSERVED",
+          "shift": "NEXT_BUSINESS_DAY"},
+         {"id": "salary", "kind": "INCOME", "date": "2026-10-31", "amount": 300_000_000, "truth": "OBSERVED",
+          "shift": "PREVIOUS_BUSINESS_DAY"},
+         {"id": "gym", "kind": "OBLIGATION", "date": "2026-10-18", "amount": 12_000_000, "truth": "USER_ASSERTED",
+          "shift": "NEXT_BUSINESS_DAY"},
+     ])),
+    ("variable income: 25th percentile of six months, series becomes ESTIMATED",
+     dict(today="2026-10-15", start=40_000_000, buffer=15_000_000, events=[
+         {"id": "freelance", "kind": "INCOME", "date": "2026-10-28",
+          "history": [210_000_000, 95_000_000, 180_000_000, 130_000_000, 260_000_000, 120_000_000]},
+         {"id": "rent", "kind": "OBLIGATION", "date": "2026-11-01", "amount": 90_000_000, "truth": "USER_ASSERTED"},
+     ])),
+]
+
+
+def encode_events(events):
+    out = []
+    for e in events:
+        x = {"id": e["id"], "kind": e["kind"], "date": e["date"], "shift": e.get("shift", "NONE")}
+        if "history" in e:
+            x["history"] = [str(h) for h in e["history"]]
+        else:
+            x["amount"] = str(e["amount"])
+            x["truth"] = e["truth"]
+        out.append(x)
+    return out
+
+
+def encode_forecast_inputs(c):
+    return {"today": c["today"], "currency": "COP", "startingBalance": str(c["start"]),
+            "buffer": str(c["buffer"]), "weekend": WEEKEND, "holidays": HOLIDAYS,
+            "events": encode_events(c["events"])}
+
+
+def forecast_vectors():
+    return [
+        {"description": d, "inputs": encode_forecast_inputs(c),
+         "expected": forecast(c["today"], c["start"], c["buffer"], WEEKEND, HOLIDAYS, c["events"])}
+        for d, c in FORECAST_CASES
+    ]
+
+
+# ---------------------------------------------------------------------------
+# cashflow.safe_to_spend@1 — colombia-credit.md §8
+# STS = max(0, min over d in [today, next_income] of balance_d − buffer), where
+# next_income is the first day after today with an income event in the forecast. With
+# no known next income the whole 30-day horizon is used and the result says so.
+# ---------------------------------------------------------------------------
+def safe_to_spend(c):
+    f = forecast(c["today"], c["start"], c["buffer"], WEEKEND, HOLIDAYS, c["events"])
+    t0 = dt.date.fromisoformat(c["today"])
+    income_days = sorted(
+        shift(dt.date.fromisoformat(e["date"]), e.get("shift", "NONE"), WEEKEND, HOLIDAYS)
+        for e in c["events"] if e["kind"] == "INCOME")
+    upcoming = [d for d in income_days if t0 < d <= t0 + dt.timedelta(days=30)]
+    end = upcoming[0] if upcoming else t0 + dt.timedelta(days=30)
+    window = [int(x["balance"]) for x in f["series"] if x["date"] <= end.isoformat()]
+    return {
+        "safeToSpend": str(max(0, min(window) - c["buffer"])),
+        "windowEnd": end.isoformat(),
+        "nextIncomeKnown": "true" if upcoming else "false",
+        "truthClass": f["truthClass"],
+    }
+
+
+STS_CASES = [
+    ("positive: the lowest balance before payday stays above the buffer", FORECAST_CASES[0][1]),
+    ("zero: obligations before payday exceed what is available", FORECAST_CASES[1][1]),
+    ("no known next income: the whole horizon is used",
+     dict(today="2026-10-15", start=200_000_000, buffer=30_000_000, events=[
+         {"id": "rent", "kind": "OBLIGATION", "date": "2026-10-20", "amount": 90_000_000, "truth": "USER_ASSERTED"},
+         {"id": "card", "kind": "OBLIGATION", "date": "2026-11-10", "amount": 50_000_000, "truth": "OBSERVED"},
+     ])),
+]
+
+
+def sts_vectors():
+    return [{"description": d, "inputs": encode_forecast_inputs(c), "expected": safe_to_spend(c)}
+            for d, c in STS_CASES]
+
+
 def write(formula_id: str, version: int, vectors: list) -> None:
     doc = {
         "formulaId": formula_id,
@@ -576,3 +732,5 @@ if __name__ == "__main__":
     write("credit.usury_check", 1, usury_vectors())
     write("credit.compare_refinance", 1, refinance_vectors())
     write("debt.payoff_plan", 1, payoff_vectors())
+    write("cashflow.forecast_30d", 1, forecast_vectors())
+    write("cashflow.safe_to_spend", 1, sts_vectors())
