@@ -20,7 +20,7 @@ import {
 import { IDS, PERSONAS } from './seed/personas.js';
 import { seedPersonas } from './seed/seed.js';
 
-let container: StartedPostgreSqlContainer;
+let container: StartedPostgreSqlContainer | undefined;
 let handle: DatabaseHandle;
 
 const HEX64 = 'a'.repeat(64);
@@ -31,9 +31,10 @@ beforeAll(async () => {
   await runMigrations(handle.db);
 }, 180_000);
 
+// Teardown tolerates a failed setup so the setup error is the one reported.
 afterAll(async () => {
-  await handle.close();
-  await container.stop();
+  await (handle as DatabaseHandle | undefined)?.close();
+  await container?.stop();
 });
 
 /** Assert that a statement is rejected by the database, with a message fragment. */
