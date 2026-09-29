@@ -1,20 +1,36 @@
 # FINCH code ownership.
 #
-# Everything is currently owned by the single authorized human developer. As other
-# human developers join, ownership is split by area here. AI agents are never listed:
-# they are tools, not owners (AGENTS.md §1).
+# Two authorized human developers: HELL (@HCHAPS404) and Irene (@Irene0911). Ownership
+# follows the areas in docs/delivery/DELEGATION.md. Every PR is reviewed by the other
+# founder, and GitHub never counts an author as their own reviewer, so shared paths list
+# both. AI agents are never listed: they are tools, not owners (AGENTS.md §1).
+#
+# Later rules override earlier ones for the same path.
 
-* @HCHAPS404
+* @HCHAPS404 @Irene0911
+
+# area/design, area/web, area/mobile (UI) — Irene leads, HELL reviews.
+/packages/design-tokens/      @Irene0911 @HCHAPS404
+/packages/ui-web/             @Irene0911 @HCHAPS404
+/packages/ui-mobile/          @Irene0911 @HCHAPS404
+/apps/web/                    @Irene0911 @HCHAPS404
+/apps/mobile/                 @Irene0911 @HCHAPS404
+/docs/design/                 @Irene0911 @HCHAPS404
+
+# area/backend, area/desktop — HELL leads, Irene reviews.
+/apps/api/                    @HCHAPS404 @Irene0911
+/apps/worker/                 @HCHAPS404 @Irene0911
+/apps/desktop/                @HCHAPS404 @Irene0911
 
 # Areas where a review is non-negotiable regardless of how small the diff looks.
-/packages/financial-engine/   @HCHAPS404
-/packages/authorization/      @HCHAPS404
-/packages/security/           @HCHAPS404
-/packages/db/migrations/      @HCHAPS404
-/.github/workflows/           @HCHAPS404
-/infra/                       @HCHAPS404
-/docs/architecture/adr/       @HCHAPS404
-/AGENTS.md                    @HCHAPS404
-/CLAUDE.md                    @HCHAPS404
-/SECURITY.md                  @HCHAPS404
-/.dependency-cruiser.cjs      @HCHAPS404
+/packages/financial-engine/   @HCHAPS404 @Irene0911
+/packages/authorization/      @HCHAPS404 @Irene0911
+/packages/security/           @HCHAPS404 @Irene0911
+/packages/db/migrations/      @HCHAPS404 @Irene0911
+/.github/workflows/           @HCHAPS404 @Irene0911
+/infra/                       @HCHAPS404 @Irene0911
+/docs/architecture/adr/       @HCHAPS404 @Irene0911
+/AGENTS.md                    @HCHAPS404 @Irene0911
+/CLAUDE.md                    @HCHAPS404 @Irene0911
+/SECURITY.md                  @HCHAPS404 @Irene0911
+/.dependency-cruiser.cjs      @HCHAPS404 @Irene0911

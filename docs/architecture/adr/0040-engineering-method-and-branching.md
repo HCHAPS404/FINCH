@@ -2,7 +2,7 @@
 
 - **Status:** Proposed
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** amends ADR-0026 (trunk-based development) for the hackathon program; moves the
   Constitution from the root `README.md` to `docs/architecture/CONSTITUTION.md`.
 

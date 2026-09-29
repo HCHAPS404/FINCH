@@ -63,14 +63,14 @@ When two documents disagree, the higher one wins:
 | ---------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
 | **Devpost Representative**               | HELL                                                       | Submission, official communication, affidavits, tax forms.                                                    |
 | **Technical lead: backend / AI / infra** | HELL                                                       | Financial engine, AI Gateway, agent, Market Truth, authorization, data, Watcher, deployment, security.        |
-| **Product / UX / front-end lead**        | Nairy                                                      | Design system, app (PWA), flows, copy, accessibility, human evaluation (Toloka), video, submission narrative. |
-| **Product Owner of the week**            | Rotates: S0 HELL · S1 Nairy · S2 HELL · S3 Nairy · S4 both | Prioritizes the week's backlog, accepts stories at the review, decides on contingency.                        |
+| **Product / UX / front-end lead**        | Irene                                                      | Design system, app (PWA), flows, copy, accessibility, human evaluation (Toloka), video, submission narrative. |
+| **Product Owner of the week**            | Rotates: S0 HELL · S1 Irene · S2 HELL · S3 Irene · S4 both | Prioritizes the week's backlog, accepts stories at the review, decides on contingency.                        |
 | **Claude**                               | Tool                                                       | Architecture, specifications, ADRs, threat models, deep review, planning.                                     |
 | **Cursor**                               | Tool                                                       | Multi-file implementation, refactoring, tests, local debugging.                                               |
 
 **RACI matrix by block** (R = does · A = approves · C = consulted · I = informed):
 
-| Block                              | HELL         | Nairy                             |
+| Block                              | HELL         | Irene                             |
 | ---------------------------------- | ------------ | --------------------------------- |
 | Financial engine and formulas      | R/A          | C (independent golden vectors: R) |
 | AI Gateway, agent, receipts, Ultra | R/A          | C                                 |
@@ -250,11 +250,11 @@ lane of one platform or discipline, with a fixed owner.
 
 | Branch         | Area                         | Platforms / scope                                                                  | Stack (ADR)                                                                       | Owner                           |
 | -------------- | ---------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------- |
-| `area/design`  | Design and design system     | Tokens, components, iconography, motion, prototypes; feeds web, mobile and desktop | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitution §34)                | Nairy                           |
+| `area/design`  | Design and design system     | Tokens, components, iconography, motion, prototypes; feeds web, mobile and desktop | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitution §34)                | Irene                           |
 | `area/backend` | Backend, engine, AI and data | API, worker/Watcher, financial engine, AI Gateway, Market Truth, DB, Channel Hub   | NestJS + Fastify (ADR-0007), PostgreSQL (ADR-0009), `financial-engine`, `ai-core` | HELL                            |
-| `area/web`     | Web front end                | Web app / **installable PWA** (main demo channel) + admin panel                    | Next.js (ADR-0005)                                                                | Nairy                           |
-| `area/mobile`  | Mobile app                   | **Android, then iOS**                                                              | React Native + Expo (ADR-0004)                                                    | Nairy (UI) + HELL (integration) |
-| `area/desktop` | Desktop app                  | **Windows, then macOS** (Linux builds come free with Tauri)                        | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL (packaging) + Nairy (UI)   |
+| `area/web`     | Web front end                | Web app / **installable PWA** (main demo channel) + admin panel                    | Next.js (ADR-0005)                                                                | Irene                           |
+| `area/mobile`  | Mobile app                   | **Android, then iOS**                                                              | React Native + Expo (ADR-0004)                                                    | Irene (UI) + HELL (integration) |
+| `area/desktop` | Desktop app                  | **Windows, then macOS** (Linux builds come free with Tauri)                        | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL (packaging) + Irene (UI)   |
 
 **Area rules:**
 
@@ -281,13 +281,13 @@ Format: `<type>/s<N>-<slug>` — type ∈ `feat` · `fix` · `test` · `chore` �
 | Branch                           | From                  | Task (05)                                                        | Owner        | Status (29 Sep 2026)                                              |
 | -------------------------------- | --------------------- | ---------------------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
 | `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + Nemotron chat + CI + deploy                   | HELL         | ✅ merged (#3, #5); deploy pending S0-06                          |
-| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 schema v1 + synthetic persona seeds                        | HELL + Nairy | ✅ merged (#4)                                                    |
-| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, typography, base components, motion, dark mode     | Nairy        | Nairy (not tracked here)                                          |
-| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 5-destination navigation, onboarding, installable PWA      | Nairy        | Nairy (not tracked here)                                          |
-| `feat/s0-mobile-shell`           | `area/mobile`         | **Parked until phase 3 (Android)** — Expo shell                  | Nairy + HELL | parked                                                            |
+| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 schema v1 + synthetic persona seeds                        | HELL + Irene | ✅ merged (#4)                                                    |
+| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, typography, base components, motion, dark mode     | Irene        | Irene (not tracked here)                                          |
+| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 5-destination navigation, onboarding, installable PWA      | Irene        | Irene (not tracked here)                                          |
+| `feat/s0-mobile-shell`           | `area/mobile`         | **Parked until phase 3 (Android)** — Expo shell                  | Irene + HELL | parked                                                            |
 | `feat/s0-desktop-shell`          | `area/desktop`        | **Parked until phase 2 (Windows)** — Tauri shell                 | HELL         | parked                                                            |
 | `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 license (after D-01), credits, decimal library | HELL         | ✅ S0-13 (#7) · S0-04 Apache-2.0 (#11); S0-03 credits per founder |
-| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 official figures and interviews                            | Nairy        | Nairy (not tracked here)                                          |
+| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 official figures and interviews                            | Irene        | Irene (not tracked here)                                          |
 
 Sprint 1 progress (29 Sep 2026), HELL's branches:
 
@@ -298,8 +298,15 @@ Sprint 1 progress (29 Sep 2026), HELL's branches:
   remain.
 - S0-04 license merged (#11); S0-06 verification record merged (#14), waiting on the console figures
   in its §3 before ADR-0038 is Accepted.
+- S0-05 verified (2026-09-29): the FAST, AGENT and DEEP Nemotron IDs are served and answer; the
+  IDs, VISION/EMBED candidates and the open GUARD question are in ADR-0036 §Verification. A real
+  assistant turn ran end to end locally. S0-03 access and balances start in
+  `docs/hackathon/credits.md`.
+- S0-02 Devpost registration done (HELL). S0-11 Devpost clarification and Nebius office hours: HELL.
+  S0-12: Irene (`@Irene0911`, D-10) added to AGENTS.md and CODEOWNERS; collaborator access and
+  branch protection on `main` pending.
 - Owed by the founders: S1-03 re-derivation in the workbook. Not started: `feat/s1-ai-gateway`,
-  `feat/s1-agent-receipts` (both wait on S0-05) and `feat/s1-payday-engine`.
+  `feat/s1-agent-receipts` (unblocked by S0-05) and `feat/s1-payday-engine`.
 - Stage S0 → `main` is open as #12 for the M0 review.
 
 **Resuming locally.** Clone, `pnpm env:doctor`, `pnpm install --frozen-lockfile`, copy `.env.example`
@@ -451,7 +458,7 @@ latency). **No new prompt or model ships without passing evaluation.**
 
 - Uptime monitor alerting both founders; daily review of health and credits.
 - Deploys only from CI; after submission, only from `release/v0.1.0-hackathon`.
-- **On-call 1–15 Dec:** HELL on odd days, Nairy on even days; runbook in
+- **On-call 1–15 Dec:** HELL on odd days, Irene on even days; runbook in
   `docs/operations/runbooks/hackathon-demo.md`.
 - Incident: stabilize → tell the other founder → record → short postmortem.
 

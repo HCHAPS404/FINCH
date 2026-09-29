@@ -2,7 +2,7 @@
 
 - **Status:** Proposed. Becomes Accepted with option A or B after task S0-06 (deadline 2026-10-02).
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** none. A **scoped exception** to ADR-0012 (AWS primary) and ADR-0013 (compute
   strategy) for the hackathon demo environment only.
 

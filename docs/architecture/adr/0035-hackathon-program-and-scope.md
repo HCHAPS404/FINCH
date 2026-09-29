@@ -2,7 +2,7 @@
 
 - **Status:** Proposed
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** none. Temporarily re-sequences README §84 (24-Week Program) and adds a scoped exception to ADR-0026.
 
 ## Context
@@ -23,7 +23,7 @@ Jetson Orin Nano per track and USD 3,000 for Best Use of Tavily. It requires:
 The README §84 program sequences 24 weeks starting from infrastructure (AWS, IaC, IdP). Following
 it literally would give no demonstrable product by 2026-10-30.
 
-The team is now two human developers (HELL and Nairy), with about 4.5 weeks of build time.
+The team is now two human developers (HELL and Irene), with about 4.5 weeks of build time.
 
 ## Decision
 

@@ -1,6 +1,6 @@
 # FINCH — design principles
 
-> **Status:** PROPOSED (ADR-0041) — owner: Nairy · review: HELL.
+> **Status:** PROPOSED (ADR-0041) — owner: Irene · review: HELL.
 > Applies to web, desktop and mobile. Every interface goes through the `design-critique` skill before
 > the PR.
 

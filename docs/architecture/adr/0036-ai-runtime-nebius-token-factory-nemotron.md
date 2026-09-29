@@ -2,7 +2,7 @@
 
 - **Status:** Proposed
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** none. Resolves the "AI runtime provider mix" item of README §112 for the hackathon program, and gives ADR-0018 its first concrete provider.
 
 ## Context
@@ -19,8 +19,8 @@ Nemotron models listed by the Nebius cookbook as of 2026-09:
 - `nvidia/nemotron-3-super-120b-a12b` (120B / 12B active);
 - `nvidia/Nemotron-3-Ultra-550b-a55b` (550B / 55B active).
 
-These IDs must be confirmed against `GET /v1/models` with the team's key (task S0-05), and the
-table below amended if they differ.
+These IDs were confirmed against `GET /v1/models` with the team's key on 2026-09-29 (task
+S0-05); see **Verification** below.
 
 ## Decision
 
@@ -30,12 +30,12 @@ maps each tier to a model ID from configuration:
 
 | Tier     | Default model                                                          | Purpose                                            |
 | -------- | ---------------------------------------------------------------------- | -------------------------------------------------- |
-| `FAST`   | Nemotron 3.5 Lightning                                                 | routing, classification, extraction, short replies |
-| `AGENT`  | Nemotron 3 Super                                                       | tool-calling agent, narrative                      |
-| `DEEP`   | Nemotron 3 Ultra                                                       | second-opinion audit, eval judge                   |
-| `VISION` | NVIDIA multimodal model available in Token Factory (to confirm)        | document extraction                                |
-| `EMBED`  | embedding model available in Token Factory (to confirm; prefer NVIDIA) | memory                                             |
-| `GUARD`  | safety model available in Token Factory (to confirm; prefer NVIDIA)    | input/output safety                                |
+| `FAST`   | `nvidia/Nemotron-3_5-Lightning`                                        | routing, classification, extraction, short replies |
+| `AGENT`  | `nvidia/nemotron-3-super-120b-a12b`                                    | tool-calling agent, narrative                      |
+| `DEEP`   | `nvidia/Nemotron-3-Ultra-550b-a55b`                                    | second-opinion audit, eval judge                   |
+| `VISION` | `openbmb/MiniCPM-V-4_5` — **proposed**, no NVIDIA multimodal is served | document extraction                                |
+| `EMBED`  | `Qwen/Qwen3-Embedding-8B` — the only embedding model served            | memory                                             |
+| `GUARD`  | none served — **open**, see Verification                               | input/output safety                                |
 
 The gateway enforces:
 
@@ -48,6 +48,35 @@ The gateway enforces:
 - tier fallback: DEEP→AGENT→FAST→deterministic template.
 
 All model output is `GENERATED_NARRATIVE`.
+
+## Verification (S0-05, 2026-09-29)
+
+`pnpm ai:models` listed 25 models on `api.tokenfactory.nebius.com`. Each tier model then
+answered one real completion (HTTP 200); the embedding model returned 4096-dimension vectors.
+The API's `/api/health` reported FAST, AGENT and DEEP available, and one assistant turn
+through the AI Gateway answered in 2.8 s on FAST.
+
+| Tier     | Model ID                            | Modality          | Context   | Region         | Features                      |
+| -------- | ----------------------------------- | ----------------- | --------- | -------------- | ----------------------------- |
+| `FAST`   | `nvidia/Nemotron-3_5-Lightning`     | text → text       | 1,048,576 | eu-north1 (FI) | tools, reasoning              |
+| `AGENT`  | `nvidia/nemotron-3-super-120b-a12b` | text → text       | 262,144   | us-central1    | tools, reasoning              |
+| `DEEP`   | `nvidia/Nemotron-3-Ultra-550b-a55b` | text → text       | 1,048,576 | us-central1    | tools, reasoning              |
+| `VISION` | `openbmb/MiniCPM-V-4_5`             | text+image → text | 32,000    | eu-north1 (FI) | json_mode, structured_outputs |
+| `EMBED`  | `Qwen/Qwen3-Embedding-8B`           | text → embedding  | 40,960    | eu-north1 (FI) | —                             |
+
+Findings that need the founders' decision:
+
+- **VISION.** No NVIDIA multimodal model is served (the only other NVIDIA model,
+  `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, is text-only). `openbmb/MiniCPM-V-4_5` is the only
+  image-capable model and supports structured outputs. The trade-off below allows non-NVIDIA
+  models only for embeddings and guard, so using it for VISION amends this ADR.
+- **GUARD.** No dedicated safety model is served. Options: a guard prompt on the FAST tier with
+  structured output plus the deterministic checks the gateway already runs, or a guard hosted
+  elsewhere (a new trust boundary, so a new ADR).
+- **Data residency.** FAST, VISION and EMBED run in Finland; AGENT and DEEP in the US. The
+  privacy notes in the submission must name both regions.
+
+Prices are per token in the catalog and change; they are not recorded here (see **Cost**).
 
 ## Alternatives considered
 

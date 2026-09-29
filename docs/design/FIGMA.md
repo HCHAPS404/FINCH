@@ -1,6 +1,6 @@
 # FINCH in Figma — design channel, structure and handoff
 
-> **Status:** PROPOSED (ADR-0041) · file owner: Nairy · technical editor: HELL.
+> **Status:** PROPOSED (ADR-0041) · file owner: Irene · technical editor: HELL.
 
 Figma is the source of truth for **layout, components, flows and prototypes**.
 `packages/design-tokens` (JSON in DTCG format) is the source of truth for **token values** in code.

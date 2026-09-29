@@ -2,7 +2,7 @@
 
 - **Status:** Proposed. **Requires founders' decision D-01** (`docs/hackathon/07`).
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** `"license": "UNLICENSED"` in the root `package.json`.
 
 ## Context

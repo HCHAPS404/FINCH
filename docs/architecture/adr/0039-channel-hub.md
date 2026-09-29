@@ -2,7 +2,7 @@
 
 - **Status:** Proposed
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** the Telegram-centred channel plan in the first version of `docs/hackathon/`
   (ADR-0035 §Decision, S-1).
 
