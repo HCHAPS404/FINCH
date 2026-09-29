@@ -1,392 +1,391 @@
-# 08 — Catálogo de funciones de FINCH
+# 08 — FINCH feature catalog
 
-> **Estado:** PROPUESTO — aprobado en conversación por HELL el 2026-09-28; pendiente de revisión de Nairy.
-> Este catálogo es la **fuente única** de alcance. `02-product-spec.md` describe la experiencia y
-> `05-roadmap-and-timeline.md` la secuencia; si hay conflicto de alcance, manda este documento.
+> **Status:** PROPOSED — approved in conversation by HELL on 2026-09-28; pending Nairy's review.
+> This catalog is the **single source** of scope. `02-product-spec.md` describes the experience and
+> `05-roadmap-and-timeline.md` the sequence; on any scope conflict, this document wins.
 
-## Niveles
+## Levels
 
-| Nivel | Significado                                                                                          |
-| ----- | ---------------------------------------------------------------------------------------------------- |
-| **H** | Entra **completa, al máximo nivel de calidad y pulida** en la hackathon. Puede aparecer en el video. |
-| **P** | Posterior a la hackathon. Queda **documentada** aquí como perspectiva de producto (sección P).       |
+| Level | Meaning                                                                                                  |
+| ----- | -------------------------------------------------------------------------------------------------------- |
+| **H** | Ships in the hackathon **complete, at the highest quality level and polished**. May appear in the video. |
+| **P** | After the hackathon. **Documented** here as product perspective (section P).                             |
 
-> **Decisión 2026-09-28 (HELL):** no hay funciones "MVP". Las 8 que estaban como H-MVP (D3, D4, D5,
-> F3, F4, F5, G4, H3) suben a **H** con su alcance completo.
+> **Decision 2026-09-28 (HELL):** there are no "MVP" features. The 8 previously marked H-MVP (D3, D4,
+> D5, F3, F4, F5, G4, H3) move up to **H** with their full scope.
 
-Reglas que aplican a **todas** las funciones (no se repiten en cada ficha):
+Rules that apply to **every** feature (not repeated in each entry):
 
-1. Toda cifra mostrada sale de una fórmula versionada y trae **recibo** (Constitución §4.2–§4.5).
-2. Toda salida de IA es `GENERATED_NARRATIVE`; lo que la IA extrae de documentos queda `ESTIMATED`
-   hasta que el usuario lo confirma (`USER_ASSERTED`).
-3. **FINCH nunca mueve dinero** (R3/R4 fuera de alcance, ADR-0021). Planifica, controla, verifica y
-   redacta; el usuario ejecuta.
-4. Rankings de productos **neutrales**: ninguna comisión altera el orden (Constitución §4.15).
-5. Recomendaciones de inversión: **simulación educativa**, nunca "compra X" (asesoría regulada).
-6. La app es **autónoma**: ninguna función depende de un canal externo (ADR-0039).
-7. Datos de mercado vía Tavily/fuentes oficiales: con URL, fecha, frescura; si no hay dato, se
-   dice — nunca se inventa.
+1. Every figure shown comes from a versioned formula and carries a **receipt** (Constitution
+   §4.2–§4.5).
+2. All AI output is `GENERATED_NARRATIVE`; what AI extracts from documents stays `ESTIMATED` until
+   the user confirms it (`USER_ASSERTED`).
+3. **FINCH never moves money** (R3/R4 out of scope, ADR-0021). It plans, controls, verifies and
+   drafts; the user executes.
+4. **Neutral** product rankings: no commission changes the order (Constitution §4.15).
+5. Investment recommendations: **educational simulation**, never "buy X" (regulated advice).
+6. The app is **autonomous**: no feature depends on an external channel (ADR-0039).
+7. Market data via Tavily/official sources: with URL, date and freshness; when there is no data,
+   FINCH says so — it never invents.
 
-Leyenda de modelos: **L** = Nemotron 3.5 Lightning · **S** = Nemotron 3 Super · **U** = Nemotron 3
-Ultra · **V** = multimodal NVIDIA (VERIFICAR disponibilidad) · **E** = embeddings · **T** = Tavily.
-Dueño: **H** = HELL, **N** = Nairy (propuesta; ver 05).
-
----
-
-## Resumen del alcance
-
-| Módulo                       | H (hackathon, completo)                                                                                                                        | P (documentado)                    |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
-| **A. Núcleo de confianza**   | A1–A11                                                                                                                                         | —                                  |
-| **B. Administrar el dinero** | B1 Payday Autopilot · B2 Sobres · B3 Tarjetas · B4 Calendario · B5 Cierre de mes · B6 Ingresos múltiples · B7 Salud financiera · B8 Patrimonio | —                                  |
-| **C. Decidir**               | C1 ¿Me lo puedo permitir? · C2 ¿Y si…? · C3 Modo tormenta · C4 Metas · C5 Simulador de inversión                                               | —                                  |
-| **D. Encontrar dinero**      | D1 Opportunity Engine · D2 Suscripciones · D3 Anomalías · D4 Gastos fijos · D5 Remesas                                                         | —                                  |
-| **E. Capturar y ordenar**    | E1 Recibos y facturas por foto · E2 Bóveda · E3 Buscador en lenguaje natural · E4 Importación                                                  | —                                  |
-| **F. Compartir y proteger**  | F1 Finanzas compartidas · F2 Radar de protección · F3 Pasaporte financiero · F4 Copiloto de derechos · F5 Impuestos CO                         | —                                  |
-| **G. Experiencia global**    | G1 Hábitos · G2 Briefing · G3 Multimoneda y FX en vivo · G4 Segundo país                                                                       | —                                  |
-| **H. Canales (Channel Hub)** | H1 Bandeja + push de la app · H2 Calendario .ics · H3 Correo entrada/salida                                                                    | H4 Telegram · H5 SMS · H6 WhatsApp |
-| **P. Futuro**                | —                                                                                                                                              | P1–P10                             |
-
-**Total hackathon:** **45 funciones H** (P: 3 canales + P1–P10 documentados). Esfuerzo y capacidad en 05 §0.
+Model legend: **L** = Nemotron 3.5 Lightning · **S** = Nemotron 3 Super · **U** = Nemotron 3 Ultra ·
+**V** = NVIDIA multimodal (VERIFY availability) · **E** = embeddings · **T** = Tavily. Owner: **H** =
+HELL, **N** = Nairy (proposal; see 05).
 
 ---
 
-## A. Núcleo de confianza (H) — lo que hace a FINCH distinta de cualquier app de finanzas
+## Scope summary
 
-| ID  | Función                     | Qué hace (resumen; detalle en 02 y 04)                                                                                                         | Acepta cuando                                                     | Dueño |
-| --- | --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------- | ----- |
-| A1  | **Financial Twin**          | Estado financiero versionado: cuentas, deudas, tarjetas, ingresos, obligaciones, metas, activos; cada hecho con clase de verdad y procedencia. | Snapshot inmutable con checksum; cada hecho muestra origen.       | H     |
-| A2  | **Motor financiero**        | Fórmulas de `docs/financial-formulas/` (crédito CO + finanzas personales), versionadas, con golden vectors independientes.                     | `pnpm financial:verify` verde; vectores verificados por N.        | H     |
-| A3  | **Recibos + verificador**   | La IA escribe marcadores, no cifras; verificador determinista bloquea números sin recibo; cifras clicables → recibo.                           | E3 = 0 cifras sin recibo en producción.                           | H     |
-| A4  | **Agente por niveles**      | L enruta/extrae · S orquesta skills · U audita. Fallback por nivel hasta plantilla.                                                            | E2 ≥ 90 % tool calls correctos (se reporta el real).              | H     |
-| A5  | **Segunda opinión (Ultra)** | U revisa cada Decision Card/acción: APPROVE / WARN / BLOCK con hallazgos visibles.                                                             | Hallazgos renderizados; BLOCK impide la acción.                   | H     |
-| A6  | **Decision Cards**          | Estructura README §17, persistidas como datos; bandeja priorizada.                                                                             | Todas las recomendaciones de B–F salen como Decision Card.        | H+N   |
-| A7  | **Memoria controlable**     | Twin + recuerdos (metas, preferencias, restricciones) con E; "Lo que FINCH sabe de ti".                                                        | Olvidar excluye el recuerdo en el siguiente turno (E2E).          | H+N   |
-| A8  | **Privacidad por diseño**   | Redacción de PII antes del LLM, consentimiento por fuente, auditoría, exportar/borrar todo.                                                    | E4: 0 fugas de PII al proveedor.                                  | H     |
-| A9  | **Evals publicadas**        | E1–E6 (04 §7) + scorecard en README.                                                                                                           | `evals/RESULTS.md` con números reales.                            | H+N   |
-| A10 | **Bilingüe, global-ready**  | ES/EN; formatos por locale; reglas de país en `jurisdictions/`.                                                                                | Cambio de idioma/país sin recargar estado.                        | N     |
-| A11 | **Vigía siempre activo**    | Nebius Serverless Job diario: recalcula, consulta mercado, detecta eventos, genera cards + briefing.                                           | Corre solo 06:00 local; "ejecutar ahora" en la UI; log con costo. | H     |
+| Module                        | H (hackathon, complete)                                                                                                                     | P (documented)                     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| **A. Trust core**             | A1–A11                                                                                                                                      | —                                  |
+| **B. Manage money**           | B1 Payday Autopilot · B2 Envelopes · B3 Cards · B4 Calendar · B5 Month-end close · B6 Multiple incomes · B7 Financial health · B8 Net worth | —                                  |
+| **C. Decide**                 | C1 Can I afford it? · C2 What if…? · C3 Storm mode · C4 Goals · C5 Investment simulator                                                     | —                                  |
+| **D. Find money**             | D1 Opportunity Engine · D2 Subscriptions · D3 Anomalies · D4 Fixed costs · D5 Remittances                                                   | —                                  |
+| **E. Capture and organize**   | E1 Receipts and invoices by photo · E2 Vault · E3 Natural-language search · E4 Import                                                       | —                                  |
+| **F. Share and protect**      | F1 Shared finances · F2 Protection radar · F3 Financial passport · F4 Rights copilot · F5 CO taxes                                          | —                                  |
+| **G. Global experience**      | G1 Habits · G2 Briefing · G3 Multi-currency and live FX · G4 Second country                                                                 | —                                  |
+| **H. Channels (Channel Hub)** | H1 Inbox + app push · H2 .ics calendar · H3 Inbound/outbound email                                                                          | H4 Telegram · H5 SMS · H6 WhatsApp |
+| **P. Future**                 | —                                                                                                                                           | P1–P10                             |
 
----
-
-## B. Administrar el dinero (H) — la "wallet administrativa inteligente"
-
-### B1. Payday Autopilot — **estrella del video**
-
-- **Qué hace:** detecta la llegada de un ingreso y en segundos propone el **plan del mes**: cuánto va
-  a cada obligación (con fecha), a deudas (priorizadas), al fondo de emergencia, a metas, a
-  inversión/ahorro y cuánto queda libre. El usuario acepta, ajusta con sliders o pide cambios en
-  lenguaje natural. Luego genera el **checklist de ejecución** ("transfiere X a…") y verifica su
-  cumplimiento con los movimientos siguientes.
-- **Detección de ingreso (cualquiera):** (1) botón "Me llegó un ingreso"; (2) texto/captura de la
-  notificación del banco pegada o compartida a la app (L/V extrae monto, fecha, origen); (3) correo
-  reenviado a la dirección privada (H3); (4) extracto importado (E4); (5) fecha habitual aprendida.
-- **Motor:** `budget.allocate@1` — asignación determinista por prioridades: obligaciones con
-  vencimiento antes del próximo ingreso → mínimos de deuda → colchón hasta objetivo → metas por
-  prioridad/fecha → excedente por estrategia de deuda o ahorro. Regla configurable ("págate primero
-  10 %", "50/30/20", personalizada).
-- **IA:** L extrae y clasifica; S explica el plan y aplica cambios pedidos ("quiero más para el viaje");
-  U revisa que no queden obligaciones descubiertas.
-- **Acepta cuando:** con la persona Laura, desde "Me llegó el sueldo" hasta plan con recibos < 10 s;
-  la suma de asignaciones = ingreso exacto (conservación verificada por test).
-- **Límite:** FINCH no mueve dinero; el checklist lo ejecuta el usuario. Dueño: H (motor/IA) + N (UI).
-
-### B2. Sobres y presupuesto vivo
-
-- **Qué hace:** sobres virtuales (hogar, mercado, transporte, deudas, ahorro, inversión, ocio…) que
-  nacen del plan de B1. Cada gasto registrado descuenta; alertas al 80 % y 100 %; mover dinero entre
-  sobres con un gesto (registro, no transferencia real).
-- **Motor:** `budget.envelope_state@1`, conservación de totales.
-- **Acepta cuando:** registrar un gasto actualiza sobre, saldo proyectado y safe-to-spend al instante.
-  Dueño: N (UI) + H (motor).
-
-### B3. Control de tarjetas de crédito
-
-- **Qué hace:** por tarjeta: cupo, uso %, fecha de corte y de pago, saldo a la fecha de corte, costo
-  de diferir a N cuotas, interés generado en el mes, pago mínimo vs pago total y su costo, alerta de
-  tasa cercana a la usura (A2).
-- **Recomendación:** qué tarjeta usar para una compra (según fecha de corte → más días sin interés
-  cuando aplica) y cuál abonar primero.
-- **Acepta cuando:** para cada tarjeta se ve "si pagas el mínimo, pagarás X de intereses este mes"
-  con recibo. Dueño: H + N.
-
-### B4. Calendario financiero
-
-- Todos los pagos, cortes, ingresos, vencimientos (E2) y metas en un calendario; ajuste por festivos
-  (`jurisdictions/*/calendar`); vista mes y "próximos 7 días". Export .ics (H2).
-  Dueño: N.
-
-### B5. Cierre de mes
-
-- Reporte automático al cierre: plan vs real por sobre, cumplimiento del checklist B1, deudas
-  reducidas, ahorro logrado, 3 aprendizajes y el ajuste propuesto para el mes siguiente (Decision
-  Card). Dueño: N (UI) + H (motor).
-
-### B6. Ingresos múltiples
-
-- Salario, honorarios, arriendos, negocio, ingresos en otra moneda. Para variables: proyección
-  conservadora (p25) marcada `ESTIMATED`. Diversificación de ingreso visible. Dueño: H.
-
-### B7. Salud financiera
-
-- Puntaje 0–100 **explicable y determinista** (`health.score@1`): relación deuda/ingreso, uso de
-  cupo, meses de colchón, tasa de ahorro, puntualidad de pagos, concentración de ingresos. Cada
-  componente con peso publicado, su recibo y "cómo subir 5 puntos". Nunca "score crediticio" (no
-  sustituye centrales de riesgo). Dueño: H + N.
-
-### B8. Patrimonio neto vivo
-
-- Activos (cuentas, CDTs, inversiones, vehículo con depreciación estimada, inmueble declarado) −
-  pasivos; evolución mensual; "qué lo movió". Multimoneda (G3). Dueño: H + N.
+**Hackathon total:** **45 H features** (P: 3 channels + P1–P10 documented). Effort and capacity in
+05 §0.
 
 ---
 
-## C. Decidir mejor (H)
+## A. Trust core (H) — what makes FINCH different from any finance app
 
-| ID  | Función                              | Qué hace                                                                                                                                                                                                                                               | Motor / IA                                                                                       | Acepta cuando                                                      | Dueño |
-| --- | ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------ | ----- |
-| C1  | **¿Me lo puedo permitir?**           | Antes de comprar: impacto en mes, sobres y metas; contado vs 1/12/36 cuotas con interés real en pesos; costo de oportunidad; veredicto "sí / sí pero / mejor espera X días" con razones.                                                               | `purchase.afford@1` (forecast + amortización). L entiende "quiero unos audífonos de 800 mil".    | Respuesta con recibos < 5 s; muestra en qué fecha sí sería cómodo. | H + N |
-| C2  | **Simulador "¿Y si…?"**              | Escenarios en lenguaje natural o sliders: aumento/pérdida de ingreso, compra a crédito, mudanza, independizarse, hijo; efecto a 12–60 meses sobre deudas, metas, colchón, patrimonio; hasta 3 escenarios lado a lado.                                  | Simulación sobre copia del snapshot (nunca muta estado). S traduce texto → parámetros validados. | Comparación visual de 3 escenarios con recibos.                    | H + N |
-| C3  | **Modo tormenta**                    | "Si pierdo mi ingreso hoy": meses de autonomía, orden de recortes, deudas a priorizar, qué pedir al banco (periodo de gracia, reestructuración) y plan semana a semana.                                                                                | `stress.runway@1`. U revisa el plan.                                                             | Plan generado con runway exacto y lista de acciones.               | H     |
-| C4  | **Metas con negociación**            | Varias metas con fecha y prioridad: factibilidad, aporte mensual, probabilidad bajo escenario conservador y trade-offs explícitos ("adelantar el viaje atrasa la cuota inicial 4 meses").                                                              | `goals.plan@1` (asignación por prioridad/fecha).                                                 | Cambiar una prioridad recalcula todas con recibos.                 | H + N |
-| C5  | **Simulador de inversión educativo** | Perfil de riesgo (cuestionario), proyección de aportes periódicos con escenarios (conservador/base/optimista) y efecto de inflación e impuestos; compara clases de producto (CDT, fondo de liquidez, etc.) — **nunca** recomienda un valor específico. | `invest.project@1`. S explica; copy legal de simulación.                                         | Proyección con 3 escenarios y supuestos visibles.                  | H     |
-
----
-
-## D. Encontrar dinero
-
-### D1. Opportunity Engine (H) — créditos, CDTs, ahorro, compra de cartera
-
-- **Qué hace:** (a) **mejor crédito** para una necesidad (monto, plazo) comparando **costo total
-  real**, no solo tasa; (b) **compra de cartera** para deudas actuales; (c) **mejores CDTs y cuentas
-  de ahorro** por **rentabilidad neta real** (después de retención en la fuente e inflación) con
-  plazo, liquidez y cobertura del seguro de depósitos (VERIFICAR condiciones de Fogafín); (d) avisos
-  del Vigía cuando aparece una opción mejor.
-- **Datos:** T (Search + Extract) sobre páginas públicas de entidades y fuentes oficiales;
-  allowlist de dominios; parseo determinista; frescura; sin logos de terceros en el video.
-- **Motor:** `credit.total_cost@1`, `credit.compare_refinance@1`, `deposit.net_return@1`.
-- **Ranking:** determinista y publicado (criterios y pesos visibles). Si en el futuro hay ingresos por
-  referidos, se declaran y **no** entran al ranking.
-- **Acepta cuando:** para Laura, top-3 CDTs y top-3 opciones de compra de cartera con fuente, fecha y
-  ahorro en pesos. Dueño: H (datos/motor) + N (UI). **Uso central de Tavily.**
-
-### D2. Detective de suscripciones y cargos recurrentes (H)
-
-- Detecta suscripciones, cargos duplicados, subidas silenciosas de precio, pruebas gratis que
-  empezaron a cobrar, cuota de manejo que subió; total anual en pesos; borrador de cancelación o
-  reclamo (F4).
-- **Motor:** `recurring.detect@1` (periodicidad ± tolerancia, monto, comercio normalizado por L).
-- **Acepta cuando:** con el extracto sintético de Laura detecta ≥ 5 recurrentes y 1 subida de precio.
-  Dueño: H.
-
-### D3. Detector de anomalías (H)
-
-- **Qué hace:** vigila cada movimiento nuevo y explica lo raro, con siguiente paso concreto.
-- **Reglas deterministas (versionadas, `anomaly.scan@1`):** cargo duplicado (mismo comercio y monto
-  en < 48 h); comisión o cargo bancario nuevo o que subió; compra en moneda extranjera con sobrecosto
-  de cambio vs tasa de referencia (G3); gasto fuera de patrón (> p95 de su categoría o z-score > 3
-  sobre su historial); cargo en comercio nunca visto por encima de un umbral; cobro después de una
-  cancelación registrada (D2); intereses cobrados en una tarjeta que el usuario marcó como pagada
-  completa.
-- **Aprendizaje por usuario:** línea base por categoría y comercio con ventana móvil; el usuario marca
-  "es normal" y la regla se ajusta para él (umbral personal, auditado).
-- **Salida:** Decision Card con evidencia (movimientos implicados), severidad y acción: reclamar (F4),
-  confirmar, ignorar. Integrada al Vigía y al push.
-- **Acepta cuando:** en el dataset sintético de anomalías (≥ 30 casos plantados + ruido) precisión y
-  recall ≥ 90 % (se reporta el real); cada alerta explica por qué con recibo. Dueño: H.
-
-### D4. Optimizador de gastos fijos (H)
-
-- **Qué hace:** revisa **todos** los gastos fijos detectados (D2/B2) — plan de celular, internet,
-  televisión/streaming, seguros voluntarios, gimnasio, servicios con tarifa comparable — y busca
-  alternativas públicas equivalentes o mejores.
-- **Cómo:** normalización de la oferta actual (L); T Search + Extract sobre páginas públicas de
-  proveedores de la allowlist por categoría; comparación determinista por atributos (precio, datos,
-  velocidad, cobertura, permanencia/cláusulas) → ahorro anual con fuentes y fecha; alertas del Vigía
-  cuando aparece una mejor opción; borrador de solicitud de cambio o cancelación (F4).
-- **Acepta cuando:** para Laura encuentra alternativas en ≥ 3 categorías con ahorro anual calculado y
-  fuentes; ranking neutral y criterios visibles. Dueño: H (datos) + N (UI).
-
-### D5. Comparador de remesas (H)
-
-- **Qué hace:** costo total real de enviar o recibir dinero entre países = comisión + margen del tipo
-  de cambio frente a la tasa de referencia (G3), en moneda de origen y en %; cuánto recibe
-  exactamente el destinatario; velocidad y método de entrega.
-- **Cobertura:** corredores principales hacia Colombia (EE. UU., España, Chile) y los del segundo
-  país (G4), para 4–6 servicios con precios públicos vía T, con fecha y hora de consulta.
-- **Extras:** simulación "si envías cada mes X, al año pierdes Y en costos"; alerta del Vigía cuando
-  el costo baja; ingreso en otra moneda (Andrés) tratado con el mismo motor.
-- **Motor:** `fx.remittance_cost@1`, `fx.convert@1`. **Acepta cuando:** para 3 corredores muestra
-  ranking con costos exactos y fuentes; conservación de montos verificada. Dueño: H.
+| ID  | Feature                     | What it does (summary; detail in 02 and 04)                                                                                       | Accepted when                                                      | Owner |
+| --- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
+| A1  | **Financial Twin**          | Versioned financial state: accounts, debts, cards, income, obligations, goals, assets; each fact with truth class and provenance. | Immutable snapshot with checksum; every fact shows its origin.     | H     |
+| A2  | **Financial engine**        | Formulas in `docs/financial-formulas/` (CO credit + personal finance), versioned, with independent golden vectors.                | `pnpm financial:verify` green; vectors verified by N.              | H     |
+| A3  | **Receipts + verifier**     | AI writes placeholders, not figures; a deterministic verifier blocks numbers without a receipt; clickable figures → receipt.      | E3 = 0 figures without a receipt in production.                    | H     |
+| A4  | **Tiered agent**            | L routes/extracts · S orchestrates skills · U audits. Per-tier fallback down to a template.                                       | E2 ≥ 90 % correct tool calls (the real figure is reported).        | H     |
+| A5  | **Second opinion (Ultra)**  | U reviews every Decision Card/action: APPROVE / WARN / BLOCK with visible findings.                                               | Findings rendered; BLOCK prevents the action.                      | H     |
+| A6  | **Decision Cards**          | README §17 structure, persisted as data; prioritized inbox.                                                                       | Every recommendation from B–F comes out as a Decision Card.        | H+N   |
+| A7  | **Controllable memory**     | Twin + memories (goals, preferences, constraints) with E; "What FINCH knows about you".                                           | Forgetting excludes the memory on the next turn (E2E).             | H+N   |
+| A8  | **Privacy by design**       | PII redaction before the LLM, per-source consent, audit, export/delete everything.                                                | E4: 0 PII leaks to the provider.                                   | H     |
+| A9  | **Published evals**         | E1–E6 (04 §7) + scorecard in the README.                                                                                          | `evals/RESULTS.md` with real numbers.                              | H+N   |
+| A10 | **Bilingual, global-ready** | ES/EN; per-locale formats; country rules in `jurisdictions/`.                                                                     | Language/country switch without reloading state.                   | N     |
+| A11 | **Always-on Watcher**       | Daily Nebius Serverless Job: recomputes, checks the market, detects events, generates cards + briefing.                           | Runs by itself at 06:00 local; "run now" in the UI; log with cost. | H     |
 
 ---
 
-## E. Capturar y ordenar (H)
+## B. Manage money (H) — the "intelligent administrative wallet"
 
-### E1. Recibos y facturas por foto (H)
+### B1. Payday Autopilot — **video star**
 
-- **Qué hace:** foto del recibo/factura (cámara del móvil vía PWA) o PDF → comercio, fecha, total,
-  impuestos, ítems relevantes → categoría y sobre sugeridos → **confirmación** → gasto registrado.
-  Factura electrónica colombiana (XML/PDF por correo, H3): extracción estructurada; marca las compras
-  relevantes para deducciones en renta si aplica (VERIFICAR regla vigente con la DIAN; F5).
-- **IA:** V extrae; L normaliza comercio y categoría; validaciones deterministas (suma de ítems ≈
-  total, fecha válida, moneda).
-- **Acepta cuando:** 10 recibos sintéticos variados con ≥ 90 % de campos correctos antes de
-  confirmación (se reporta el real); la confirmación nunca se salta. Dueño: H (pipeline) + N (UI de
-  cámara y confirmación).
+- **What it does:** detects incoming income and within seconds proposes the **month plan**: how much
+  goes to each obligation (with date), to debts (prioritized), to the emergency fund, to goals, to
+  investing/saving and how much is left free. The user accepts, adjusts with sliders or asks for
+  changes in natural language. It then generates the **execution checklist** ("transfer X to…") and
+  verifies completion against subsequent transactions.
+- **Income detection (any of):** (1) "Income arrived" button; (2) text/screenshot of the bank
+  notification pasted or shared to the app (L/V extracts amount, date, source); (3) email forwarded to
+  the private address (H3); (4) imported statement (E4); (5) learned usual date.
+- **Engine:** `budget.allocate@1` — deterministic allocation by priority: obligations due before the
+  next income → debt minimums → buffer up to target → goals by priority/date → surplus by debt or
+  savings strategy. Configurable rule ("pay yourself first 10 %", "50/30/20", custom).
+- **AI:** L extracts and classifies; S explains the plan and applies requested changes ("I want more
+  for the trip"); U checks no obligation is left uncovered.
+- **Accepted when:** with persona Laura, from "My paycheck arrived" to a plan with receipts < 10 s;
+  the sum of allocations = income exactly (conservation verified by a test).
+- **Limit:** FINCH does not move money; the user executes the checklist. Owner: H (engine/AI) + N (UI).
 
-### E2. Bóveda de documentos con vencimientos (H)
+### B2. Envelopes and live budget
 
-- **Qué hace:** guarda pólizas, contratos (arriendo, crédito), garantías, SOAT, revisión
-  técnico-mecánica, extractos, certificados; extrae **fechas clave y montos**; recordatorios antes
-  del vencimiento (30/7/1 días) en calendario (B4) y bandeja; búsqueda por contenido (E).
-- **Seguridad:** cifrado en reposo, acceso solo del dueño del workspace (o compartido explícito en
-  F1), cuarentena al subir, borrado real al eliminar.
-- **Acepta cuando:** subir un SOAT sintético crea su vencimiento y recordatorio con confirmación.
-  Dueño: H + N.
+- **What it does:** virtual envelopes (home, groceries, transport, debts, savings, investing,
+  leisure…) born from the B1 plan. Every recorded expense deducts; alerts at 80 % and 100 %; moving
+  money between envelopes with one gesture (a record, not a real transfer).
+- **Engine:** `budget.envelope_state@1`, conservation of totals.
+- **Accepted when:** recording an expense updates the envelope, projected balance and safe-to-spend
+  instantly. Owner: N (UI) + H (engine).
 
-### E3. Buscador en lenguaje natural (H)
+### B3. Credit-card control
 
-- "¿Cuánto gasté en domicilios en agosto?", "¿qué mes gasté más en transporte?", "muéstrame pagos a
-  Claro este año". S traduce a un **DSL de consulta acotado** (filtros, agrupaciones, rangos) validado
-  con esquema — **nunca SQL libre** —; el backend ejecuta; respuesta con tabla/gráfico y recibo de
-  consulta.
-- **Acepta cuando:** 30 preguntas del dataset E2 con ≥ 90 % de consultas correctas; 0 consultas fuera
-  del workspace (test de autorización). Dueño: H + N.
+- **What it does:** per card: limit, utilization %, cut-off and payment dates, balance at cut-off,
+  cost of splitting into N instalments, interest accrued this month, minimum vs full payment and its
+  cost, alert when the rate is near the usury cap (A2).
+- **Recommendation:** which card to use for a purchase (by cut-off date → more interest-free days
+  where applicable) and which to pay down first.
+- **Accepted when:** each card shows "if you pay the minimum, you will pay X in interest this month"
+  with a receipt. Owner: H + N.
 
-### E4. Importación de datos (H)
+### B4. Financial calendar
 
-- Extractos CSV/XLSX/PDF (texto), notificaciones bancarias pegadas/compartidas, carga manual rápida.
-  Deduplicación determinista; normalización de comercios (L); todo con procedencia `IMPORT`/`DOCUMENT`.
-  Dueño: H.
+- All payments, cut-offs, incomes, expiries (E2) and goals in a calendar; holiday adjustment
+  (`jurisdictions/*/calendar`); month view and "next 7 days". .ics export (H2). Owner: N.
+
+### B5. Month-end close
+
+- Automatic report at close: plan vs actual per envelope, B1 checklist completion, debts reduced,
+  savings achieved, 3 learnings and the proposed adjustment for next month (Decision Card).
+  Owner: N (UI) + H (engine).
+
+### B6. Multiple incomes
+
+- Salary, fees, rent, business, income in another currency. For variable income: a conservative
+  projection (p25) marked `ESTIMATED`. Income diversification visible. Owner: H.
+
+### B7. Financial health
+
+- A 0–100 score, **explainable and deterministic** (`health.score@1`): debt-to-income, credit
+  utilization, months of buffer, savings rate, payment punctuality, income concentration. Every
+  component has a published weight, its receipt and "how to gain 5 points". Never a "credit score"
+  (it does not replace credit bureaus). Owner: H + N.
+
+### B8. Live net worth
+
+- Assets (accounts, CDTs, investments, vehicle with estimated depreciation, declared property) −
+  liabilities; monthly evolution; "what moved it". Multi-currency (G3). Owner: H + N.
 
 ---
 
-## F. Compartir y proteger
+## C. Decide better (H)
 
-### F1. Finanzas compartidas (H)
+| ID  | Feature                              | What it does                                                                                                                                                                                                                                                | Engine / AI                                                                                           | Accepted when                                                            | Owner |
+| --- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----- |
+| C1  | **Can I afford it?**                 | Before buying: impact on the month, envelopes and goals; cash vs 1/12/36 instalments with real interest in pesos; opportunity cost; verdict "yes / yes but / better wait X days" with reasons.                                                              | `purchase.afford@1` (forecast + amortization). L understands "I want some headphones for 800k".       | Answer with receipts < 5 s; shows the date when it would be comfortable. | H + N |
+| C2  | **"What if…?" simulator**            | Scenarios in natural language or sliders: income rise/loss, purchase on credit, moving, going independent, a child; effect over 12–60 months on debts, goals, buffer, net worth; up to 3 scenarios side by side.                                            | Simulation on a copy of the snapshot (never mutates state). S translates text → validated parameters. | Visual comparison of 3 scenarios with receipts.                          | H + N |
+| C3  | **Storm mode**                       | "If I lose my income today": months of runway, order of cuts, debts to prioritize, what to ask the bank for (grace period, restructuring) and a week-by-week plan.                                                                                          | `stress.runway@1`. U reviews the plan.                                                                | Plan generated with exact runway and an action list.                     | H     |
+| C4  | **Goals with trade-offs**            | Several goals with date and priority: feasibility, monthly contribution, probability under a conservative scenario and explicit trade-offs ("bringing the trip forward delays the down payment by 4 months").                                               | `goals.plan@1` (allocation by priority/date).                                                         | Changing a priority recomputes all of them with receipts.                | H + N |
+| C5  | **Educational investment simulator** | Risk profile (questionnaire), projection of periodic contributions with scenarios (conservative/base/optimistic) and the effect of inflation and taxes; compares product classes (CDT, money-market fund, etc.) — **never** recommends a specific security. | `invest.project@1`. S explains; simulation legal copy.                                                | Projection with 3 scenarios and visible assumptions.                     | H     |
 
-- **Qué hace:** workspace compartido (pareja, hogar, roommates) sobre el modelo Principal / Party /
-  Workspace / Membership ya diseñado (README §8, ADR-0010/0011). Gastos compartidos con reglas de
-  división (partes iguales, proporcional al ingreso, montos fijos), liquidación "quién le debe a
-  quién" con mínimo número de transferencias, metas y sobres comunes. **Cada persona decide qué
-  comparte**; lo personal sigue privado.
-- **Motor:** `split.settle@1` (liquidación mínima, conservación de totales).
-- **Acepta cuando:** Hogar Pérez (2 personas) ve gastos comunes, proporción por ingreso y liquidación
-  correcta; test de autorización: un miembro no ve cuentas no compartidas del otro. Dueño: H (auth +
-  motor) + N (UI).
+---
 
-### F2. Radar de protección (H)
+## D. Find money
 
-- **Qué hace:** evalúa (a) fondo de emergencia vs objetivo (meses de gastos esenciales); (b)
-  dependientes económicos y cobertura existente; (c) seguros ya pagados dentro de créditos o tarjetas
-  (posible duplicidad); (d) riesgos sin cubrir. Resultado: mapa de protección con prioridades
-  educativas. **No vende ni recomienda aseguradoras.**
-- **Motor:** `protection.gaps@1` (reglas deterministas publicadas).
-- **Acepta cuando:** para Laura detecta el seguro de vida deudor duplicado en dos créditos y el
-  colchón insuficiente, con recibos. Dueño: H + N.
+### D1. Opportunity Engine (H) — credit, CDTs, savings, balance transfers
 
-### F3. Pasaporte financiero (H)
+- **What it does:** (a) **best credit** for a need (amount, term) comparing **real total cost**, not
+  just rate; (b) **balance transfer** for current debts; (c) **best CDTs and savings accounts** by
+  **real net return** (after withholding tax and inflation) with term, liquidity and deposit-insurance
+  coverage (VERIFY Fogafín conditions); (d) Watcher alerts when a better option appears.
+- **Data:** T (Search + Extract) over public institution pages and official sources; domain
+  allowlist; deterministic parsing; freshness; no third-party logos in the video.
+- **Engine:** `credit.total_cost@1`, `credit.compare_refinance@1`, `deposit.net_return@1`.
+- **Ranking:** deterministic and published (criteria and weights visible). If referral revenue ever
+  exists, it is declared and does **not** enter the ranking.
+- **Accepted when:** for Laura, top-3 CDTs and top-3 balance-transfer options with source, date and
+  savings in pesos. Owner: H (data/engine) + N (UI). **Central use of Tavily.**
 
-- **Qué hace:** documento compartible para arrendadores, bancos o empleadores que demuestra solidez
-  financiera **sin exponer movimientos**: ingreso promedio y estabilidad (3–12 meses), relación
-  deuda/ingreso, meses de colchón, puntualidad de pagos, salud financiera (B7) y patrimonio (B8)
-  opcional.
-- **Control del usuario:** elige qué indicadores incluir; enlace firmado que **expira** (24 h, 7 d,
-  30 d) y se **revoca** en un toque; opcional con código de acceso; registro de cada apertura (quién,
-  cuándo, desde dónde aproximado); versión PDF con código de verificación que valida contra FINCH.
-- **Honestidad:** cada indicador marca su clase de verdad (declarado por el usuario, derivado de
-  extractos importados, observado); nunca se presenta como certificación bancaria.
-- **Acepta cuando:** crear, abrir, expirar y revocar funcionan con tests de seguridad (enlace
-  revocado → 410; enlace manipulado → rechazo). Dueño: H + N (diseño del documento).
+### D2. Subscription and recurring-charge detective (H)
 
-### F4. Copiloto de derechos del consumidor financiero (H)
+- Detects subscriptions, duplicate charges, silent price rises, free trials that started charging,
+  handling fees that went up; annual total in pesos; cancellation or claim draft (F4).
+- **Engine:** `recurring.detect@1` (periodicity ± tolerance, amount, merchant normalized by L).
+- **Accepted when:** on Laura's synthetic statement it detects ≥ 5 recurring charges and 1 price rise.
+  Owner: H.
 
-- **Qué hace:** acompaña al usuario frente a su entidad financiera de principio a fin.
-- **Casos cubiertos:** cobro indebido o no reconocido; comisión/cuota de manejo no pactada; seguros
-  cobrados sin autorización; solicitud de compra de cartera o renegociación de tasa; paz y salvo o
-  certificado de deuda; reporte negativo en centrales de riesgo (derecho de habeas data financiero);
-  reclamo no respondido; cancelación de productos o suscripciones (D2/D4).
-- **Flujo:** diagnóstico guiado → ruta (entidad → Defensor del Consumidor Financiero → queja ante la
-  SFC u autoridad competente) → **documento** (petición, reclamo, solicitud) en PDF con cifras con
-  recibo y evidencia adjunta desde la bóveda (E2) → **seguimiento del caso** con plazos legales,
-  recordatorios y escalamiento sugerido si vence el plazo.
-- **Marco legal:** citado con fuente y fecha (VERIFICAR con abogado: Ley 1328 de 2009, régimen de
-  habeas data financiero, plazos de respuesta a peticiones). Las plantillas se revisan antes del
-  lanzamiento público.
-- **Acepta cuando:** los 8 casos generan documento y caso con plazos; U revisa cada documento.
-  Dueño: N (flujos/plantillas) + H (PDF, casos, recibos).
+### D3. Anomaly detector (H)
 
-### F5. Impuestos Colombia (H)
+- **What it does:** watches every new transaction and explains what is unusual, with a concrete next
+  step.
+- **Deterministic rules (versioned, `anomaly.scan@1`):** duplicate charge (same merchant and amount
+  within < 48 h); new or increased bank fee or charge; foreign-currency purchase with an FX markup vs
+  the reference rate (G3); out-of-pattern spend (> p95 of its category or z-score > 3 over its
+  history); charge at a never-seen merchant above a threshold; charge after a recorded cancellation
+  (D2); interest charged on a card the user marked as paid in full.
+- **Per-user learning:** baseline per category and merchant with a rolling window; the user marks
+  "this is normal" and the rule adjusts for them (personal threshold, audited).
+- **Output:** Decision Card with evidence (transactions involved), severity and action: claim (F4),
+  confirm, ignore. Integrated with the Watcher and push.
+- **Accepted when:** on the synthetic anomaly dataset (≥ 30 planted cases + noise) precision and
+  recall ≥ 90 % (the real figure is reported); every alert explains why, with a receipt. Owner: H.
 
-- **Qué hace:** conciencia tributaria personal completa, siempre con fuente oficial y marcada
+### D4. Fixed-cost optimizer (H)
+
+- **What it does:** reviews **all** detected fixed costs (D2/B2) — mobile plan, internet,
+  TV/streaming, voluntary insurance, gym, services with comparable pricing — and searches for
+  equivalent or better public alternatives.
+- **How:** normalization of the current offer (L); T Search + Extract over public provider pages on
+  the per-category allowlist; deterministic comparison by attributes (price, data, speed, coverage,
+  lock-in/clauses) → annual savings with sources and date; Watcher alerts when a better option
+  appears; draft change or cancellation request (F4).
+- **Accepted when:** for Laura it finds alternatives in ≥ 3 categories with computed annual savings
+  and sources; neutral ranking and visible criteria. Owner: H (data) + N (UI).
+
+### D5. Remittance comparator (H)
+
+- **What it does:** the real total cost of sending or receiving money between countries = fee + FX
+  margin vs the reference rate (G3), in source currency and in %; exactly how much the recipient
+  gets; speed and delivery method.
+- **Coverage:** main corridors into Colombia (USA, Spain, Chile) and those of the second country (G4),
+  for 4–6 services with public prices via T, with query date and time.
+- **Extras:** simulation "if you send X every month, you lose Y a year in costs"; Watcher alert when
+  the cost drops; income in another currency (Andrés) handled by the same engine.
+- **Engine:** `fx.remittance_cost@1`, `fx.convert@1`. **Accepted when:** for 3 corridors it shows a
+  ranking with exact costs and sources; amount conservation verified. Owner: H.
+
+---
+
+## E. Capture and organize (H)
+
+### E1. Receipts and invoices by photo (H)
+
+- **What it does:** photo of a receipt/invoice (phone camera via the PWA) or PDF → merchant, date,
+  total, taxes, relevant items → suggested category and envelope → **confirmation** → expense
+  recorded. Colombian electronic invoice (XML/PDF by email, H3): structured extraction; flags
+  purchases relevant to income-tax deductions where applicable (VERIFY the current rule with the
+  DIAN; F5).
+- **AI:** V extracts; L normalizes merchant and category; deterministic validations (sum of items ≈
+  total, valid date, currency).
+- **Accepted when:** 10 varied synthetic receipts with ≥ 90 % correct fields before confirmation (the
+  real figure is reported); confirmation is never skipped. Owner: H (pipeline) + N (camera and
+  confirmation UI).
+
+### E2. Document vault with expiry dates (H)
+
+- **What it does:** stores policies, contracts (lease, credit), warranties, SOAT, vehicle inspection,
+  statements, certificates; extracts **key dates and amounts**; reminders before expiry (30/7/1 days)
+  in the calendar (B4) and inbox; search by content (E).
+- **Security:** encrypted at rest, access only by the workspace owner (or explicitly shared in F1),
+  quarantine on upload, real deletion on delete.
+- **Accepted when:** uploading a synthetic SOAT creates its expiry and reminder after confirmation.
+  Owner: H + N.
+
+### E3. Natural-language search (H)
+
+- "How much did I spend on delivery in August?", "which month did I spend most on transport?", "show
+  me payments to my phone company this year". S translates into a **bounded query DSL** (filters,
+  groupings, ranges) validated by schema — **never free SQL** —; the backend executes; answer with a
+  table/chart and a query receipt.
+- **Accepted when:** 30 questions from the E2 dataset with ≥ 90 % correct queries; 0 queries outside
+  the workspace (authorization test). Owner: H + N.
+
+### E4. Data import (H)
+
+- CSV/XLSX/PDF (text) statements, pasted/shared bank notifications, quick manual entry.
+  Deterministic deduplication; merchant normalization (L); everything with `IMPORT`/`DOCUMENT`
+  provenance. Owner: H.
+
+---
+
+## F. Share and protect
+
+### F1. Shared finances (H)
+
+- **What it does:** shared workspace (couple, household, roommates) on the Principal / Party /
+  Workspace / Membership model already designed (README §8, ADR-0010/0011). Shared expenses with
+  split rules (equal parts, proportional to income, fixed amounts), "who owes whom" settlement with
+  the minimum number of transfers, shared goals and envelopes. **Each person decides what to share**;
+  the personal stays private.
+- **Engine:** `split.settle@1` (minimal settlement, conservation of totals).
+- **Accepted when:** the Pérez household (2 people) sees shared expenses, income proportion and a
+  correct settlement; authorization test: a member never sees the other's unshared accounts.
+  Owner: H (auth + engine) + N (UI).
+
+### F2. Protection radar (H)
+
+- **What it does:** assesses (a) emergency fund vs target (months of essential expenses); (b)
+  financial dependants and existing coverage; (c) insurance already paid inside credits or cards
+  (possible duplication); (d) uncovered risks. Result: a protection map with educational priorities.
+  **It neither sells nor recommends insurers.**
+- **Engine:** `protection.gaps@1` (published deterministic rules).
+- **Accepted when:** for Laura it detects the credit life insurance duplicated across two loans and
+  the insufficient buffer, with receipts. Owner: H + N.
+
+### F3. Financial passport (H)
+
+- **What it does:** a shareable document for landlords, banks or employers proving financial
+  soundness **without exposing transactions**: average income and stability (3–12 months),
+  debt-to-income, months of buffer, payment punctuality, financial health (B7) and optional net
+  worth (B8).
+- **User control:** chooses which indicators to include; a signed link that **expires** (24 h, 7 d,
+  30 d) and is **revoked** in one tap; optional access code; a log of every opening (who, when,
+  approximate location); PDF version with a verification code that validates against FINCH.
+- **Honesty:** each indicator states its truth class (declared by the user, derived from imported
+  statements, observed); never presented as a bank certification.
+- **Accepted when:** create, open, expire and revoke work with security tests (revoked link → 410;
+  tampered link → rejected). Owner: H + N (document design).
+
+### F4. Financial consumer rights copilot (H)
+
+- **What it does:** supports the user against their financial institution end to end.
+- **Cases covered:** undue or unrecognized charge; unagreed fee/handling fee; insurance charged
+  without authorization; balance-transfer or rate-renegotiation request; paid-in-full or debt
+  certificate; negative credit-bureau report (financial habeas data right); unanswered claim;
+  cancellation of products or subscriptions (D2/D4).
+- **Flow:** guided diagnosis → route (institution → Financial Consumer Ombudsman → complaint to the
+  SFC or competent authority) → **document** (petition, claim, request) as PDF with figures carrying
+  receipts and evidence attached from the vault (E2) → **case tracking** with legal deadlines,
+  reminders and suggested escalation if the deadline passes.
+- **Legal framework:** cited with source and date (VERIFY with a lawyer: Law 1328 of 2009, the
+  financial habeas data regime, response deadlines for petitions). Templates are reviewed before
+  public launch.
+- **Accepted when:** the 8 cases generate a document and a case with deadlines; U reviews every
+  document. Owner: N (flows/templates) + H (PDF, cases, receipts).
+
+### F5. Colombian taxes (H)
+
+- **What it does:** complete personal tax awareness, always with an official source and marked
   `ESTIMATED`:
-  - **¿Debo declarar renta?** con los topes del año gravable (patrimonio, ingresos, consumos con
-    tarjeta, compras, consignaciones) leídos de fuente oficial DIAN vía T; si no hay fuente fresca, no
-    afirma.
-  - **Calendario DIAN** según los últimos dígitos del documento, con recordatorios (B4).
-  - **Retención en la fuente** en rendimientos (CDT, cuentas) integrada a D1.
-  - **GMF (4×1.000)** en flujos, con marcación de la cuenta exenta si el usuario la declara.
-  - **Estimador de renta de personas naturales** (cédula general) con rentas exentas y deducciones
-    más comunes (dependientes, intereses de vivienda, medicina prepagada, aportes voluntarios, compras
-    con factura electrónica — reglas y topes VERIFICAR con fuente oficial y contador), como
-    **simulación**.
-  - **Checklist de documentos** para declarar, alimentado por la bóveda (E2) y las facturas (E1).
-- **Acepta cuando:** para Andrés responde "¿debo declarar?" con fuente y fecha, genera calendario y
-  una simulación con supuestos visibles; golden vectors de las reglas verificados contra ejemplos
-  oficiales. Dueño: H (+ revisión de contador antes del lanzamiento público).
+  - **Must I file income tax?** with the tax-year thresholds (assets, income, card spending,
+    purchases, deposits) read from the official DIAN source via T; without a fresh source, it makes
+    no claim.
+  - **DIAN calendar** by the last digits of the ID document, with reminders (B4).
+  - **Withholding tax** on returns (CDT, accounts) integrated into D1.
+  - **GMF (4×1,000)** on flows, with the exempt account flagged if the user declares it.
+  - **Individual income-tax estimator** (general schedule) with the most common exempt income and
+    deductions (dependants, mortgage interest, prepaid medicine, voluntary contributions, purchases
+    with electronic invoice — rules and caps VERIFY with an official source and an accountant), as a
+    **simulation**.
+  - **Filing documents checklist**, fed by the vault (E2) and invoices (E1).
+- **Accepted when:** for Andrés it answers "must I file?" with source and date, generates the
+  calendar and a simulation with visible assumptions; golden vectors of the rules verified against
+  official examples. Owner: H (+ accountant review before public launch).
 
 ---
 
-## G. Experiencia global y hábitos
+## G. Global experience and habits
 
-| ID  | Función                       | Nivel | Qué hace                                                                                                                                                                                                                                                                                                                              | Dueño |
-| --- | ----------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| G1  | **Compromisos y hábitos**     | H     | Retos elegidos por el usuario ("7 días sin domicilios", "redondeo virtual al ahorro", "no usar tarjeta X este mes") con progreso en pesos reales y celebración sobria; el Vigía hace seguimiento. Sin gamificación infantil.                                                                                                          | N + H |
-| G2  | **Briefing diario y semanal** | H     | En la app cada mañana: 3 cosas que importan hoy (pagos, alertas, oportunidad); semanal: logros, desvíos, ajuste. Cifras con recibo. Opcionalmente también por correo (H3).                                                                                                                                                            | N + H |
-| G3  | **Multimoneda y FX en vivo**  | H     | Cuentas, ingresos y gastos en varias monedas; tasas de cambio de fuentes oficiales/de referencia con fecha y fuente (VERIFICAR proveedor: banco central/ECB/API pública); patrimonio y presupuesto consolidados en moneda base; sobrecosto de cambio en compras internacionales. `fx.convert@1` con procedencia.                      | H     |
-| G4  | **Segundo país completo**     | H     | `jurisdictions/<país>/` completo: moneda, festivos, convenciones de tasas, tasas de referencia oficiales, techo de interés si existe, productos de ahorro/crédito locales para D1, corredor de remesas (D5), copy legal y persona demo; demuestra que FINCH escala sin tocar el núcleo. País: **decisión D-11** (México recomendado). | H     |
-
----
-
-## H. Canales — Channel Hub (ADR-0039)
-
-La app es autónoma; los canales son adaptadores opcionales con consentimiento propio.
-
-| ID  | Canal                               | Nivel | Alcance                                                                                                                                                                                                                                                                                                                                                                                                               |
-| --- | ----------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| H1  | **Bandeja + push de la propia app** | H     | Bandeja interna de Decision Cards y alertas; **Web Push** en la PWA instalable (VERIFICAR soporte iOS de web push en PWA instalada); preferencias por tipo de alerta; horario silencioso. Es el canal principal.                                                                                                                                                                                                      |
-| H2  | **Exportar calendario (.ics)**      | H     | Suscripción .ics privada con fechas de pago/vencimientos (sin montos).                                                                                                                                                                                                                                                                                                                                                |
-| H3  | **Correo: entrada y salida**        | H     | **Entrada:** dirección privada por usuario (rotable) para reenviar notificaciones bancarias, facturas electrónicas y documentos → E1/E2/E4, con reglas de reenvío automático guiadas, cuarentena y contenido no confiable. **Salida:** briefing diario/semanal y alertas críticas con mínimo PII y plantillas de marca; preferencias y baja en un clic (proveedor transaccional; VERIFICAR costo, dominio, SPF/DKIM). |
-| H4  | Telegram                            | P     | Adaptador opcional: preguntas y alertas. Diseño listo por el puerto; sin prioridad.                                                                                                                                                                                                                                                                                                                                   |
-| H5  | SMS                                 | P     | Entrada (reenvío de SMS bancarios) y salida de alertas críticas vía proveedor (VERIFICAR costos y numeración en CO).                                                                                                                                                                                                                                                                                                  |
-| H6  | WhatsApp                            | P     | WhatsApp Business Platform: requiere verificación de empresa en Meta, plantillas aprobadas y opt-in — se inicia tras constituir la sociedad.                                                                                                                                                                                                                                                                          |
+| ID  | Feature                        | Level | What it does                                                                                                                                                                                                                                                                                                           | Owner |
+| --- | ------------------------------ | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
+| G1  | **Commitments and habits**     | H     | Challenges chosen by the user ("7 days without delivery", "virtual round-up to savings", "don't use card X this month") with progress in real pesos and a sober celebration; the Watcher follows up. No childish gamification.                                                                                         | N + H |
+| G2  | **Daily and weekly briefing**  | H     | In the app every morning: 3 things that matter today (payments, alerts, opportunity); weekly: achievements, deviations, adjustment. Figures with receipts. Optionally by email too (H3).                                                                                                                               | N + H |
+| G3  | **Multi-currency and live FX** | H     | Accounts, income and expenses in several currencies; exchange rates from official/reference sources with date and source (VERIFY provider: central bank/ECB/public API); net worth and budget consolidated in the base currency; FX markup on international purchases. `fx.convert@1` with provenance.                 | H     |
+| G4  | **Complete second country**    | H     | Complete `jurisdictions/<country>/`: currency, holidays, rate conventions, official reference rates, interest cap if any, local savings/credit products for D1, remittance corridor (D5), legal copy and demo persona; proves FINCH scales without touching the core. Country: **decision D-11** (Mexico recommended). | H     |
 
 ---
 
-## P. Perspectiva futura (documentada, no se construye en la hackathon)
+## H. Channels — Channel Hub (ADR-0039)
 
-| ID  | Función                                               | Por qué importa                                                                                | Condición para iniciarla                                                                            |
-| --- | ----------------------------------------------------- | ---------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- |
-| P1  | **Apps nativas iOS/Android (Expo) y desktop (Tauri)** | Push nativo, widgets, biometría, lectura de notificaciones bancarias en Android (con permiso). | Q1 2027 (ADR-0004/0006).                                                                            |
-| P2  | **Open finance / agregador**                          | Datos bancarios automáticos, fin de la carga manual.                                           | Proveedor elegido; VERIFICAR estado regulatorio de open finance en Colombia.                        |
-| P3  | **Ejecución automática con socio regulado**           | Payday Autopilot que sí mueve dinero (R3).                                                     | Gates F/G, socio regulado, revisión externa (ADR-0021).                                             |
-| P4  | **Proyección de retiro**                              | Planeación de largo plazo.                                                                     | Modelo del sistema pensional colombiano verificado con fuente oficial y experto (reforma reciente). |
-| P5  | **Modo voz**                                          | Accesibilidad y conveniencia.                                                                  | Modelo de voz disponible en Nebius/NVIDIA (VERIFICAR).                                              |
-| P6  | **Servidor MCP "FINCH Skills"**                       | FINCH como cerebro financiero de otros agentes personales.                                     | Post-hackathon; skills de solo cálculo.                                                             |
-| P7  | **Inferencia privada dedicada**                       | Documentos sensibles procesados en endpoint propio (Nebius Serverless Endpoint).               | Presupuesto de AI Cloud.                                                                            |
-| P8  | **Fine-tuning (LoRA) de extracción**                  | Mejor precisión en documentos colombianos.                                                     | Dataset sintético/consentido suficiente.                                                            |
-| P9  | **Seguridad social del independiente**                | Cálculo y recordatorio de aportes.                                                             | Reglas vigentes verificadas con fuente oficial.                                                     |
-| P10 | **FINCH para microempresas**                          | Persona `microbusiness_owner`: flujo de caja del negocio separado del personal.                | Tras validar el producto personal.                                                                  |
+The app is autonomous; channels are optional adapters with their own consent.
+
+| ID  | Channel                         | Level | Scope                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --- | ------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| H1  | **Inbox + the app's own push**  | H     | In-app inbox of Decision Cards and alerts; **Web Push** in the installable PWA (VERIFY iOS web-push support in an installed PWA); preferences per alert type; quiet hours. The main channel.                                                                                                                                                                                                              |
+| H2  | **Calendar export (.ics)**      | H     | Private .ics subscription with payment/expiry dates (no amounts).                                                                                                                                                                                                                                                                                                                                         |
+| H3  | **Email: inbound and outbound** | H     | **Inbound:** a private per-user address (rotatable) to forward bank notifications, electronic invoices and documents → E1/E2/E4, with guided automatic-forwarding rules, quarantine and untrusted content. **Outbound:** daily/weekly briefing and critical alerts with minimal PII and branded templates; preferences and one-click unsubscribe (transactional provider; VERIFY cost, domain, SPF/DKIM). |
+| H4  | Telegram                        | P     | Optional adapter: questions and alerts. Design ready through the port; no priority.                                                                                                                                                                                                                                                                                                                       |
+| H5  | SMS                             | P     | Inbound (forwarding bank SMS) and outbound critical alerts via a provider (VERIFY costs and numbering in CO).                                                                                                                                                                                                                                                                                             |
+| H6  | WhatsApp                        | P     | WhatsApp Business Platform: requires business verification with Meta, approved templates and opt-in — starts after incorporating the company.                                                                                                                                                                                                                                                             |
 
 ---
 
-## Trazabilidad con criterios del jurado
+## P. Future perspective (documented, not built in the hackathon)
 
-| Criterio                     | Funciones que más aportan                                                                                                                   |
-| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
-| Technological Implementation | A3, A4, A5, A11, E1 (multimodal), E3 (DSL seguro), D1 (Tavily + parseo), A9 (evals)                                                         |
-| Design                       | B1, B2, B3, H1, C2, E2, G2 — experiencia completa y coherente, premium                                                                      |
-| Potential Impact             | B1, B3, C3, D1, D2, F2, F4 — ahorro y protección demostrables en pesos                                                                      |
-| Quality of the Idea          | A3 (el modelo no puede escribir cifras), A5 (Ultra auditor), F1 (finanzas compartidas con privacidad por miembro), F3 (pasaporte revocable) |
-| Best Use of Tavily           | D1, D4, D5, F5, G3 — datos de mercado en tiempo real, citados y verificados                                                                 |
+| ID  | Feature                                                | Why it matters                                                                             | Condition to start it                                                                                 |
+| --- | ------------------------------------------------------ | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- |
+| P1  | **Native iOS/Android (Expo) and desktop (Tauri) apps** | Native push, widgets, biometrics, reading bank notifications on Android (with permission). | Q1 2027 (ADR-0004/0006); delivery order web → Windows → Android → macOS + iOS.                        |
+| P2  | **Open finance / aggregator**                          | Automatic bank data, the end of manual loading.                                            | Provider chosen; VERIFY the regulatory status of open finance in Colombia.                            |
+| P3  | **Automatic execution with a regulated partner**       | A Payday Autopilot that does move money (R3).                                              | Gates F/G, regulated partner, external review (ADR-0021).                                             |
+| P4  | **Retirement projection**                              | Long-term planning.                                                                        | Model of the Colombian pension system verified with an official source and an expert (recent reform). |
+| P5  | **Voice mode**                                         | Accessibility and convenience.                                                             | Voice model available on Nebius/NVIDIA (VERIFY).                                                      |
+| P6  | **"FINCH Skills" MCP server**                          | FINCH as the financial brain of other personal agents.                                     | Post-hackathon; calculation-only skills.                                                              |
+| P7  | **Dedicated private inference**                        | Sensitive documents processed on an own endpoint (Nebius Serverless Endpoint).             | AI Cloud budget.                                                                                      |
+| P8  | **Extraction fine-tuning (LoRA)**                      | Better accuracy on Colombian documents.                                                    | A sufficient synthetic/consented dataset.                                                             |
+| P9  | **Social security for the self-employed**              | Calculation and reminder of contributions.                                                 | Current rules verified with an official source.                                                       |
+| P10 | **FINCH for micro-businesses**                         | `microbusiness_owner` persona: business cash flow separate from personal.                  | After validating the personal product.                                                                |
+
+---
+
+## Traceability to the judging criteria
+
+| Criterion                    | Features contributing most                                                                                                     |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Technological Implementation | A3, A4, A5, A11, E1 (multimodal), E3 (safe DSL), D1 (Tavily + parsing), A9 (evals)                                             |
+| Design                       | B1, B2, B3, H1, C2, E2, G2 — complete, coherent, premium experience                                                            |
+| Potential Impact             | B1, B3, C3, D1, D2, F2, F4 — savings and protection demonstrable in pesos                                                      |
+| Quality of the Idea          | A3 (the model cannot write figures), A5 (Ultra auditor), F1 (shared finances with per-member privacy), F3 (revocable passport) |
+| Best Use of Tavily           | D1, D4, D5, F5, G3 — real-time market data, cited and verified                                                                 |

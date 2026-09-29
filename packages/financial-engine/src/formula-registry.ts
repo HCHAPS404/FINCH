@@ -41,7 +41,7 @@ export interface FormulaDefinition {
  * Foundation registers the money primitives only. Amortization, refinancing, cashflow,
  * forecast, stress and safe-to-spend arrive with FIN-038 onward, each with its own
  * entry and its own golden vectors before it is allowed to inform a recommendation
- * (README §15: "Debe existir antes de recomendaciones reales").
+ * (README §15: "It must exist before real recommendations").
  */
 const REGISTRY = new Map<string, FormulaDefinition>();
 

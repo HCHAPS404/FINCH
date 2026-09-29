@@ -1,69 +1,69 @@
-# Arquitectura de software y método de ingeniería de FINCH
+# FINCH software architecture and engineering method
 
-> **Estado:** PROPUESTO (ADR-0040) · **Fecha:** 2026-09-28 · **Autoridad superior:**
-> [CONSTITUTION.md](CONSTITUTION.md) y ADRs aceptados.
-> Este documento concreta **cómo** se construye FINCH: estilo arquitectónico, módulos, capas,
-> componentes de IA gobernados por **CRISP-ML(Q)**, prácticas de **Extreme Programming (XP)** y
-> cadencia **Agile** para un equipo de dos fundadores con herramientas de IA.
+> **Status:** PROPOSED (ADR-0040) · **Date:** 2026-09-28 · **Higher authority:**
+> [CONSTITUTION.md](CONSTITUTION.md) and accepted ADRs.
+> This document makes concrete **how** FINCH is built: architectural style, modules, layers, AI
+> components governed by **CRISP-ML(Q)**, **Extreme Programming (XP)** practices and an **Agile**
+> cadence for a two-founder team working with AI tools.
 
 ---
 
-## 1. Estilo arquitectónico
+## 1. Architectural style
 
-FINCH combina cinco patrones, cada uno con una razón concreta:
+FINCH combines five patterns, each for a concrete reason:
 
-| Patrón                                                     | Dónde                         | Por qué                                                                                                                |
-| ---------------------------------------------------------- | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| **Monolito modular** con fronteras desplegables (ADR-0001) | `apps/api` + `apps/worker`    | Transacciones ACID donde importan, un solo despliegue para dos personas, extracción futura posible.                    |
-| **Hexagonal (ports & adapters)**                           | Cada módulo                   | El dominio no conoce NestJS, Drizzle, Tavily ni Token Factory; los proveedores se cambian sin tocar reglas (ADR-0022). |
-| **DDD — bounded contexts**                                 | Módulos por contexto (§3)     | Cada contexto posee sus invariantes y tablas; sin lecturas cruzadas de base de datos.                                  |
-| **Functional core, imperative shell**                      | `packages/financial-engine`   | Toda la matemática es pura, determinista y testeable; el I/O vive fuera (ADR-0017).                                    |
-| **Eventos con outbox + CQRS ligero**                       | Worker, Vigía, notificaciones | Consumidores idempotentes, entrega at-least-once, vistas de lectura para pantallas (Constitución §21, §88).            |
+| Pattern                                                    | Where                          | Why                                                                                                                       |
+| ---------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------- |
+| **Modular monolith** with deployable boundaries (ADR-0001) | `apps/api` + `apps/worker`     | ACID transactions where they matter, a single deployment for two people, future extraction possible.                      |
+| **Hexagonal (ports & adapters)**                           | Every module                   | The domain knows nothing of NestJS, Drizzle, Tavily or Token Factory; providers change without touching rules (ADR-0022). |
+| **DDD — bounded contexts**                                 | Modules per context (§3)       | Each context owns its invariants and tables; no cross-database reads.                                                     |
+| **Functional core, imperative shell**                      | `packages/financial-engine`    | All the math is pure, deterministic and testable; I/O lives outside (ADR-0017).                                           |
+| **Events with outbox + light CQRS**                        | Worker, Watcher, notifications | Idempotent consumers, at-least-once delivery, read views for screens (Constitution §21, §88).                             |
 
-### Regla de dependencias (verificada por `pnpm architecture:check`)
+### Dependency rule (verified by `pnpm architecture:check`)
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1'}}}%%
 flowchart LR
   AD[Adapters<br/>HTTP · DB · Tavily · Token Factory · Channels] --> PO[Ports<br/>interfaces]
-  AP[Application<br/>casos de uso] --> PO
+  AP[Application<br/>use cases] --> PO
   AD --> AP
-  AP --> DO[Domain<br/>entidades · invariantes]
-  AP --> EN[financial-engine<br/>puro]
+  AP --> DO[Domain<br/>entities · invariants]
+  AP --> EN[financial-engine<br/>pure]
   DO --> CT[contracts]
   EN --> CT
 ```
 
-Las flechas indican "depende de". **Nunca** al revés. Una violación rompe el CI.
+Arrows mean "depends on". **Never** the reverse. A violation breaks CI.
 
-## 2. Vista de contenedores (C4 nivel 2)
+## 2. Container view (C4 level 2)
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1'}}}%%
 flowchart TB
-  subgraph Cliente
-    PWA[FINCH App<br/>Next.js PWA · push propio]
+  subgraph Client
+    PWA[FINCH App<br/>Next.js PWA · own push]
   end
-  subgraph Backend[Monolito modular]
+  subgraph Backend[Modular monolith]
     API[apps/api<br/>NestJS + Fastify · REST /api/v1]
-    WK[apps/worker<br/>outbox · pipelines · Vigía]
+    WK[apps/worker<br/>outbox · pipelines · Watcher]
   end
-  subgraph Datos
+  subgraph Data
     PG[(PostgreSQL + pgvector)]
-    OBJ[(Almacenamiento de documentos cifrado)]
+    OBJ[(Encrypted document storage)]
   end
-  subgraph Externos
+  subgraph External
     TF[Nebius Token Factory<br/>Nemotron L · S · U · V · E · Guard]
     NSJ[Nebius Serverless Jobs]
     TAV[Tavily]
-    MAIL[Proveedor de correo]
+    MAIL[Email provider]
     LS[LangSmith]
   end
   PWA -->|HTTPS| API
   API --> PG
   API --> OBJ
   WK --> PG
-  NSJ -->|ejecuta| WK
+  NSJ -->|runs| WK
   API -->|AI Gateway| TF
   WK -->|AI Gateway| TF
   API -->|Market Truth| TAV
@@ -72,149 +72,153 @@ flowchart TB
   API -.traces.-> LS
 ```
 
-## 3. Bounded contexts → módulos → funciones del catálogo
+## 3. Bounded contexts → modules → catalog features
 
-Cada módulo vive como carpeta en `apps/api/src/modules/<contexto>/` con las capas
-`domain/ · application/ · ports/ · adapters/` y su `README.md` (Constitución §98).
+Each module lives as a folder in `apps/api/src/modules/<context>/` with the layers
+`domain/ · application/ · ports/ · adapters/` and its `README.md` (Constitution §98).
 
-| Contexto                                                      | Responsabilidad                                                   | Funciones (08)     | Paquetes que usa                           |
-| ------------------------------------------------------------- | ----------------------------------------------------------------- | ------------------ | ------------------------------------------ |
-| `identity` · `workspaces` · `authorization` · `consent`       | Principal, Party, Workspace, Membership, permisos, consentimiento | A8, F1, F3         | `authorization`, `contracts`               |
-| `financial-twin`                                              | Hechos con clase de verdad, snapshots inmutables                  | A1                 | `domain`, `db`                             |
-| `accounts` · `transactions` · `categorization` · `recurrence` | Cuentas, movimientos, normalización, recurrentes                  | E4, D2, D3         | `financial-engine`, `ai-core`              |
-| `income` · `planning` · `budgeting`                           | Ingresos, Payday Autopilot, sobres, cierre                        | B1, B2, B5, B6     | `financial-engine`                         |
-| `credit-cards` · `debts`                                      | Tarjetas, deudas, usura, compra de cartera                        | B3, D1             | `financial-engine`, `jurisdictions/*`      |
-| `calendar`                                                    | Pagos, cortes, vencimientos, .ics                                 | B4, H2             | —                                          |
-| `simulation` · `forecasting` · `goals`                        | Afford, ¿y si…?, tormenta, metas, inversión                       | C1–C5              | `financial-engine`                         |
-| `health` · `networth`                                         | Salud financiera, patrimonio                                      | B7, B8             | `financial-engine`                         |
-| `market` (Market Truth)                                       | Tasas, productos, FX, remesas, planes, DIAN                       | D1, D4, D5, F5, G3 | `provider-sdk` (adapter Tavily)            |
-| `documents` (captura + bóveda)                                | Recibos, facturas, bóveda, vencimientos                           | E1, E2             | `ai-core`, almacenamiento                  |
-| `query`                                                       | Buscador NL → DSL acotado                                         | E3                 | `ai-core`                                  |
-| `household`                                                   | Gastos compartidos, liquidación                                   | F1                 | `financial-engine`, `authorization`        |
-| `protection`                                                  | Radar de protección                                               | F2                 | `financial-engine`                         |
-| `rights` (casos)                                              | Copiloto de derechos, documentos, plazos                          | F4                 | `ai-core`                                  |
-| `tax`                                                         | Impuestos por jurisdicción                                        | F5                 | `jurisdictions/*`                          |
-| `habits`                                                      | Compromisos y hábitos                                             | G1                 | —                                          |
-| `decision-cards` · `actions`                                  | Cards, segunda opinión, borradores R2                             | A5, A6             | `ai-core`                                  |
-| `assistant` (agente)                                          | Orquestación, skills, recibos, memoria                            | A3, A4, A7         | `ai-core`                                  |
-| `notifications` · `channels`                                  | Bandeja, push, correo, briefing (Channel Hub)                     | G2, H1–H3          | adapters por canal                         |
-| `watcher` (Vigía)                                             | Job diario, eventos, cards proactivas                             | A11                | worker                                     |
-| `audit` · `observability`                                     | Auditoría, métricas, traces                                       | A8, A9             | `observability`                            |
-| `jurisdictions`                                               | Reglas por país (fuera del core)                                  | G4, F5, A10        | `jurisdictions/CO`, `jurisdictions/<D-11>` |
+| Context                                                       | Responsibility                                                | Features (08)      | Packages used                              |
+| ------------------------------------------------------------- | ------------------------------------------------------------- | ------------------ | ------------------------------------------ |
+| `identity` · `workspaces` · `authorization` · `consent`       | Principal, Party, Workspace, Membership, permissions, consent | A8, F1, F3         | `authorization`, `contracts`               |
+| `financial-twin`                                              | Facts with truth class, immutable snapshots                   | A1                 | `domain`, `db`                             |
+| `accounts` · `transactions` · `categorization` · `recurrence` | Accounts, transactions, normalization, recurring charges      | E4, D2, D3         | `financial-engine`, `ai-core`              |
+| `income` · `planning` · `budgeting`                           | Income, Payday Autopilot, envelopes, close                    | B1, B2, B5, B6     | `financial-engine`                         |
+| `credit-cards` · `debts`                                      | Cards, debts, usury, balance transfer                         | B3, D1             | `financial-engine`, `jurisdictions/*`      |
+| `calendar`                                                    | Payments, cut-offs, expiries, .ics                            | B4, H2             | —                                          |
+| `simulation` · `forecasting` · `goals`                        | Afford, what if…, storm, goals, investment                    | C1–C5              | `financial-engine`                         |
+| `health` · `networth`                                         | Financial health, net worth                                   | B7, B8             | `financial-engine`                         |
+| `market` (Market Truth)                                       | Rates, products, FX, remittances, plans, DIAN                 | D1, D4, D5, F5, G3 | `provider-sdk` (Tavily adapter)            |
+| `documents` (capture + vault)                                 | Receipts, invoices, vault, expiries                           | E1, E2             | `ai-core`, storage                         |
+| `query`                                                       | NL search → bounded DSL                                       | E3                 | `ai-core`                                  |
+| `household`                                                   | Shared expenses, settlement                                   | F1                 | `financial-engine`, `authorization`        |
+| `protection`                                                  | Protection radar                                              | F2                 | `financial-engine`                         |
+| `rights` (cases)                                              | Rights copilot, documents, deadlines                          | F4                 | `ai-core`                                  |
+| `tax`                                                         | Taxes per jurisdiction                                        | F5                 | `jurisdictions/*`                          |
+| `habits`                                                      | Commitments and habits                                        | G1                 | —                                          |
+| `decision-cards` · `actions`                                  | Cards, second opinion, R2 drafts                              | A5, A6             | `ai-core`                                  |
+| `assistant` (agent)                                           | Orchestration, skills, receipts, memory                       | A3, A4, A7         | `ai-core`                                  |
+| `notifications` · `channels`                                  | Inbox, push, email, briefing (Channel Hub)                    | G2, H1–H3          | per-channel adapters                       |
+| `watcher`                                                     | Daily job, events, proactive cards                            | A11                | worker                                     |
+| `audit` · `observability`                                     | Audit, metrics, traces                                        | A8, A9             | `observability`                            |
+| `jurisdictions`                                               | Per-country rules (outside the core)                          | G4, F5, A10        | `jurisdictions/CO`, `jurisdictions/<D-11>` |
 
-**Reglas de módulo:** un módulo solo expone su API de aplicación y eventos; nunca lee tablas de otro
-módulo; toda comunicación cruzada es por llamada a caso de uso o evento del outbox.
+**Module rules:** a module exposes only its application API and events; it never reads another
+module's tables; all cross-module communication is a use-case call or an outbox event.
 
-## 4. Subsistema de IA
+## 4. AI subsystem
 
 ```text
-Petición → AI Gateway (packages/ai-core)
-  ├─ Clasificación de datos + redacción de PII
-  ├─ Router por niveles (L · S · U · V · E · Guard) + fallback
-  ├─ Prompt registry versionado
-  ├─ Validación de esquema (zod) de toda salida
-  ├─ Verificador de recibos (ninguna cifra sin recibo)
-  ├─ Presupuesto (día / sesión) + kill switch
-  └─ Auditoría ai_calls + traces redactados (LangSmith)
+Request → AI Gateway (packages/ai-core)
+  ├─ Data classification + PII redaction
+  ├─ Tiered router (L · S · U · V · E · Guard) + fallback
+  ├─ Versioned prompt registry
+  ├─ Schema validation (zod) of every output
+  ├─ Receipt verifier (no figure without a receipt)
+  ├─ Budget (day / session) + kill switch
+  └─ ai_calls audit + redacted traces (LangSmith)
 ```
 
-Detalle completo en `docs/hackathon/04-ai-design-safety-evals.md`.
+Full detail in `docs/hackathon/04-ai-design-safety-evals.md`.
 
-## 5. CRISP-ML(Q) — ciclo de vida de los componentes de IA
+## 5. CRISP-ML(Q) — lifecycle of the AI components
 
-FINCH trata cada componente de IA como un **producto de ML con aseguramiento de calidad**, siguiendo
-las seis fases de CRISP-ML(Q) (Cross-Industry Standard Process for Machine Learning with Quality
-assurance). Aunque usamos modelos preentrenados (Nemotron) y no entrenamos desde cero, las fases
-aplican a la selección de modelo, prompts, datos de evaluación, despliegue y monitoreo.
+FINCH treats every AI component as an **ML product with quality assurance**, following the six
+phases of CRISP-ML(Q) (Cross-Industry Standard Process for Machine Learning with Quality assurance).
+Although we use pre-trained models (Nemotron) and do not train from scratch, the phases apply to
+model selection, prompts, evaluation data, deployment and monitoring.
 
-### Componentes de IA gobernados
+### Governed AI components
 
-| ID    | Componente                                    | Tipo                       | Modelo       |
-| ----- | --------------------------------------------- | -------------------------- | ------------ |
-| ML-1  | Router de intención y extracción de entidades | Clasificación / extracción | L            |
-| ML-2  | Lectura de notificaciones bancarias y correos | Extracción estructurada    | L            |
-| ML-3  | Extracción de recibos, facturas y documentos  | Extracción multimodal      | V            |
-| ML-4  | Normalización de comercios y categorías       | Clasificación              | L            |
-| ML-5  | Agente con skills (tool calling)              | Orquestación               | S            |
-| ML-6  | Buscador NL → DSL                             | Traducción semántica       | S            |
-| ML-7  | Segunda opinión                               | Juez/auditor               | U            |
-| ML-8  | Memoria semántica                             | Recuperación               | E            |
-| ML-9  | Línea base de anomalías por usuario           | Estadística (no LLM)       | determinista |
-| ML-10 | Seguridad de entradas/salidas                 | Clasificación              | Guard        |
+| ID    | Component                                | Type                        | Model         |
+| ----- | ---------------------------------------- | --------------------------- | ------------- |
+| ML-1  | Intent router and entity extraction      | Classification / extraction | L             |
+| ML-2  | Reading bank notifications and emails    | Structured extraction       | L             |
+| ML-3  | Receipt, invoice and document extraction | Multimodal extraction       | V             |
+| ML-4  | Merchant and category normalization      | Classification              | L             |
+| ML-5  | Agent with skills (tool calling)         | Orchestration               | S             |
+| ML-6  | NL search → DSL                          | Semantic translation        | S             |
+| ML-7  | Second opinion                           | Judge/auditor               | U             |
+| ML-8  | Semantic memory                          | Retrieval                   | E             |
+| ML-9  | Per-user anomaly baseline                | Statistics (not an LLM)     | deterministic |
+| ML-10 | Input/output safety                      | Classification              | Guard         |
 
-### Fases, entregables y compuertas de calidad
+### Phases, deliverables and quality gates
 
-| Fase CRISP-ML(Q)                     | Qué hacemos en FINCH                                                                                                                        | Entregable (en el repo)                                                                                     | Compuerta de calidad (Q)                                                                                   |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
-| **1. Business & Data Understanding** | Definir la tarea, el éxito en términos de negocio, riesgos y límites (qué NO decide la IA).                                                 | Ficha del componente `docs/ml/<ML-x>.md`: objetivo, métrica, umbral, riesgos, clase de verdad de la salida. | Aprobada por ambos fundadores; riesgo evaluado (R0–R4).                                                    |
-| **2. Data Engineering**              | Datasets sintéticos y de evaluación (personas, recibos, notificaciones, preguntas), sin PII real; esquema de entrada/salida.                | `evals/datasets/<ML-x>.jsonl` + `fixtures/` versionados.                                                    | Sin PII (verificación automática); cobertura de casos límite y adversariales ≥ 20 %.                       |
-| **3. Model Engineering**             | Selección de modelo por nivel, diseño de prompt, few-shot, esquema de salida estructurada, parámetros; comparativa entre modelos.           | `packages/ai-core/prompts/<id>/<version>.md` con resultados.                                                | El candidato supera el umbral de la fase 1 en el set de desarrollo.                                        |
-| **4. Evaluation**                    | Evaluación offline (batch inference), humana (Toloka) y con juez (U); robustez y seguridad.                                                 | `evals/RESULTS.md` con métricas por versión.                                                                | Umbral cumplido en set de prueba separado; E4 ≥ 95 %; sin regresiones > 2 pp.                              |
-| **5. Deployment**                    | Activación por configuración (feature flag), rollout, fallback por nivel, presupuesto.                                                      | Cambio de configuración revisado + nota de versión.                                                         | Health check en producción; fallback probado; costo por turno dentro del presupuesto.                      |
-| **6. Monitoring & Maintenance**      | Métricas en vivo (errores de esquema, rechazos del verificador, fallbacks, latencia, costo), muestreo para revisión, re-evaluación semanal. | Tablero + informe semanal en la retro.                                                                      | Alertas definidas; si una métrica cruza el umbral → vuelta a la fase 3 con nueva versión de prompt/modelo. |
+| CRISP-ML(Q) phase                    | What we do in FINCH                                                                                                     | Deliverable (in the repo)                                                                    | Quality gate (Q)                                                                                     |
+| ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| **1. Business & Data Understanding** | Define the task, success in business terms, risks and limits (what AI does NOT decide).                                 | Component card `docs/ml/<ML-x>.md`: objective, metric, threshold, risks, output truth class. | Approved by both founders; risk assessed (R0–R4).                                                    |
+| **2. Data Engineering**              | Synthetic and evaluation datasets (personas, receipts, notifications, questions), no real PII; input/output schema.     | Versioned `evals/datasets/<ML-x>.jsonl` + `fixtures/`.                                       | No PII (automatic check); edge and adversarial coverage ≥ 20 %.                                      |
+| **3. Model Engineering**             | Model selection per tier, prompt design, few-shot, structured output schema, parameters; comparison across models.      | `packages/ai-core/prompts/<id>/<version>.md` with results.                                   | The candidate beats the phase 1 threshold on the development set.                                    |
+| **4. Evaluation**                    | Offline evaluation (batch inference), human (Toloka) and judge-based (U); robustness and safety.                        | `evals/RESULTS.md` with metrics per version.                                                 | Threshold met on a separate test set; E4 ≥ 95 %; no regressions > 2 pp.                              |
+| **5. Deployment**                    | Activation by configuration (feature flag), rollout, per-tier fallback, budget.                                         | Reviewed configuration change + release note.                                                | Production health check; fallback tested; cost per turn within budget.                               |
+| **6. Monitoring & Maintenance**      | Live metrics (schema errors, verifier rejections, fallbacks, latency, cost), sampling for review, weekly re-evaluation. | Dashboard + weekly report in the retro.                                                      | Alerts defined; if a metric crosses its threshold → back to phase 3 with a new prompt/model version. |
 
-**Regla:** ningún componente ML llega a producción sin pasar las compuertas 1–5, y cualquier cambio de
-modelo o prompt crea una **versión nueva** (nunca se edita en sitio), igual que las fórmulas.
+**Rule:** no ML component reaches production without passing gates 1–5, and any model or prompt change
+creates a **new version** (never edited in place), just like formulas.
 
-## 6. Extreme Programming (XP) adaptado a FINCH
+## 6. Extreme Programming (XP) adapted to FINCH
 
-| Práctica XP                  | Cómo la aplicamos                                                                                                                                                                        |
-| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Planning game**            | Lunes: se eligen las historias de la semana desde el catálogo (08) según valor; cada una con estimación en horas.                                                                        |
-| **Small releases**           | Cada merge a la rama de etapa despliega a _preview_; cada hito semanal va a `main` y al demo público.                                                                                    |
-| **Metáfora del sistema**     | "Un CFO personal que muestra sus recibos": guía nombres, UX y decisiones.                                                                                                                |
-| **Diseño simple**            | Lo mínimo que cumple la historia y sus invariantes; nada especulativo (Constitución §4.19).                                                                                              |
-| **TDD**                      | **Obligatorio** en `financial-engine`, `authorization`, verificador de recibos y DSL de consulta: test (golden vector o caso de autorización) antes del código. Recomendado en el resto. |
-| **Refactorización continua** | En cada PR, dejar el código mejor que como se encontró, sin mezclar refactor con lógica financiera en el mismo diff.                                                                     |
-| **Programación en parejas**  | Pareja humana para lo crítico (motor, autorización, verificador, dinero compartido); pareja humano + IA (Claude/Cursor) para el resto, con revisión obligatoria del otro humano.         |
-| **Propiedad colectiva**      | Cualquiera puede cambiar cualquier módulo, con revisión del otro; CODEOWNERS exige revisión en áreas críticas.                                                                           |
-| **Integración continua**     | `pnpm check` local antes de cada push; CI en cada PR (lint, tipos, arquitectura, tests, seguridad).                                                                                      |
-| **Ritmo sostenible**         | Jornadas de 8+ h con pausas; un bloque de descanso semanal fijo; nada de "noches heroicas" antes del freeze.                                                                             |
-| **Cliente en sitio**         | Los fundadores rotan el rol de _Product Owner_ por semana; las personas sintéticas y 5 testers externos validan cada hito.                                                               |
-| **Estándares de código**     | ESLint + reglas de la Constitución FINCH, Prettier, TypeScript estricto, Conventional Commits.                                                                                           |
+| XP practice                | How we apply it                                                                                                                                                              |
+| -------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Planning game**          | Monday: the week's stories are chosen from the catalog (08) by value; each with an estimate in hours.                                                                        |
+| **Small releases**         | Every merge to the stage branch deploys to _preview_; every weekly milestone goes to `main` and the public demo.                                                             |
+| **System metaphor**        | "A personal CFO who shows their receipts": guides names, UX and decisions.                                                                                                   |
+| **Simple design**          | The minimum that satisfies the story and its invariants; nothing speculative (Constitution §4.19).                                                                           |
+| **TDD**                    | **Mandatory** in `financial-engine`, `authorization`, the receipt verifier and the query DSL: test (golden vector or authorization case) before code. Recommended elsewhere. |
+| **Continuous refactoring** | In every PR, leave the code better than you found it, without mixing refactoring with financial logic in the same diff.                                                      |
+| **Pair programming**       | Human pairs for the critical parts (engine, authorization, verifier, shared money); human + AI pairs (Claude/Cursor) for the rest, with mandatory review by the other human. |
+| **Collective ownership**   | Anyone may change any module, with the other's review; CODEOWNERS requires review in critical areas.                                                                         |
+| **Continuous integration** | `pnpm check` locally before every push; CI on every PR (lint, types, architecture, tests, security).                                                                         |
+| **Sustainable pace**       | 8+ h days with breaks; a fixed weekly rest block; no "heroic nights" before the freeze.                                                                                      |
+| **On-site customer**       | The founders rotate the _Product Owner_ role weekly; synthetic personas and 5 external testers validate each milestone.                                                      |
+| **Coding standards**       | ESLint + FINCH Constitution rules, Prettier, strict TypeScript, Conventional Commits.                                                                                        |
 
-## 7. Cadencia Agile
+## 7. Agile cadence
 
-- **Sprint = 1 semana = 1 etapa** (S0–S4), alineado con los hitos de `docs/hackathon/05`.
-- **Ceremonias:**
-  - **Planning** (lunes, 60 min): objetivo del sprint + historias + riesgos.
-  - **Daily** (15 min): ayer / hoy / bloqueos; revisar el tablero.
-  - **Review** (domingo, 45 min): demo en la URL pública contra el hito; decisión de contingencia (05 §5).
-  - **Retro** (domingo, 30 min): qué mantener / cambiar / probar + métricas ML (CRISP-ML(Q) fase 6).
-- **Tablero Kanban** (GitHub Projects): `Backlog → Ready → In progress → In review → Done`, con
-  **WIP máximo 2 por persona**.
-- **Historias** con formato: _"Como [persona], quiero [capacidad] para [beneficio]"_ + criterios de
-  aceptación del catálogo (08) + ID de función.
-- **Definition of Ready:** criterios de aceptación claros, fórmula/skill identificada, diseño
-  disponible si es UI, riesgo R0–R4 asignado.
-- **Definition of Done:** ver `README-DEVELOPERS.md` §9 y Constitución §75.
-- **Métricas:** burn-up de funciones H, % de hitos cumplidos, tiempo de ciclo de PR, métricas de
-  evals.
+- **Sprint = 1 week = 1 stage** (S0–S4), aligned with the milestones in `docs/hackathon/05`.
+- **Ceremonies:**
+  - **Planning** (Monday, 60 min): sprint goal + stories + risks.
+  - **Daily** (15 min): yesterday / today / blockers; review the board.
+  - **Review** (Sunday, 45 min): demo at the public URL against the milestone; contingency decision
+    (05 §5).
+  - **Retro** (Sunday, 30 min): keep / change / try + ML metrics (CRISP-ML(Q) phase 6).
+- **Kanban board** (GitHub Projects): `Backlog → Ready → In progress → In review → Done`, with **WIP
+  at most 2 per person**.
+- **Stories** in the format _"As [persona], I want [capability] so that [benefit]"_ + acceptance
+  criteria from the catalog (08) + feature ID.
+- **Definition of Ready:** clear acceptance criteria, formula/skill identified, design available if
+  it is UI, risk tier R0–R4 assigned.
+- **Definition of Done:** see `README-DEVELOPERS.md` §9 and Constitution §75.
+- **Metrics:** burn-up of H features, % of milestones met, PR cycle time, eval metrics.
 
-## 8. Estrategia de ramas
+## 8. Branching strategy
 
-Ver ADR-0040 y `README-DEVELOPERS.md` §6. Resumen:
+See ADR-0040 and `README-DEVELOPERS.md` §6. Summary:
 
 ```text
-main                               siempre desplegable; solo recibe merges de hito (etapas)
-└─ stage/sN-<nombre>               integración semanal (vive ≤ 7 días)
-   ├─ area/design                  sistema de diseño (web · móvil · escritorio)
-   ├─ area/backend                 API · worker · motor · IA · datos
+main                               always deployable; receives only milestone merges (stages)
+└─ stage/sN-<name>                 weekly integration (lives ≤ 7 days)
+   ├─ area/design                  design system (web · mobile · desktop)
+   ├─ area/backend                 API · worker · engine · AI · data
    ├─ area/web                     Next.js PWA (+ admin)
    ├─ area/mobile                  Expo: iOS · Android
    └─ area/desktop                 Tauri: Windows · macOS · Linux
-      └─ feat|fix|test|chore|docs/sN-<slug>   tarea corta (≤ 2 días), PR a su área
-release/v0.1.0-hackathon           se corta en el freeze (27-oct) desde main
-next                               desarrollo tras el envío (31-oct → 15-dic)
+      └─ feat|fix|test|chore|docs/sN-<slug>   short task (≤ 2 days), PR to its area
+release/v0.1.0-hackathon           cut at the freeze (27 Oct) from main
+next                               development after submission (31 Oct → 15 Dec)
 ```
 
-### Plataformas cliente
+### Client platforms (delivery order: web → Windows → Android → macOS + iOS)
 
-| Plataforma              | Stack                           | Paquetes compartidos                                    | Alcance hackathon                                                                                  |
-| ----------------------- | ------------------------------- | ------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| Web / PWA               | Next.js (ADR-0005)              | `design-tokens`, `ui-web`, `api-client`, `contracts`    | Completa — superficie principal del demo                                                           |
-| iOS · Android           | React Native + Expo (ADR-0004)  | `design-tokens`, `ui-mobile`, `api-client`, `contracts` | Shell funcional (Hoy, bandeja, recibos, captura con cámara) y builds si hay tiempo; completa en P1 |
-| Windows · macOS · Linux | Tauri 2 + React/Vite (ADR-0006) | `design-tokens`, `ui-web`, `api-client`, `contracts`    | Shell funcional (Hoy, bandeja, recibos, importación) y builds si hay tiempo; completa en P1        |
+| Phase | Platform    | Stack                           | Shared packages                                         | Window                   |
+| ----- | ----------- | ------------------------------- | ------------------------------------------------------- | ------------------------ |
+| 1     | Web / PWA   | Next.js (ADR-0005)              | `design-tokens`, `ui-web`, `api-client`, `contracts`    | Hackathon (until 29 Oct) |
+| 2     | Windows     | Tauri 2 + React/Vite (ADR-0006) | `design-tokens`, `ui-web`, `api-client`, `contracts`    | Nov 2026                 |
+| 3     | Android     | React Native + Expo (ADR-0004)  | `design-tokens`, `ui-mobile`, `api-client`, `contracts` | Nov–Dec 2026             |
+| 4     | macOS · iOS | Tauri 2 · Expo                  | the same                                                | Jan 2027                 |
 
-Las tres consumen la misma API y los mismos contratos: la lógica financiera **nunca** se duplica en
-un cliente.
+Task detail: `docs/delivery/DELEGATION.md`; front-end architecture:
+`docs/design/FRONTEND-ARCHITECTURE.md`.
+
+All clients consume the same API and the same contracts: financial logic is **never** duplicated in a
+client.

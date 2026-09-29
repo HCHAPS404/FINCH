@@ -1,0 +1,14 @@
+{
+  "$comment": "Static README badges in brand colours. Regenerate with: python3 assets/brand/tools/render_badges.py (requires Pillow). The renderer fails if any text/background pair is below WCAG AA (4.5:1).",
+  "badges": [
+    ["node", "Node", "24.21.0"],
+    ["pnpm", "pnpm", "11.26.0"],
+    ["typescript-version", "TypeScript", "6.0.3 strict"],
+    ["deadline", "deadline", "30 Oct 2026 12:00 COT"],
+    ["nvidia-nemotron", "NVIDIA", "Nemotron"],
+    ["nebius", "Nebius", "Token Factory · Serverless"],
+    ["tavily", "Tavily", "live market truth"],
+    ["typescript-strict", "TypeScript", "strict"],
+    ["money", "money", "never a float"]
+  ]
+}

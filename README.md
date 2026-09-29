@@ -7,23 +7,22 @@
 <img src="https://img.shields.io/badge/status-building%20for%20the%20Nebius%20%C3%97%20NVIDIA%20hackathon-0E4331?style=for-the-badge&labelColor=053F2B" alt="Status" />
 <img src="https://img.shields.io/badge/track-Personal%20AI-1F7A55?style=for-the-badge&labelColor=053F2B" alt="Track: Personal AI" />
 <br/>
-<img src="https://img.shields.io/badge/NVIDIA-Nemotron-6FCF97?style=flat-square&labelColor=0E4331" alt="NVIDIA Nemotron" />
-<img src="https://img.shields.io/badge/Nebius-Token%20Factory%20%C2%B7%20Serverless-6FCF97?style=flat-square&labelColor=0E4331" alt="Nebius" />
-<img src="https://img.shields.io/badge/Tavily-live%20market%20truth-6FCF97?style=flat-square&labelColor=0E4331" alt="Tavily" />
-<img src="https://img.shields.io/badge/TypeScript-strict-6FCF97?style=flat-square&labelColor=0E4331" alt="TypeScript strict" />
-<img src="https://img.shields.io/badge/money-never%20a%20float-6FCF97?style=flat-square&labelColor=0E4331" alt="Money is never a float" />
+<img src="assets/brand/badges/nvidia-nemotron.png" alt="NVIDIA Nemotron" height="20" />
+<img src="assets/brand/badges/nebius.png" alt="Nebius" height="20" />
+<img src="assets/brand/badges/tavily.png" alt="Tavily" height="20" />
+<img src="assets/brand/badges/typescript-strict.png" alt="TypeScript strict" height="20" />
+<img src="assets/brand/badges/money.png" alt="Money is never a float" height="20" />
 
 <br/><br/>
 
-**[What it is](#-what-is-finch)** · **[Features](#-features)** · **[How it works](#-how-it-works)** ·
-**[Nemotron & Nebius](#-built-on-nvidia-nemotron--nebius)** · **[Architecture](#-architecture)** ·
-**[Quickstart](#-quickstart)** · **[Roadmap](#-roadmap)** · **[Team](#-team)**
+**[What it is](#what-is-finch)** · **[Features](#features)** · **[How it works](#how-it-works)** ·
+**[Nemotron & Nebius](#nemotron-nebius)** · **[Architecture](#architecture)** ·
+**[Quickstart](#quickstart)** · **[Roadmap](#roadmap)** · **[Team](#team)**
 
 </div>
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 🌿 What is FINCH
+<a id="what-is-finch"></a>
+<img src="assets/brand/headings/what-is-finch.png" alt="What is FINCH" width="100%" />
 
 **FINCH is a premium personal-finance app that manages your money the way a personal CFO
 would** — privately, every day, and with proof.
@@ -77,9 +76,8 @@ CDT withholding, DIAN calendars) and a second country pack.
 > are neutral — no commission can ever change a ranking. Investment content is educational
 > simulation, not advice.
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## ✨ Features
+<a id="features"></a>
+<img src="assets/brand/headings/features.png" alt="Features" width="100%" />
 
 Status legend: ✅ shipped · 🚧 in progress · 🗓️ planned for the hackathon submission (30 Oct 2026).
 Full specification: [`docs/hackathon/08-feature-catalog.md`](docs/hackathon/08-feature-catalog.md).
@@ -183,12 +181,11 @@ Full specification: [`docs/hackathon/08-feature-catalog.md`](docs/hackathon/08-f
 
 </details>
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 🔬 How it works
+<a id="how-it-works"></a>
+<img src="assets/brand/headings/how-it-works.png" alt="How it works" width="100%" />
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','fontFamily':'Inter, Segoe UI, sans-serif'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1','fontFamily':'Inter, Segoe UI, sans-serif'}}}%%
 flowchart LR
   U([You]) -->|"My paycheck arrived"| L[Nemotron 3.5 Lightning<br/>understands & extracts]
   L --> S[Nemotron 3 Super<br/>calls financial skills]
@@ -211,9 +208,8 @@ flowchart LR
 4. **Act safely** — plans, checklists, drafts and reminders. FINCH never moves money.
 5. **Watch** — every morning a Nebius Serverless Job re-checks everything and briefs you.
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## ⚡ Built on NVIDIA Nemotron & Nebius
+<a id="nemotron-nebius"></a>
+<img src="assets/brand/headings/nemotron-nebius.png" alt="Built on NVIDIA Nemotron & Nebius" width="100%" />
 
 | Tier            | Model (on Nebius Token Factory)                     | Used for                                                                                                      |
 | --------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
@@ -243,15 +239,14 @@ always cited.
 
 </details>
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 🏗️ Architecture
+<a id="architecture"></a>
+<img src="assets/brand/headings/architecture.png" alt="Architecture" width="100%" />
 
 A **modular monolith** with hexagonal modules, domain-driven bounded contexts and a pure financial
 engine. Full description: [`docs/architecture/SOFTWARE-ARCHITECTURE.md`](docs/architecture/SOFTWARE-ARCHITECTURE.md).
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5'}}}%%
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1'}}}%%
 flowchart TB
   APP[FINCH App — Next.js PWA<br/>own inbox & push] --> API[API — NestJS + Fastify]
   API --> ENG[Financial engine<br/>pure · bigint money]
@@ -273,9 +268,8 @@ flowchart TB
 | Quality      | Vitest, golden vectors, dependency-cruiser fitness functions, ESLint "FINCH Constitution" rules |
 | Method       | XP + weekly Agile sprints; AI components governed by CRISP-ML(Q)                                |
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 🚀 Quickstart
+<a id="quickstart"></a>
+<img src="assets/brand/headings/quickstart.png" alt="Quickstart" width="100%" />
 
 > Requirements: **Node 24.21.0** (see `.nvmrc`), **pnpm 11.26.0** via corepack, Docker.
 
@@ -309,9 +303,8 @@ assets/brand/    logos, banner
 
 </details>
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 🧪 Quality & evaluation
+<a id="quality"></a>
+<img src="assets/brand/headings/quality.png" alt="Quality & evaluation" width="100%" />
 
 | Evaluation             | Measures                                    | Target         |
 | ---------------------- | ------------------------------------------- | -------------- |
@@ -324,7 +317,8 @@ assets/brand/    logos, banner
 
 Results are published in `evals/RESULTS.md` with **real numbers**, not targets, as they are measured.
 
-## 🔐 Security & privacy
+<a id="security"></a>
+<img src="assets/brand/headings/security.png" alt="Security & privacy" width="100%" />
 
 - Secrets never live in the repository or the client; keys are server-side only.
 - Personal identifiers are redacted before any model call; model output can never become financial
@@ -333,25 +327,27 @@ Results are published in `evals/RESULTS.md` with **real numbers**, not targets, 
 - Synthetic data only in development; production data never reaches a laptop.
 - Report vulnerabilities as described in [`SECURITY.md`](SECURITY.md).
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
+<a id="roadmap"></a>
+<img src="assets/brand/headings/roadmap.png" alt="Roadmap" width="100%" />
 
-## 🗺️ Roadmap
+| When             | Milestone                                                                                                                  |
+| ---------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| **Oct 2026**     | Phase 1 — **Web (PWA)**: 45 features, weekly milestones — [`docs/hackathon/05`](docs/hackathon/05-roadmap-and-timeline.md) |
+| **30 Oct 2026**  | Submission to the Nebius × NVIDIA Global AI Hackathon (Personal AI track)                                                  |
+| **Nov 2026**     | Phase 2 — **Windows** desktop app (Tauri 2)                                                                                |
+| **Nov–Dec 2026** | Phase 3 — **Android** app (Expo)                                                                                           |
+| **Jan 2027**     | Phase 4 — **macOS** and **iOS**                                                                                            |
+| **2027**         | Closed alpha in Colombia · open-finance data · FINCH Premium · partner actions · WhatsApp & SMS channels                   |
 
-| When            | Milestone                                                                                                          |
-| --------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Oct 2026**    | Hackathon build: 45 features, weekly milestones — [`docs/hackathon/05`](docs/hackathon/05-roadmap-and-timeline.md) |
-| **30 Oct 2026** | Submission to the Nebius × NVIDIA Global AI Hackathon (Personal AI track)                                          |
-| **Q1 2027**     | Closed alpha in Colombia · native iOS/Android apps                                                                 |
-| **Q2 2027**     | Open-finance data · FINCH Premium · closed beta                                                                    |
-| **Q3–Q4 2027**  | Partner actions (refinancing, deposits) · public launch · WhatsApp & SMS channels                                  |
-
-## 👥 Team
+<a id="team"></a>
+<img src="assets/brand/headings/team.png" alt="Team" width="100%" />
 
 FINCH is built by its two founders, **Helmut** ([@HCHAPS404](https://github.com/HCHAPS404)) and
 **Nairy**, in Colombia. AI tools (Claude, Cursor) assist development; authorship and responsibility
 remain with the founders.
 
-## 📄 License & trademarks
+<a id="license"></a>
+<img src="assets/brand/headings/license.png" alt="License & trademarks" width="100%" />
 
 Open-source licensing follows [ADR-0037](docs/architecture/adr/0037-open-source-license.md)
 (Apache-2.0 proposed; the `LICENSE` file is added when the founders approve it). The **FINCH** name

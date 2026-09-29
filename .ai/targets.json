@@ -1,0 +1,22 @@
+{
+  "$comment": "Where scripts/ai-sync.mjs writes the agent adapters. Source of truth is .ai/rules and .ai/skills. Paths marked verify must be re-checked against each tool's current documentation (AGENTS.md §7) and adjusted here only.",
+  "claude": {
+    "skillsDir": ".claude/skills",
+    "memoryFile": "CLAUDE.md",
+    "verified": true
+  },
+  "cursor": {
+    "rulesDir": ".cursor/rules",
+    "verified": true
+  },
+  "codex": {
+    "agentsFile": "AGENTS.md",
+    "verified": true
+  },
+  "antigravity": {
+    "rulesDir": ".agent/rules",
+    "workflowsDir": ".agent/workflows",
+    "verified": false,
+    "verify": "Confirm Antigravity workspace rule and workflow directories in its documentation."
+  }
+}

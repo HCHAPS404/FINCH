@@ -1,143 +1,144 @@
-# 03 — Arquitectura del demo y uso del stack Nebius / NVIDIA
+# 03 — Demo architecture and use of the Nebius / NVIDIA stack
 
-Principio: **la arquitectura objetivo de FINCH no cambia; la topología desplegada sí se reduce**
-(README §6: "la topología desplegada debe ser la mínima que satisfaga correctamente el workload
-actual"). El demo usa los mismos paquetes y fronteras del monorepo. No se crea un repo "de juguete".
+Principle: **FINCH's target architecture does not change; the deployed topology is reduced**
+(README §6: "the deployed topology must be the minimum that correctly satisfies the current
+workload"). The demo uses the same packages and boundaries as the monorepo — no "toy" repository.
 
-> **VERIFICAR:** todo lo marcado así debe confirmarse contra la documentación oficial o la consola
-> antes de implementarlo (AGENTS.md §7: nunca inventar versiones, APIs ni flags). Los IDs de modelo
-> se confirman con `GET https://api.tokenfactory.nebius.com/v1/models` usando la llave del equipo.
+> **VERIFY:** everything marked this way must be confirmed against official documentation or the
+> console before implementation (AGENTS.md §7: never invent versions, APIs or flags). Model IDs are
+> confirmed with `GET https://api.tokenfactory.nebius.com/v1/models` using the team's key.
 
 ---
 
-## 1. Vista de contexto
+## 1. Context view
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1'}}}%%
 flowchart LR
-  U[Usuario / Jurado<br/>navegador o móvil] -->|HTTPS| WEB[apps/web<br/>Next.js]
-  CH[Canales opcionales<br/>correo · .ics · luego SMS/WhatsApp/Telegram] <-->|Channel Hub ADR-0039| API
-  PUSH[Web Push de la app] --- WEB
+  U[User / Judge<br/>browser or phone] -->|HTTPS| WEB[apps/web<br/>Next.js]
+  CH[Optional channels<br/>email · .ics · later SMS/WhatsApp/Telegram] <-->|Channel Hub ADR-0039| API
+  PUSH[App web push] --- WEB
   WEB -->|REST /api/v1| API[apps/api<br/>NestJS + Fastify]
-  API --> ENG[packages/financial-engine<br/>puro, determinista]
+  API --> ENG[packages/financial-engine<br/>pure, deterministic]
   API --> GW[packages/ai-core<br/>AI Gateway]
   API --> DB[(PostgreSQL + pgvector)]
   GW -->|OpenAI-compatible| TF[Nebius Token Factory<br/>Nemotron Lightning · Super · Ultra<br/>embeddings · guard]
   API --> MT[Market Truth adapter<br/>packages/provider-sdk]
   MT -->|search / extract| TAV[Tavily API]
-  JOB[apps/worker: Vigía<br/>Nebius Serverless Job] --> DB
+  JOB[apps/worker: Watcher<br/>Nebius Serverless Job] --> DB
   JOB --> GW
   JOB --> MT
   GW -. traces .-> LS[LangSmith]
   API -. OTel .-> LS
 ```
 
-## 2. Componentes y su lugar en el monorepo
+## 2. Components and their place in the monorepo
 
-| Componente      | Ubicación                                         | Responsabilidad en la hackathon                                                                                                 | Frontera que NO se rompe                                                               |
-| --------------- | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
-| Web             | `apps/web` (Next.js, ADR-0005)                    | UI completa, i18n, recibos, Decision Cards.                                                                                     | No llama a Token Factory ni a Tavily directamente: las llaves nunca llegan al cliente. |
-| API             | `apps/api` (NestJS/Fastify, ADR-0007)             | REST, orquestación del agente, sesiones de demo, Channel Hub (ADR-0039): bandeja, web push, .ics, correo.                       | Autorización por workspace en backend (ADR-0010/0011, versión mínima).                 |
-| Worker / Vigía  | `apps/worker`                                     | Job del Vigía, empaquetado como contenedor para Nebius Serverless Jobs.                                                         | Idempotente (clave `workspace_id + fecha`), at-least-once (Constitución §4.12–13).     |
-| Motor           | `packages/financial-engine`                       | Todas las fórmulas de [colombia-credit.md](../financial-formulas/colombia-credit.md).                                           | Puro: sin I/O ni SDKs (ADR-0017, dependency-cruiser).                                  |
-| Jurisdicción CO | `jurisdictions/CO`                                | Convenciones de tasas, festivos, copy legal y fuentes oficiales permitidas.                                                     | Las reglas colombianas no entran al core global (README §36).                          |
-| AI Gateway      | `packages/ai-core`                                | Ruteo por niveles, redacción de PII, registro de prompts, validación de esquema, verificador numérico, presupuesto y auditoría. | Única ruta hacia modelos (ADR-0018). La salida siempre es `GENERATED_NARRATIVE`.       |
-| Market Truth    | `packages/provider-sdk` (puerto) + adapter Tavily | Búsqueda y extracción con lista blanca, parseo determinista, caché y procedencia.                                               | El SDK del proveedor vive solo en el adapter (ADR-0022).                               |
-| Contratos       | `packages/contracts`                              | `CalcReceipt`, `DecisionCard`, `SkillDefinition`, eventos.                                                                      | Sin dependencias a otros paquetes.                                                     |
-| DB              | `packages/db` (Drizzle)                           | Esquema mínimo: principals/workspaces demo, twin facts, snapshots, receipts, cards, memories, audit, vigia_runs.                | Solo `packages/db` toca el driver.                                                     |
-| Observabilidad  | `packages/observability`                          | OTel + logs estructurados; exportador hacia LangSmith.                                                                          | Nunca PII ni montos crudos en analítica (AGENTS.md §4).                                |
+| Component        | Location                                        | Hackathon responsibility                                                                                           | Boundary that is NOT broken                                                    |
+| ---------------- | ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------ |
+| Web              | `apps/web` (Next.js, ADR-0005)                  | Complete UI, i18n, receipts, Decision Cards.                                                                       | Never calls Token Factory or Tavily directly: keys never reach the client.     |
+| API              | `apps/api` (NestJS/Fastify, ADR-0007)           | REST, agent orchestration, demo sessions, Channel Hub (ADR-0039): inbox, web push, .ics, email.                    | Workspace authorization on the server (ADR-0010/0011, minimal version).        |
+| Worker / Watcher | `apps/worker`                                   | Watcher job, packaged as a container for Nebius Serverless Jobs.                                                   | Idempotent (`workspace_id + date` key), at-least-once (Constitution §4.12–13). |
+| Engine           | `packages/financial-engine`                     | Every formula in `docs/financial-formulas/`.                                                                       | Pure: no I/O, no SDKs (ADR-0017, dependency-cruiser).                          |
+| CO jurisdiction  | `jurisdictions/CO`                              | Rate conventions, holidays, legal copy, allowed official sources.                                                  | Colombian rules never enter the global core (README §36).                      |
+| AI Gateway       | `packages/ai-core`                              | Tiered routing, PII redaction, prompt registry, schema validation, number verifier, budget and audit.              | The only path to models (ADR-0018). Output is always `GENERATED_NARRATIVE`.    |
+| Market Truth     | `packages/provider-sdk` (port) + Tavily adapter | Allowlisted search and extraction, deterministic parsing, cache and provenance.                                    | The provider SDK lives only in the adapter (ADR-0022).                         |
+| Contracts        | `packages/contracts`                            | `CalcReceipt`, `DecisionCard`, `SkillDefinition`, events.                                                          | No dependencies on other packages.                                             |
+| DB               | `packages/db` (Drizzle)                         | Minimal schema: demo principals/workspaces, twin facts, snapshots, receipts, cards, memories, audit, watcher runs. | Only `packages/db` touches the driver.                                         |
+| Observability    | `packages/observability`                        | OTel + structured logs; exporter to LangSmith.                                                                     | Never PII or raw amounts in analytics (AGENTS.md §4).                          |
 
-> El Channel Hub (ADR-0039) y usar Tavily como proveedor son decisiones que README §76 obliga a registrar
-> (nuevo _core vendor_ y nueva frontera de confianza): quedan en ADR-0035/0036.
+> The Channel Hub (ADR-0039) and Tavily as a provider are decisions README §76 requires to record
+> (new _core vendor_ and new trust boundary): they live in ADR-0035/0036/0039.
 
-## 3. Topología de despliegue del demo (detalle en ADR-0038)
+## 3. Demo deployment topology (details in ADR-0038)
 
-### Topología A: preferida, máximo uso de Nebius
+### Topology A: preferred, maximum use of Nebius
 
-| Pieza                    | Dónde                                                                                                 | Notas                                                                                                                                                                                                 |
-| ------------------------ | ----------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Inferencia               | **Nebius Token Factory** (serverless, por token)                                                      | Obligatorio. `NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1/`.                                                                                                                               |
-| Vigía                    | **Nebius Serverless Jobs**                                                                            | Contenedor de `apps/worker`. **VERIFICAR:** si los Jobs admiten cron nativo; si no, un GitHub Actions `schedule` lanza el job con la CLI de Nebius (credencial de servicio con el mínimo privilegio). |
-| Web + API                | **Nebius Serverless Endpoint** con contenedor HTTP, o VM pequeña en Nebius AI Cloud                   | **VERIFICAR:** si los Serverless Endpoints aceptan un contenedor HTTP genérico solo-CPU y su costo por 11 semanas encendido (hasta el 15-dic).                                                        |
-| PostgreSQL               | **Nebius Managed PostgreSQL** (VERIFICAR disponibilidad, pgvector y costo), o Postgres en la misma VM | Backups diarios.                                                                                                                                                                                      |
-| Inferencia privada (C-1) | **Nebius Serverless Endpoint** con Nemotron Lightning                                                 | Solo si hay crédito de AI Cloud; es opcional.                                                                                                                                                         |
+| Piece                  | Where                                                                                              | Notes                                                                                                                                                                                            |
+| ---------------------- | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Inference              | **Nebius Token Factory** (serverless, per token)                                                   | Mandatory. `NEBIUS_BASE_URL=https://api.tokenfactory.nebius.com/v1/`.                                                                                                                            |
+| Watcher                | **Nebius Serverless Jobs**                                                                         | Container of `apps/worker`. **VERIFY** whether Jobs support native scheduling; if not, a GitHub Actions `schedule` triggers the job through the Nebius CLI (least-privilege service credential). |
+| Web + API              | **Nebius Serverless Endpoint** running an HTTP container, or a small VM on Nebius AI Cloud         | **VERIFY** whether Serverless Endpoints accept a generic CPU-only HTTP container, and the cost of 11 weeks always-on (until 15 Dec).                                                             |
+| PostgreSQL             | **Nebius Managed PostgreSQL** (VERIFY availability, pgvector and cost), or Postgres on the same VM | Daily backups.                                                                                                                                                                                   |
+| Private inference (P7) | **Nebius Serverless Endpoint** with Nemotron Lightning                                             | Only with AI Cloud credit; optional.                                                                                                                                                             |
 
-### Topología B: fallback de bajo costo y alta estabilidad
+### Topology B: low-cost, high-stability fallback
 
-- Web + API: Railway / Render / Fly.io (un contenedor, _always-on_).
-- Postgres: Neon o Supabase (plan con pgvector).
-- Vigía: GitHub Actions cron → endpoint interno autenticado. **O** Nebius Serverless Job si está
-  verificado (se conserva "deployed/run using Nebius AI Cloud compute").
-- Inferencia: Token Factory (el requisito de "runs on Nebius" se cumple por la llamada en runtime).
+- Web + API: Railway / Render / Fly.io (one always-on container).
+- Postgres: Neon or Supabase (plan with pgvector).
+- Watcher: GitHub Actions cron → authenticated internal endpoint, **or** a Nebius Serverless Job once
+  verified (keeping "deployed/run using Nebius AI Cloud compute").
+- Inference: Token Factory (the "runs on Nebius" requirement is met by the runtime call).
 
-**Regla de decisión (tarea S0-06, fecha límite viernes 2-oct):** si la Topología A cuesta más de lo
-que cubren los créditos disponibles para AI Cloud **o** no puede garantizar disponibilidad continua
-hasta el 15-dic, se usa B para web/API/DB y se mantiene el Vigía en Nebius Serverless Jobs.
+**Decision rule (task S0-06, due Friday 2 Oct):** if Topology A costs more than the available AI Cloud
+credits cover **or** cannot guarantee continuous availability until 15 Dec, use B for web/API/DB and
+keep the Watcher on Nebius Serverless Jobs.
 
-## 4. Mapa de herramientas: qué se usa, para qué y con qué crédito
+## 4. Tool map: what is used, for what, and with which credit
 
-| Herramienta                                                                                                                                  | Fuente del crédito                                                                                       | Uso en FINCH                                                                                                                                                   | Criterio de jurado que alimenta       |
-| -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| **Nebius Token Factory**: Nemotron 3.5 Lightning (30B/3B activos, 1M ctx)                                                                    | USD 25 (promo `NEBIUS-DEVPOST-GLOBAL26`) + USD 25 (Builders Program)                                     | Router de intención, clasificación, extracción de texto, respuestas rápidas, lectura de notificaciones bancarias, briefing. Es **la mayoría de las llamadas**. | Tech Impl., Idea                      |
-| Token Factory: **Nemotron 3 Super 120B-A12B**                                                                                                | idem                                                                                                     | Agente orquestador con tool calling y structured outputs; narrativa de Decision Cards.                                                                         | Tech Impl.                            |
-| Token Factory: **Nemotron 3 Ultra 550B-A55B**                                                                                                | idem                                                                                                     | Segunda opinión auditora (solo en Decision Cards y acciones) y juez en evals. Uso escaso y medido.                                                             | Idea, Tech Impl.                      |
-| Token Factory: modelo multimodal Nemotron (Nano VL u Omni; **VERIFICAR** disponibilidad)                                                     | idem                                                                                                     | Extracción de ofertas y extractos en imagen o PDF escaneado (S-2).                                                                                             | Design, Tech Impl.                    |
-| Token Factory: **embeddings** (p. ej. `Qwen/Qwen3-Embedding-8B`; **VERIFICAR** si existe un embedding NVIDIA disponible y preferirlo)        | idem                                                                                                     | Memoria semántica (pgvector).                                                                                                                                  | Tech Impl.                            |
-| Token Factory: **guard model** (p. ej. `meta-llama/Llama-Guard-3-8B`; **VERIFICAR** si hay un Nemotron safety guard disponible y preferirlo) | idem                                                                                                     | Clasificación de seguridad de entradas y salidas.                                                                                                              | Tech Impl.                            |
-| Token Factory: **structured outputs + function calling**                                                                                     | —                                                                                                        | Contratos del agente.                                                                                                                                          | Tech Impl.                            |
-| Token Factory: **batch inference** (~50 % menos costo, resultados < 24 h)                                                                    | idem                                                                                                     | Correr las evals E2–E6 completas.                                                                                                                              | Tech Impl.                            |
-| Token Factory: **post-training / LoRA** (C-2)                                                                                                | idem                                                                                                     | Extractor de ofertas colombianas especializado. Opcional.                                                                                                      | Idea                                  |
-| **Nebius AI Cloud: Serverless Jobs**                                                                                                         | Créditos AI Cloud (**VERIFICAR** si el Builders Program o la promo cubren AI Cloud o solo Token Factory) | Vigía siempre activo.                                                                                                                                          | Personal AI ("always-on"), Tech Impl. |
-| Nebius AI Cloud: Serverless Endpoints                                                                                                        | idem                                                                                                     | Web/API (Topología A) e inferencia privada (C-1).                                                                                                              | Personal AI ("private")               |
-| **Tavily**                                                                                                                                   | USD 25 (Builders) + código `BBDEVPOST` (**VERIFICAR** vigencia)                                          | Market Truth: usura, tasas de referencia, ofertas. Search + Extract.                                                                                           | **Best Use of Tavily**, Impact        |
-| **LangSmith**                                                                                                                                | USD 100 (Builders)                                                                                       | Tracing de cada turno del agente, datasets de eval y comparación de versiones de prompts.                                                                      | Tech Impl. (evidencia visible)        |
-| **Toloka**                                                                                                                                   | USD 100 (Builders)                                                                                       | Evaluación humana de la calidad de las explicaciones en español colombiano e inglés (E5).                                                                      | Design, Impact                        |
-| **Nebius Academy**: certificación por USD 1 y curso gratuito de Agentic AI                                                                   | Builders                                                                                                 | Ambos fundadores la toman en la semana 0–1 (2–4 h). Sirve de credencial en el pitch y para aprender el patrón de agentes de Nebius.                            | — (equipo)                            |
-| **Office hours de Nebius y Discord**                                                                                                         | Builders                                                                                                 | Resolver las dudas VERIFICAR (Jobs con cron, endpoints CPU, modelos disponibles, retención de datos). Agendar en la semana 0.                                  | —                                     |
-| NVIDIA NemoClaw / OpenShell / Hermes Agent                                                                                                   | Open source                                                                                              | P6 (post-hackathon): exponer FINCH por MCP a agentes personales. En la hackathon el encaje con el track se cubre con Nebius Serverless y la app autónoma.      | Personal AI                           |
+| Tool                                                                                                                                       | Credit source                                                                                             | Use in FINCH                                                                                                                                          | Judging criterion it feeds            |
+| ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| **Nebius Token Factory**: Nemotron 3.5 Lightning (30B/3B active, 1M context)                                                               | USD 25 (promo `NEBIUS-DEVPOST-GLOBAL26`) + USD 25 (Builders Program)                                      | Intent routing, classification, text extraction, quick replies, bank-notification reading, briefing. **The majority of calls.**                       | Tech Impl., Idea                      |
+| Token Factory: **Nemotron 3 Super 120B-A12B**                                                                                              | same                                                                                                      | Orchestrating agent with tool calling and structured outputs; Decision Card narrative.                                                                | Tech Impl.                            |
+| Token Factory: **Nemotron 3 Ultra 550B-A55B**                                                                                              | same                                                                                                      | Auditing second opinion (Decision Cards and actions only) and eval judge. Sparse, measured use.                                                       | Idea, Tech Impl.                      |
+| Token Factory: multimodal Nemotron model (Nano VL or Omni; **VERIFY** availability)                                                        | same                                                                                                      | Receipts, invoices, offers and statements in images or scanned PDFs.                                                                                  | Design, Tech Impl.                    |
+| Token Factory: **embeddings** (e.g. `Qwen/Qwen3-Embedding-8B`; **VERIFY** whether an NVIDIA embedding model is available and prefer it)    | same                                                                                                      | Semantic memory (pgvector).                                                                                                                           | Tech Impl.                            |
+| Token Factory: **guard model** (e.g. `meta-llama/Llama-Guard-3-8B`; **VERIFY** whether a Nemotron safety guard is available and prefer it) | same                                                                                                      | Input and output safety classification.                                                                                                               | Tech Impl.                            |
+| Token Factory: **structured outputs + function calling**                                                                                   | —                                                                                                         | Agent contracts.                                                                                                                                      | Tech Impl.                            |
+| Token Factory: **batch inference** (~50 % cheaper, results < 24 h)                                                                         | same                                                                                                      | Running the full E2–E6 evals.                                                                                                                         | Tech Impl.                            |
+| Token Factory: **post-training / LoRA** (P8)                                                                                               | same                                                                                                      | Specialized extractor for Colombian documents. Optional.                                                                                              | Idea                                  |
+| **Nebius AI Cloud: Serverless Jobs**                                                                                                       | AI Cloud credits (**VERIFY** whether the Builders Program or promo covers AI Cloud or only Token Factory) | Always-on Watcher.                                                                                                                                    | Personal AI ("always-on"), Tech Impl. |
+| Nebius AI Cloud: Serverless Endpoints                                                                                                      | same                                                                                                      | Web/API (Topology A) and private inference (P7).                                                                                                      | Personal AI ("private")               |
+| **Tavily**                                                                                                                                 | Builders add-on credits + `BBDEVPOST` code (**VERIFY** validity)                                          | Market Truth: usury cap, reference rates, offers, FX, remittances, official tax data. Search + Extract.                                               | **Best Use of Tavily**, Impact        |
+| **LangSmith**                                                                                                                              | USD 100 (Builders)                                                                                        | Tracing every agent turn, eval datasets, comparing prompt versions.                                                                                   | Tech Impl. (visible evidence)         |
+| **Toloka**                                                                                                                                 | USD 100 (Builders)                                                                                        | Human evaluation of explanation quality in Colombian Spanish and English (E5).                                                                        | Design, Impact                        |
+| **Nebius Academy**: USD 1 certification and free Agentic AI course                                                                         | Builders                                                                                                  | Both founders take it in weeks 0–1 (2–4 h): a credential for the pitch and Nebius agent patterns.                                                     | — (team)                              |
+| **Nebius office hours and Discord**                                                                                                        | Builders                                                                                                  | Resolve the VERIFY items (Jobs scheduling, CPU endpoints, available models, data retention). Book in week 0.                                          | —                                     |
+| NVIDIA NemoClaw / OpenShell / Hermes Agent                                                                                                 | Open source                                                                                               | P6 (post-hackathon): expose FINCH over MCP to personal agents. In the hackathon the track fit is covered by Nebius Serverless and the autonomous app. | Personal AI                           |
 
-**Presupuesto de inferencia:** los precios por token cambian y no se fijan aquí. El gateway aplica
-un **presupuesto diario configurable** (`AI_DAILY_BUDGET_USD`) y un **presupuesto por sesión de
-demo**, y reserva **≥ 40 % del crédito total para el periodo de jurados** (01–15-dic). En la semana
-1 se mide el costo real por conversación y se recalcula. Si no alcanza, comprar entre USD 20 y 50
-adicionales es un gasto razonable frente al premio (decisión D-08).
+**Inference budget:** per-token prices change and are not fixed here. The gateway enforces a
+**configurable daily budget** (`AI_DAILY_BUDGET_USD`) and a **per-demo-session budget**, and reserves
+**≥ 40 % of total credit for the judging period** (1–15 Dec). Real cost per conversation is measured
+in week 1 and the plan recalculated. If credit falls short, buying USD 20–50 more is reasonable
+against the prize (decision D-08).
 
-## 5. Datos y privacidad
+## 5. Data and privacy
 
-| Dato                                                        | Clasificación (ADR-0028) | ¿Sale hacia un LLM?                                                                                            | Tratamiento                                                         |
-| ----------------------------------------------------------- | ------------------------ | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
-| Nombre, cédula, número de cuenta o tarjeta, teléfono, email | PII alta                 | **No.** Se redacta antes de salir (`<PERSON_1>`, `<ACCOUNT_1>`); el mapa de reemplazo vive solo en el backend. | Cifrado en reposo; nunca en logs ni en analítica.                   |
-| Montos, tasas, fechas                                       | Financiero sensible      | Sí, lo mínimo necesario para la tarea.                                                                         | Minimización por skill. Los montos que ve el LLM vienen de recibos. |
-| Documentos subidos                                          | Sensible                 | Solo el texto o imagen necesario para extraer; opcionalmente a un endpoint privado (C-1).                      | Cuarentena; borrado automático a los 7 días en modo demo.           |
-| Recuerdos                                                   | Sensible                 | Solo los recuperados y relevantes.                                                                             | Visibles, editables y borrables por el usuario.                     |
+| Data                                                    | Classification (ADR-0028) | Sent to an LLM?                                                                                             | Handling                                                      |
+| ------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| Name, national ID, account or card number, phone, email | High PII                  | **No.** Redacted before egress (`<PERSON_1>`, `<ACCOUNT_1>`); the replacement map lives only on the server. | Encrypted at rest; never in logs or analytics.                |
+| Amounts, rates, dates                                   | Sensitive financial       | Yes — the minimum needed for the task.                                                                      | Minimized per skill; amounts the LLM sees come from receipts. |
+| Uploaded documents                                      | Sensitive                 | Only the text or image needed to extract; optionally to a private endpoint (P7).                            | Quarantine; automatic deletion after 7 days in demo mode.     |
+| Memories                                                | Sensitive                 | Only those retrieved and relevant.                                                                          | Visible, editable and deletable by the user.                  |
 
-**VERIFICAR con Nebius (office hours):** la política de retención y uso de datos de Token Factory
-(¿se usan prompts para entrenar? ¿hay opción de _zero data retention_?). La respuesta se documenta
-en el README, porque es central para el argumento de privacidad del track.
+**VERIFY with Nebius (office hours):** Token Factory's data retention and usage policy (are prompts
+used for training? is there a _zero data retention_ option?). The answer is documented in the README,
+because it is central to the track's privacy argument.
 
-## 6. Seguridad del demo público
+## 6. Security of the public demo
 
-- Llaves solo en variables de entorno del host; `.env.example` con placeholders; gitleaks en CI.
-- Rate limit por IP y por sesión; tope de tokens por sesión; _credit guard_ global (kill switch,
+- Keys only in host environment variables; `.env.example` with placeholders; gitleaks in CI.
+- Rate limits per IP and session; token cap per session; global _credit guard_ (kill switch,
   README §62).
-- CORS restringido; cabeceras de seguridad; subida de archivos limitada (tipo y tamaño).
-- El contenido web (Tavily) y los documentos son **datos no confiables**: nunca se concatenan como
-  instrucciones (ver 04 §5).
-- Las sesiones de demo están aisladas por workspace efímero; se limpian cada 24 h.
-- Modelo de amenazas del slice en `docs/architecture/threat-models/hackathon-demo.md` (tarea S1-10;
-  README §39 lo exige para R1+).
+- Restricted CORS; security headers; limited uploads (type and size).
+- Web content (Tavily) and documents are **untrusted data**: never concatenated as instructions
+  (see 04 §5).
+- Demo sessions are isolated in ephemeral workspaces, cleaned every 24 h.
+- Threat model of the slice in `docs/architecture/threat-models/hackathon-demo.md` (task S1-09;
+  README §39 requires it for R1+).
 
-## 7. Stack técnico concreto (versiones a verificar en el registro antes de agregar, AGENTS.md §7)
+## 7. Concrete technical stack (versions verified in the registry before adding, AGENTS.md §7)
 
-| Necesidad                                                        | Elección propuesta                                        | Estado                                           |
-| ---------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------ |
-| Cliente OpenAI-compatible                                        | SDK oficial `openai` (Node) apuntando a `NEBIUS_BASE_URL` | VERIFICAR versión                                |
-| Validación de esquemas                                           | `zod` + conversión a JSON Schema                          | VERIFICAR versión                                |
-| Decimal de precisión arbitraria (tasas, potencias fraccionarias) | `decimal.js` (soporta `pow` con exponente no entero)      | VERIFICAR; requiere ADR menor o nota en ADR-0016 |
-| Tavily                                                           | SDK oficial `@tavily/core` o HTTP directo                 | VERIFICAR                                        |
-| Web Push                                                         | API estándar Web Push + VAPID (librería a VERIFICAR)      | VERIFICAR soporte iOS en PWA instalada           |
-| Correo transaccional + recepción                                 | Proveedor a elegir en S0-06 (ADR-0039)                    | VERIFICAR costo y dominio                        |
-| ORM                                                              | Drizzle (ya en README)                                    | VERIFICAR                                        |
-| Vector                                                           | extensión `pgvector`                                      | VERIFICAR en el host elegido                     |
-| i18n web                                                         | `next-intl` o i18n nativo de Next                         | VERIFICAR                                        |
-| PDF (cartas)                                                     | `@react-pdf/renderer` o `pdf-lib`                         | VERIFICAR                                        |
-| Tracing                                                          | LangSmith SDK u OTel exporter hacia LangSmith             | VERIFICAR soporte OTel                           |
+| Need                                                   | Proposed choice                                          | Status                                |
+| ------------------------------------------------------ | -------------------------------------------------------- | ------------------------------------- |
+| OpenAI-compatible client                               | Official `openai` Node SDK pointed at `NEBIUS_BASE_URL`  | VERIFY version                        |
+| Schema validation                                      | `zod` + JSON Schema conversion                           | VERIFY version                        |
+| Arbitrary-precision decimal (rates, fractional powers) | `decimal.js` (supports `pow` with non-integer exponents) | VERIFY; note in ADR-0016              |
+| Tavily                                                 | Official `@tavily/core` SDK or direct HTTP               | VERIFY                                |
+| Web Push                                               | Standard Web Push + VAPID (library to VERIFY)            | VERIFY iOS support for installed PWAs |
+| Transactional + inbound email                          | Provider chosen in S0-06 (ADR-0039)                      | VERIFY cost and domain                |
+| ORM                                                    | Drizzle (already in the Constitution)                    | VERIFY                                |
+| Vector                                                 | `pgvector` extension                                     | VERIFY on the chosen host             |
+| Web i18n                                               | `next-intl` or Next's built-in i18n                      | VERIFY                                |
+| PDF (letters)                                          | `@react-pdf/renderer` or `pdf-lib`                       | VERIFY                                |
+| Tracing                                                | LangSmith SDK or OTel exporter to LangSmith              | VERIFY OTel support                   |

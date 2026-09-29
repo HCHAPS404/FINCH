@@ -2,6 +2,30 @@
   "name": "@finch/design-tokens",
   "version": "0.0.0",
   "private": true,
-  "description": "Semantic design tokens shared by web, mobile and desktop. README \u00a734.",
-  "type": "module"
+  "description": "Semantic design tokens shared by web, mobile and desktop. README §34.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./css": "./dist/finch-tokens.css",
+    "./tokens/*": "./dist/tokens/*"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -b tsconfig.build.json && node build-css.mjs",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "vitest run",
+    "clean": "rm -rf dist *.tsbuildinfo"
+  },
+  "devDependencies": {
+    "typescript": "6.0.3",
+    "vitest": "5.0.1",
+    "@vitest/coverage-v8": "5.0.1"
+  }
 }

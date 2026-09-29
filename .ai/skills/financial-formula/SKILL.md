@@ -1,0 +1,52 @@
+---
+name: financial-formula
+description: Add or change a versioned financial formula in @finch/financial-engine with independent golden vectors, invariants and a receipt. Use for any rate, amortization, cost, budget, forecast, tax or FX calculation.
+---
+
+# Skill: financial formula
+
+## When to use
+
+Any new calculation that produces a number a user will see, or any change to existing math.
+
+## Inputs you need
+
+- The spec in `docs/financial-formulas/*.md` (write or update it first if missing).
+- The catalog feature ID (e.g. B1, D1) and the jurisdiction parameters it needs.
+
+## Steps
+
+1. **Spec first.** In `docs/financial-formulas/`, write: formula, inputs with units, output unit,
+   rounding (mode + where), assumptions, edge cases, reference (standard/regulation/textbook).
+2. **Vectors before code.** Create ≥ 4 golden vectors (nominal, boundary, conservation/invariant,
+   error) in `packages/financial-engine/test/vectors/<formulaId>.json`. Expected values must come
+   from an **independent** calculation (spreadsheet or hand derivation) — never from running your
+   own code.
+3. **Red test.** Write the Vitest spec reading the vectors; run it and see it fail.
+4. **Implement** in `packages/financial-engine/src/<area>/<formula>.ts`:
+   - `Money` for amounts (bigint minor units), arbitrary-precision decimal for rates;
+   - no `number` for money, no implicit rounding, no I/O, no imports outside `@finch/contracts`.
+5. **Register** with `registerFormula({ formulaId, version, purpose, inputs, outputUnit, rounding,
+assumptions, reference, edgeCases, implementationPath, testVectors })`.
+6. **Invariants**: add property-style tests (e.g. allocation conserves the total; higher rate never
+   lowers total interest; the last instalment clears the balance).
+7. **Receipt**: the skill wrapper returns `CalcReceipt` with inputs + provenance + outputs + truth
+   class (`ESTIMATED` if any input is estimated).
+8. Changing an existing formula? **New version** (`@2`); keep `@1` and its vectors untouched.
+
+## Verify
+
+```bash
+pnpm --filter @finch/financial-engine test
+pnpm financial:verify
+pnpm lint && pnpm typecheck && pnpm architecture:check
+```
+
+## Done when
+
+Spec + vectors + implementation + registry entry + invariants + receipt; all green; the other founder
+re-derived at least one vector.
+
+## Never
+
+Round implicitly · use floats · edit a formula in place · take expected values from your own output.

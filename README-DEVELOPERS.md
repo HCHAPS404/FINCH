@@ -5,135 +5,135 @@
 <br/>
 
 <img src="https://img.shields.io/badge/README-developers-0E4331?style=for-the-badge&labelColor=053F2B" alt="Developers" />
-<img src="https://img.shields.io/badge/m%C3%A9todo-XP%20%C2%B7%20Agile%20%C2%B7%20CRISP--ML(Q)-1F7A55?style=for-the-badge&labelColor=053F2B" alt="Método" />
+<img src="https://img.shields.io/badge/method-XP%20%C2%B7%20Agile%20%C2%B7%20CRISP--ML(Q)-1F7A55?style=for-the-badge&labelColor=053F2B" alt="Method" />
 <br/>
-<img src="https://img.shields.io/badge/Node-24.21.0-6FCF97?style=flat-square&labelColor=0E4331" alt="Node" />
-<img src="https://img.shields.io/badge/pnpm-11.26.0-6FCF97?style=flat-square&labelColor=0E4331" alt="pnpm" />
-<img src="https://img.shields.io/badge/TypeScript-6.0.3%20strict-6FCF97?style=flat-square&labelColor=0E4331" alt="TypeScript" />
-<img src="https://img.shields.io/badge/deadline-30%20oct%202026%2012%3A00%20COT-6FCF97?style=flat-square&labelColor=0E4331" alt="Deadline" />
+<img src="assets/brand/badges/node.png" alt="Node" height="20" />
+<img src="assets/brand/badges/pnpm.png" alt="pnpm" height="20" />
+<img src="assets/brand/badges/typescript-version.png" alt="TypeScript" height="20" />
+<img src="assets/brand/badges/deadline.png" alt="Deadline" height="20" />
 
 <br/><br/>
 
-**Acuerdo de trabajo de los fundadores de FINCH.** Todo lo del [README público](README.md), más
-cómo trabajamos, qué nos obligamos a cumplir y cómo se entrega.
+**The FINCH founders' working agreement.** Everything in the [public README](README.md), plus how we
+work, what we commit to and how we deliver.
 
 </div>
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
+<a id="dev-index"></a>
+<img src="assets/brand/headings/dev-index.png" alt="Contents" width="100%" />
 
-## 📚 Índice
+1. [Order of authority](#dev-01)
+2. [Team, roles and responsibilities](#dev-02)
+3. [Obligations and duties](#dev-03)
+4. [Development environment](#dev-04)
+5. [Commands](#dev-05)
+6. [Branches, stages and milestones](#dev-06)
+7. [Workflow: from story to merge](#dev-07)
+8. [Method: XP · Agile · CRISP-ML(Q)](#dev-08)
+9. [Definition of Ready and Definition of Done](#dev-09)
+10. [Coding standards](#dev-10)
+11. [AI: in the product and as a tool](#dev-11)
+12. [Security, secrets and data](#dev-12)
+13. [Credits and costs](#dev-13)
+14. [Demo operations and on-call](#dev-14)
+15. [Decisions and escalation](#dev-15)
+16. [Documentation map](#dev-16)
+17. [Agents, rules, skills and Figma](#dev-17)
 
-1. [Jerarquía normativa](#1--jerarquía-normativa)
-2. [Equipo, roles y responsabilidades](#2--equipo-roles-y-responsabilidades)
-3. [Obligaciones y deberes](#3--obligaciones-y-deberes)
-4. [Entorno de desarrollo](#4--entorno-de-desarrollo)
-5. [Comandos](#5--comandos)
-6. [Ramas, etapas e hitos](#6--ramas-etapas-e-hitos)
-7. [Flujo de trabajo: de la historia al merge](#7--flujo-de-trabajo-de-la-historia-al-merge)
-8. [Método: XP · Agile · CRISP-ML(Q)](#8--método-xp--agile--crisp-mlq)
-9. [Definition of Ready y Definition of Done](#9--definition-of-ready-y-definition-of-done)
-10. [Estándares de código](#10--estándares-de-código)
-11. [IA: en el producto y como herramienta](#11--ia-en-el-producto-y-como-herramienta)
-12. [Seguridad, secretos y datos](#12--seguridad-secretos-y-datos)
-13. [Créditos y costos](#13--créditos-y-costos)
-14. [Operación del demo y guardia](#14--operación-del-demo-y-guardia)
-15. [Decisiones y escalamiento](#15--decisiones-y-escalamiento)
-16. [Mapa de documentación](#16--mapa-de-documentación)
+<a id="dev-01"></a>
+<img src="assets/brand/headings/dev-01.png" alt="1. Order of authority" width="100%" />
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
-
-## 1. 🧭 Jerarquía normativa
-
-Cuando dos documentos dicen cosas distintas, manda el de arriba:
+When two documents disagree, the higher one wins:
 
 ```text
-1. Constitución — docs/architecture/CONSTITUTION.md   (las referencias "README §N" apuntan aquí)
-2. ADRs aceptados — docs/architecture/adr/
-3. AGENTS.md y CLAUDE.md                                (reglas para agentes de IA)
-4. Este README-DEVELOPERS.md                            (acuerdo de trabajo)
-5. Catálogo de funciones — docs/hackathon/08            (fuente única de alcance)
-6. Especificaciones y fórmulas — docs/hackathon/, docs/financial-formulas/
-7. Código + tests
-8. Issues y descripciones de PR
+1. Constitution — docs/architecture/CONSTITUTION.md   ("README §N" references point here)
+2. Accepted ADRs — docs/architecture/adr/
+3. AGENTS.md and CLAUDE.md                              (rules for AI agents)
+4. This README-DEVELOPERS.md                            (working agreement)
+5. Feature catalog — docs/hackathon/08                  (single source of scope)
+6. Specifications and formulas — docs/hackathon/, docs/financial-formulas/
+7. Code + tests
+8. Issues and PR descriptions
 ```
 
-## 2. 👥 Equipo, roles y responsabilidades
+<a id="dev-02"></a>
+<img src="assets/brand/headings/dev-02.png" alt="2. Team, roles and responsibilities" width="100%" />
 
-| Rol                                    | Persona                                                  | Responsable de                                                                                                     |
-| -------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Representative ante Devpost**        | HELL                                                     | Envío, comunicación oficial, affidavits, formularios fiscales.                                                     |
-| **Líder técnico backend / IA / infra** | HELL                                                     | Motor financiero, AI Gateway, agente, Market Truth, autorización, datos, Vigía, despliegue, seguridad.             |
-| **Líder de producto / UX / frontend**  | Nairy                                                    | Sistema de diseño, app (PWA), flujos, copy, accesibilidad, evaluación humana (Toloka), video, narrativa del envío. |
-| **Product Owner de la semana**         | Rota: S0 HELL · S1 Nairy · S2 HELL · S3 Nairy · S4 ambos | Prioriza el backlog de la semana, acepta historias en la review, decide la contingencia.                           |
-| **Claude**                             | Herramienta                                              | Arquitectura, especificaciones, ADRs, threat models, revisión profunda, planeación.                                |
-| **Cursor**                             | Herramienta                                              | Implementación multiarchivo, refactor, tests, depuración local.                                                    |
+| Role                                     | Person                                                     | Responsible for                                                                                               |
+| ---------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| **Devpost Representative**               | HELL                                                       | Submission, official communication, affidavits, tax forms.                                                    |
+| **Technical lead: backend / AI / infra** | HELL                                                       | Financial engine, AI Gateway, agent, Market Truth, authorization, data, Watcher, deployment, security.        |
+| **Product / UX / front-end lead**        | Nairy                                                      | Design system, app (PWA), flows, copy, accessibility, human evaluation (Toloka), video, submission narrative. |
+| **Product Owner of the week**            | Rotates: S0 HELL · S1 Nairy · S2 HELL · S3 Nairy · S4 both | Prioritizes the week's backlog, accepts stories at the review, decides on contingency.                        |
+| **Claude**                               | Tool                                                       | Architecture, specifications, ADRs, threat models, deep review, planning.                                     |
+| **Cursor**                               | Tool                                                       | Multi-file implementation, refactoring, tests, local debugging.                                               |
 
-**Matriz RACI de bloques** (R = hace · A = aprueba · C = consultado · I = informado):
+**RACI matrix by block** (R = does · A = approves · C = consulted · I = informed):
 
-| Bloque                             | HELL         | Nairy                                |
-| ---------------------------------- | ------------ | ------------------------------------ |
-| Motor financiero y fórmulas        | R/A          | C (golden vectors independientes: R) |
-| AI Gateway, agente, recibos, Ultra | R/A          | C                                    |
-| Market Truth (Tavily)              | R/A          | I                                    |
-| Autorización y hogar compartido    | R/A          | C                                    |
-| Sistema de diseño y app            | C            | R/A                                  |
-| Flujos de producto y copy          | C            | R/A                                  |
-| Captura (recibos, bóveda)          | R (pipeline) | R (UI) · A                           |
-| Evals y CRISP-ML(Q)                | R (runner)   | R (datasets, Toloka) · A             |
-| Operación del demo                 | R/A          | I                                    |
-| Video y Devpost                    | C            | R/A                                  |
+| Block                              | HELL         | Nairy                             |
+| ---------------------------------- | ------------ | --------------------------------- |
+| Financial engine and formulas      | R/A          | C (independent golden vectors: R) |
+| AI Gateway, agent, receipts, Ultra | R/A          | C                                 |
+| Market Truth (Tavily)              | R/A          | I                                 |
+| Authorization and shared household | R/A          | C                                 |
+| Design system and app              | C            | R/A                               |
+| Product flows and copy             | C            | R/A                               |
+| Capture (receipts, vault)          | R (pipeline) | R (UI) · A                        |
+| Evals and CRISP-ML(Q)              | R (runner)   | R (datasets, Toloka) · A          |
+| Demo operations                    | R/A          | I                                 |
+| Video and Devpost                  | C            | R/A                               |
 
-> Las IA son **herramientas, no autoras** (AGENTS.md §1). Nunca aparecen en el historial ni en
+> AI tools are **tools, not authors** (AGENTS.md §1). They never appear in the history or in
 > CODEOWNERS.
 
-## 3. ⚖️ Obligaciones y deberes
+<a id="dev-03"></a>
+<img src="assets/brand/headings/dev-03.png" alt="3. Obligations and duties" width="100%" />
 
-### Innegociables (romper uno bloquea el merge)
+### Non-negotiables (breaking one blocks the merge)
 
-1. **Nunca atribución de IA** en commits, PRs, headers, changelogs ni release notes.
-2. **Nunca cambiar la identidad git** de nadie (`user.name`, `user.email`).
-3. **El dinero nunca es `number`/float.** `bigint` en unidades menores o decimal de precisión arbitraria.
-4. **Un LLM nunca es autoridad** sobre saldos, tasas, elegibilidad, pagos ni cifras.
-5. **Nunca debilitar** un test, un tipo o un control de seguridad para que algo pase.
-6. **Nunca secretos en el repo** ni en el cliente. Nunca datos reales en desarrollo.
-7. **Nunca push directo a `main`.** Todo entra por PR revisado por el otro fundador.
-8. **FINCH nunca mueve dinero** y **ninguna comisión altera un ranking**.
-9. **Una sola cuenta por persona** en cada programa de créditos (reglas §11 de la hackathon).
+1. **Never AI attribution** in commits, PRs, headers, changelogs or release notes.
+2. **Never change anyone's git identity** (`user.name`, `user.email`).
+3. **Money is never a `number`/float.** `bigint` in minor units or arbitrary-precision decimal.
+4. **An LLM is never the authority** on balances, rates, eligibility, payments or figures.
+5. **Never weaken** a test, a type or a security control to make something pass.
+6. **Never secrets in the repository** or in the client. Never real data in development.
+7. **Never push directly to `main`.** Everything goes in through a PR reviewed by the other founder.
+8. **FINCH never moves money** and **no commission changes a ranking**.
+9. **One account per person** in each credits program (hackathon rules §11).
 
-### Deberes de cada fundador
+### Duties of each founder
 
-| Deber                                                                             | Frecuencia / plazo                   |
-| --------------------------------------------------------------------------------- | ------------------------------------ |
-| Daily de 15 min (ayer · hoy · bloqueos)                                           | Diario, hora fija                    |
-| Revisar los PRs del otro                                                          | **≤ 4 h hábiles** desde que se piden |
-| Correr `pnpm check` antes de cada push                                            | Siempre                              |
-| Mantener el tablero actualizado (WIP ≤ 2)                                         | Continuo                             |
-| Registrar fricciones con Nebius/NVIDIA/Tavily en `docs/hackathon/feedback-log.md` | Cuando ocurran                       |
-| Actualizar el estado de las funciones en el README público (✅ 🚧 🗓️)             | Al cerrar cada historia              |
-| Actualizar el README del paquete si cambia su contrato                            | En el mismo PR                       |
-| Escribir o actualizar el ADR si la decisión es de arquitectura                    | Antes de implementar                 |
-| Asistir a planning, review y retro                                                | Lunes y domingo                      |
-| Respetar el ritmo sostenible (8+ h con pausas, descanso semanal fijo)             | Siempre                              |
-| Guardia del demo en su turno (01–15-dic)                                          | Según rotación (§14)                 |
+| Duty                                                                       | Frequency / deadline                   |
+| -------------------------------------------------------------------------- | -------------------------------------- |
+| 15-minute daily (yesterday · today · blockers)                             | Daily, fixed time                      |
+| Review the other's PRs                                                     | **≤ 4 working hours** from the request |
+| Run `pnpm check` before every push                                         | Always                                 |
+| Keep the board up to date (WIP ≤ 2)                                        | Continuous                             |
+| Log friction with Nebius/NVIDIA/Tavily in `docs/hackathon/feedback-log.md` | When it happens                        |
+| Update feature status in the public README (✅ 🚧 🗓️)                      | When closing each story                |
+| Update the package README when its contract changes                        | In the same PR                         |
+| Write or update the ADR when the decision is architectural                 | Before implementing                    |
+| Attend planning, review and retro                                          | Monday and Sunday                      |
+| Keep a sustainable pace (8+ h with breaks, fixed weekly rest)              | Always                                 |
+| Demo on-call on your shift (1–15 Dec)                                      | Per rotation (§14)                     |
 
-### Deberes del revisor de un PR
+### Duties of a PR reviewer
 
-- Leer el diff completo y ejecutar localmente si toca motor, autorización o dinero.
-- Verificar la Definition of Done (§9) punto por punto.
-- Bloquear si hay: cifra sin recibo, `number` en dinero, secreto, IA con autoridad, test debilitado,
-  PII en logs o analítica.
-- Aprobar o pedir cambios con comentarios concretos. Nunca "LGTM" sin haber leído.
+- Read the whole diff and run it locally if it touches the engine, authorization or money.
+- Check the Definition of Done (§9) item by item.
+- Block on: a figure without a receipt, `number` for money, a secret, AI with authority, a weakened
+  test, PII in logs or analytics.
+- Approve or request changes with concrete comments. Never "LGTM" without reading.
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
+<a id="dev-04"></a>
+<img src="assets/brand/headings/dev-04.png" alt="4. Development environment" width="100%" />
 
-## 4. 🛠️ Entorno de desarrollo
-
-| Herramienta | Versión     | Notas                                                         |
-| ----------- | ----------- | ------------------------------------------------------------- |
-| Node        | **24.21.0** | `.nvmrc`; si falta `corepack`, estás en el Node equivocado.   |
-| pnpm        | **11.26.0** | Vía corepack. `engine-strict` activo.                         |
-| TypeScript  | **6.0.3**   | Fijado por compatibilidad con `typescript-eslint` (ADR-0033). |
-| Docker      | reciente    | PostgreSQL 18.6 local.                                        |
+| Tool       | Version     | Notes                                                          |
+| ---------- | ----------- | -------------------------------------------------------------- |
+| Node       | **24.21.0** | `.nvmrc`; if `corepack` is missing, you are on the wrong Node. |
+| pnpm       | **11.26.0** | Via corepack. `engine-strict` on.                              |
+| TypeScript | **6.0.3**   | Pinned for compatibility with `typescript-eslint` (ADR-0033).  |
+| Docker     | recent      | Local PostgreSQL 18.6.                                         |
 
 ```bash
 git clone https://github.com/HCHAPS404/FINCH.git && cd FINCH
@@ -144,167 +144,174 @@ cp .env.example .env
 pnpm dev:infra
 ```
 
-**Variables de entorno (solo en `.env` local y en el gestor de secretos del host):**
+**Environment variables (only in the local `.env` and the host secret store):**
 
-| Variable                                                                   | Para qué                                                    |
-| -------------------------------------------------------------------------- | ----------------------------------------------------------- |
-| `NEBIUS_API_KEY`                                                           | Token Factory (inferencia)                                  |
-| `NEBIUS_BASE_URL`                                                          | `https://api.tokenfactory.nebius.com/v1/`                   |
-| `NEBIUS_MODEL_FAST` · `_AGENT` · `_DEEP` · `_VISION` · `_EMBED` · `_GUARD` | IDs de modelos por nivel (confirmados con `GET /v1/models`) |
-| `TAVILY_API_KEY`                                                           | Market Truth                                                |
-| `LANGSMITH_API_KEY`                                                        | Traces y datasets                                           |
-| `AI_DAILY_BUDGET_USD` · `AI_SESSION_BUDGET_USD`                            | Presupuestos del AI Gateway                                 |
-| `DATABASE_URL`                                                             | PostgreSQL                                                  |
-| `EMAIL_*` · `WEB_PUSH_*`                                                   | Channel Hub (ADR-0039)                                      |
+| Variable                                                                   | Purpose                                              |
+| -------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `NEBIUS_API_KEY`                                                           | Token Factory (inference)                            |
+| `NEBIUS_BASE_URL`                                                          | `https://api.tokenfactory.nebius.com/v1/`            |
+| `NEBIUS_MODEL_FAST` · `_AGENT` · `_DEEP` · `_VISION` · `_EMBED` · `_GUARD` | Model IDs per tier (confirmed with `GET /v1/models`) |
+| `TAVILY_API_KEY`                                                           | Market Truth                                         |
+| `LANGSMITH_API_KEY`                                                        | Traces and datasets                                  |
+| `AI_DAILY_BUDGET_USD` · `AI_SESSION_BUDGET_USD`                            | AI Gateway budgets                                   |
+| `DATABASE_URL`                                                             | PostgreSQL                                           |
+| `EMAIL_*` · `WEB_PUSH_*`                                                   | Channel Hub (ADR-0039)                               |
 
-## 5. ⌨️ Comandos
+<a id="dev-05"></a>
+<img src="assets/brand/headings/dev-05.png" alt="5. Commands" width="100%" />
 
 ```bash
-pnpm env:doctor           # verifica el toolchain
-pnpm dev:infra            # PostgreSQL en Docker
-pnpm lint                 # ESLint + reglas de la Constitución FINCH
-pnpm typecheck            # TypeScript estricto
-pnpm test                 # unitarios + corrección financiera
-pnpm architecture:check   # fronteras de arquitectura (dependency-cruiser)
-pnpm security:check       # higiene de archivos, gitleaks, auditoría de dependencias
-pnpm financial:verify     # artefacto de corrección financiera
-pnpm check                # lint + format + typecheck + architecture + test
+pnpm env:doctor           # verify the toolchain
+pnpm dev:infra            # PostgreSQL in Docker
+pnpm lint                 # ESLint + FINCH Constitution rules
+pnpm typecheck            # strict TypeScript
+pnpm test                 # unit + financial correctness
+pnpm architecture:check   # architecture boundaries (dependency-cruiser)
+pnpm security:check       # file hygiene, gitleaks, dependency audit
+pnpm financial:verify     # financial correctness artifact
+pnpm ai:sync              # regenerate agent adapters from .ai/
+pnpm check                # ai:check + lint + format + typecheck + architecture + test
 
-node scripts/architecture-check.mjs --self-test   # planta una violación y exige que se detecte
-node scripts/security-check.mjs --self-test       # planta un secreto y exige que se detecte
+node scripts/architecture-check.mjs --self-test   # plants a violation and requires detection
+node scripts/security-check.mjs --self-test       # plants a secret and requires detection
 ```
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
+<a id="dev-06"></a>
+<img src="assets/brand/headings/dev-06.png" alt="6. Branches, stages and milestones" width="100%" />
 
-## 6. 🌿 Ramas, etapas e hitos
-
-Modelo definido en [ADR-0040](docs/architecture/adr/0040-engineering-method-and-branching.md).
+Model defined in [ADR-0040](docs/architecture/adr/0040-engineering-method-and-branching.md).
 
 ```mermaid
-%%{init: {'theme':'base','themeVariables':{'git0':'#0E4331','git1':'#1F7A55','git2':'#6FCF97','git3':'#2E8B57','git4':'#A7E3C1','gitBranchLabel0':'#FFFFFF','gitBranchLabel1':'#FFFFFF','commitLabelColor':'#053F2B'}}}%%
+%%{init: {'theme':'base','themeVariables':{'git0':'#0E4331','git1':'#1F7A55','git2':'#6FCF97','git3':'#145C40','git4':'#A7E3C1','git5':'#256B4E','git6':'#4FB483','git7':'#053F2B','gitBranchLabel0':'#FFFFFF','gitBranchLabel1':'#FFFFFF','gitBranchLabel2':'#053F2B','gitBranchLabel3':'#FFFFFF','gitBranchLabel4':'#053F2B','gitBranchLabel5':'#FFFFFF','gitBranchLabel6':'#053F2B','gitBranchLabel7':'#FFFFFF','commitLabelColor':'#053F2B','commitLabelBackground':'#E8F5EE','tagLabelColor':'#FFFFFF','tagLabelBackground':'#0E4331','tagLabelBorder':'#6FCF97'}}}%%
 gitGraph
   commit id: "docs: plan"
   branch stage/s0-foundation
-  commit id: "etapa S0"
+  commit id: "stage S0"
   branch area/backend
   commit id: "skeleton · DB"
   checkout stage/s0-foundation
   branch area/web
-  commit id: "shell PWA"
+  commit id: "PWA shell"
   checkout stage/s0-foundation
   merge area/backend
   merge area/web
   checkout main
-  merge stage/s0-foundation tag: "H0 · 4-oct"
+  merge stage/s0-foundation tag: "M0 · 4 Oct"
   branch stage/s1-payday
-  commit id: "motor · agente · Payday"
+  commit id: "engine · agent · Payday"
   checkout main
-  merge stage/s1-payday tag: "H1 · 11-oct"
+  merge stage/s1-payday tag: "M1 · 11 Oct"
   branch stage/s2-market-capture-decide
-  commit id: "Tavily · recibos · simuladores"
+  commit id: "Tavily · receipts · simulators"
   checkout main
-  merge stage/s2-market-capture-decide tag: "H2 · 18-oct"
+  merge stage/s2-market-capture-decide tag: "M2 · 18 Oct"
   branch stage/s3-complete
-  commit id: "bóveda · hogar · Vigía · evals"
+  commit id: "vault · household · Watcher · evals"
   checkout main
-  merge stage/s3-complete tag: "H3 · 25-oct"
+  merge stage/s3-complete tag: "M3 · 25 Oct"
   branch stage/s4-release
   commit id: "freeze · video"
   checkout main
-  merge stage/s4-release tag: "v0.1.0-hackathon · 29-oct"
+  merge stage/s4-release tag: "v0.1.0-hackathon · 29 Oct"
 ```
 
-### Ramas permanentes y de etapa
+### Permanent and stage branches
 
-| Rama                             | Propósito                                              | Vida            | Protección                                                                                |
-| -------------------------------- | ------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------- |
-| `main`                           | Producto siempre desplegable; fuente del demo público. | Permanente      | PR obligatorio, 1 aprobación del otro fundador, CI verde, sin push directo ni force-push. |
-| `stage/s0-foundation`            | Sprint 0 — Fundación                                   | 28-sep → 4-oct  | CI verde para merge.                                                                      |
-| `stage/s1-payday`                | Sprint 1 — "Me llegó el sueldo"                        | 5 → 11-oct      | CI verde.                                                                                 |
-| `stage/s2-market-capture-decide` | Sprint 2 — Mercado, captura y decisión                 | 12 → 18-oct     | CI verde.                                                                                 |
-| `stage/s3-complete`              | Sprint 3 — Completar las 45 funciones                  | 19 → 25-oct     | CI verde.                                                                                 |
-| `stage/s4-release`               | Sprint 4 — Freeze, video y envío                       | 26 → 29-oct     | CI verde; solo P0 tras el freeze.                                                         |
-| `release/v0.1.0-hackathon`       | Se corta de `main` en el freeze (27-oct)               | Hasta 15-dic    | Solo lectura.                                                                             |
-| `next`                           | Desarrollo tras el envío                               | 31-oct → 15-dic | CI verde.                                                                                 |
+| Branch                           | Purpose                                               | Lifetime        | Protection                                                                              |
+| -------------------------------- | ----------------------------------------------------- | --------------- | --------------------------------------------------------------------------------------- |
+| `main`                           | Always-deployable product; source of the public demo. | Permanent       | PR required, 1 approval from the other founder, green CI, no direct push or force-push. |
+| `stage/s0-foundation`            | Sprint 0 — Foundation                                 | 28 Sep → 4 Oct  | Green CI to merge.                                                                      |
+| `stage/s1-payday`                | Sprint 1 — "My paycheck arrived"                      | 5 → 11 Oct      | Green CI.                                                                               |
+| `stage/s2-market-capture-decide` | Sprint 2 — Market, capture and decide                 | 12 → 18 Oct     | Green CI.                                                                               |
+| `stage/s3-complete`              | Sprint 3 — Complete the 45 features                   | 19 → 25 Oct     | Green CI.                                                                               |
+| `stage/s4-release`               | Sprint 4 — Freeze, video and submission               | 26 → 29 Oct     | Green CI; P0 only after the freeze.                                                     |
+| `release/v0.1.0-hackathon`       | Cut from `main` at the freeze (27 Oct)                | Until 15 Dec    | Read-only.                                                                              |
+| `next`                           | Development after submission                          | 31 Oct → 15 Dec | Green CI.                                                                               |
 
-**Al inicio de cada sprint:** la rama de etapa se actualiza desde `main`
-(`git switch stage/sN-… && git merge main`). **Al cierre (domingo, review):** PR
-`stage/sN → main`; si el hito está verde se mergea y se etiqueta `hN`.
+**At the start of each sprint:** the stage branch is updated from `main`
+(`git switch stage/sN-… && git merge main`). **At close (Sunday, review):** PR `stage/sN → main`; if
+the milestone is green it is merged and tagged `mN`.
 
-### Hitos por etapa
+### Milestones per stage
 
-| Hito   | Fecha            | Criterio de salida (en la URL pública)                                                                                                                             |
-| ------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **H0** | dom 4-oct        | App shell navegable (5 destinos), onboarding, `/api/health` con Nemotron, chat vía Token Factory, CI verde, deploy automático.                                     |
-| **H1** | dom 11-oct       | Payday Autopilot con recibos, sobres, tarjetas, calendario, ¿me lo puedo permitir?; agente + verificador. **Demo enviable.**                                       |
-| **H2** | dom 18-oct       | Tavily, Opportunity Engine, suscripciones, anomalías, recibos por foto, importación, simuladores, Ultra, memoria, copiloto de derechos.                            |
-| **H3** | dom 25-oct       | Bóveda, buscador NL, hogar, protección, hábitos, briefing, Vigía, push, .ics, correo, gastos fijos, remesas, pasaporte, impuestos, segundo país; evals publicadas. |
-| **H4** | mar 27-oct 18:00 | Code freeze.                                                                                                                                                       |
-| **H5** | jue 29-oct 18:00 | Envío en Devpost + tag `v0.1.0-hackathon`.                                                                                                                         |
+| Milestone | Date             | Exit criterion (at the public URL)                                                                                                                                 |
+| --------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **M0**    | Sun 4 Oct        | Navigable app shell (5 destinations), onboarding, `/api/health` with Nemotron, chat via Token Factory, green CI, automatic deploy.                                 |
+| **M1**    | Sun 11 Oct       | Payday Autopilot with receipts, envelopes, cards, calendar, can I afford it?; agent + verifier. **Demo submittable.**                                              |
+| **M2**    | Sun 18 Oct       | Tavily, Opportunity Engine, subscriptions, anomalies, receipts by photo, import, simulators, Ultra, memory, rights copilot.                                        |
+| **M3**    | Sun 25 Oct       | Vault, NL search, household, protection, habits, briefing, Watcher, push, .ics, email, fixed costs, remittances, passport, taxes, second country; evals published. |
+| **M4**    | Tue 27 Oct 18:00 | Code freeze.                                                                                                                                                       |
+| **M5**    | Thu 29 Oct 18:00 | Devpost submission + tag `v0.1.0-hackathon`.                                                                                                                       |
 
-### Ramas de área (plataformas y disciplinas)
+### Area branches (platforms and disciplines)
 
-Tres niveles: **`main` ← `stage/sN` ← `area/<área>` ← ramas de tarea.** Cada área es el carril de
-integración de una plataforma o disciplina, con dueño fijo.
+Three levels: **`main` ← `stage/sN` ← `area/<area>` ← task branches.** Each area is the integration
+lane of one platform or discipline, with a fixed owner.
 
-| Rama           | Área                       | Plataformas / alcance                                                                  | Stack (ADR)                                                                       | Dueño                           |
-| -------------- | -------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------- |
-| `area/design`  | Diseño y sistema de diseño | Tokens, componentes, iconografía, motion, prototipos; alimenta web, móvil y escritorio | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitución §34)                | Nairy                           |
-| `area/backend` | Backend, motor, IA y datos | API, worker/Vigía, motor financiero, AI Gateway, Market Truth, DB, Channel Hub         | NestJS + Fastify (ADR-0007), PostgreSQL (ADR-0009), `financial-engine`, `ai-core` | HELL                            |
-| `area/web`     | Frontend web               | App web / **PWA instalable** (canal principal del demo) + panel admin                  | Next.js (ADR-0005)                                                                | Nairy                           |
-| `area/mobile`  | App móvil                  | **iOS y Android**                                                                      | React Native + Expo (ADR-0004)                                                    | Nairy (UI) + HELL (integración) |
-| `area/desktop` | App de escritorio          | **Windows, macOS y Linux**                                                             | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL (empaquetado) + Nairy (UI) |
+| Branch         | Area                         | Platforms / scope                                                                  | Stack (ADR)                                                                       | Owner                           |
+| -------------- | ---------------------------- | ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------- |
+| `area/design`  | Design and design system     | Tokens, components, iconography, motion, prototypes; feeds web, mobile and desktop | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitution §34)                | Nairy                           |
+| `area/backend` | Backend, engine, AI and data | API, worker/Watcher, financial engine, AI Gateway, Market Truth, DB, Channel Hub   | NestJS + Fastify (ADR-0007), PostgreSQL (ADR-0009), `financial-engine`, `ai-core` | HELL                            |
+| `area/web`     | Web front end                | Web app / **installable PWA** (main demo channel) + admin panel                    | Next.js (ADR-0005)                                                                | Nairy                           |
+| `area/mobile`  | Mobile app                   | **Android, then iOS**                                                              | React Native + Expo (ADR-0004)                                                    | Nairy (UI) + HELL (integration) |
+| `area/desktop` | Desktop app                  | **Windows, then macOS** (Linux builds come free with Tauri)                        | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL (packaging) + Nairy (UI)   |
 
-**Reglas de área:**
+**Area rules:**
 
-- Una rama de área se **actualiza desde la rama de etapa activa todos los días** (`git merge stage/sN-…`)
-  y **entrega a la etapa por PR al menos cada 2 días** — nunca acumula más de 2 días de divergencia.
-- Al empezar un sprint, cada área se actualiza desde la nueva rama de etapa.
-- Todo el código compartido (contratos, motor, tokens, cliente de API) vive en `packages/` y se consume
-  igual en web, móvil y escritorio; las apps no se importan entre sí (dependency-cruiser).
-- **Alcance en la hackathon:** la **PWA web** es la superficie principal del demo y del video. Móvil y
-  escritorio entregan **apps shell funcionales** (login de demo, "Hoy", bandeja y recibos) que consumen
-  los mismos paquetes, y builds instalables si el tiempo lo permite; su versión completa es P1 (Q1 2027).
-  Ampliar su alcance en la hackathon requiere acuerdo de ambos (impacta la capacidad, 05 §0).
+- An area branch is **updated from the active stage branch every day** (`git merge stage/sN-…`) and
+  **delivers to the stage by PR at least every 2 days** — never more than 2 days of divergence.
+- At the start of a sprint, each area is updated from the new stage branch.
+- All shared code (contracts, engine, tokens, API client) lives in `packages/` and is consumed the
+  same way on web, mobile and desktop; apps never import each other (dependency-cruiser).
+- **Platform order (decision 2026-09-28):** **web → Windows → Android → macOS + iOS**. Everything is
+  proven on web first; see [`docs/delivery/DELEGATION.md`](docs/delivery/DELEGATION.md).
+- **Hackathon scope:** the **web PWA** is the only surface of the demo and the video. `area/desktop`
+  and `area/mobile` stay parked until their phases (Windows from 2 Nov, Android from 23 Nov);
+  widening their scope during the hackathon requires both founders' agreement (it affects capacity,
+  05 §0).
 
-### Ramas de tarea
+### Task branches
 
-Formato: `<tipo>/s<N>-<slug>` — tipo ∈ `feat` · `fix` · `test` · `chore` · `docs` · `security` · `spike`.
-Salen de la **rama de área** correspondiente (o de la etapa si son transversales), viven **≤ 2 días** y
-vuelven por PR a su área.
+Format: `<type>/s<N>-<slug>` — type ∈ `feat` · `fix` · `test` · `chore` · `docs` · `security` ·
+`spike`. They start from the matching **area branch** (or from the stage if cross-cutting), live
+**≤ 2 days** and return by PR to their area.
 
-Ramas del **Sprint 0** ya creadas:
+**Sprint 0** branches already created:
 
-| Rama                             | Sale de               | Tarea (05)                                                          | Resp.        |
-| -------------------------------- | --------------------- | ------------------------------------------------------------------- | ------------ |
-| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + chat Nemotron + CI + deploy                      | HELL         |
-| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 esquema v1 + seeds de personas sintéticas                     | HELL + Nairy |
-| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, tipografía, componentes base, motion, modo oscuro     | Nairy        |
-| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 navegación de 5 destinos, onboarding, PWA instalable          | Nairy        |
-| `feat/s0-mobile-shell`           | `area/mobile`         | Shell Expo iOS/Android consumiendo tokens y cliente de API          | Nairy + HELL |
-| `feat/s0-desktop-shell`          | `area/desktop`        | Shell Tauri Windows/macOS/Linux consumiendo tokens y cliente de API | HELL         |
-| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 licencia (tras D-01), créditos, librería decimal  | HELL         |
-| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 cifras oficiales y entrevistas                                | Nairy        |
+| Branch                           | From                  | Task (05)                                                        | Owner        |
+| -------------------------------- | --------------------- | ---------------------------------------------------------------- | ------------ |
+| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + Nemotron chat + CI + deploy                   | HELL         |
+| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 schema v1 + synthetic persona seeds                        | HELL + Nairy |
+| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, typography, base components, motion, dark mode     | Nairy        |
+| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 5-destination navigation, onboarding, installable PWA      | Nairy        |
+| `feat/s0-mobile-shell`           | `area/mobile`         | **Parked until phase 3 (Android)** — Expo shell                  | Nairy + HELL |
+| `feat/s0-desktop-shell`          | `area/desktop`        | **Parked until phase 2 (Windows)** — Tauri shell                 | HELL         |
+| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 license (after D-01), credits, decimal library | HELL         |
+| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 official figures and interviews                            | Nairy        |
 
-Ramas previstas para los siguientes sprints (se crean el lunes de cada sprint desde su área):
+Branches planned for the following sprints (created on each sprint's Monday from their area):
 
-| Sprint | `area/backend`                                                                                                                                                                                                                                 | `area/design` · `area/web`                                                                                                                               | `area/mobile` · `area/desktop`                               |
-| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------ |
-| S1     | `feat/s1-engine-credit-co` · `feat/s1-engine-personal-finance` · `test/s1-golden-vectors` · `feat/s1-ai-gateway` · `feat/s1-agent-receipts` · `feat/s1-payday-engine` · `docs/s1-threat-model`                                                 | `feat/s1-payday-ui` · `feat/s1-money-screens` · `feat/s1-afford-ui` · `feat/s1-receipt-panel`                                                            | `feat/s1-mobile-today-inbox` · `feat/s1-desktop-today-inbox` |
-| S2     | `feat/s2-market-truth-tavily` · `feat/s2-opportunity-engine` · `feat/s2-import-recurring-anomalies` · `feat/s2-receipt-pipeline` · `feat/s2-decision-cards-ultra` · `feat/s2-memory` · `feat/s2-rights-docs`                                   | `feat/s2-opportunities-ui` · `feat/s2-camera-capture-ui` · `feat/s2-simulators-ui` · `feat/s2-rights-flows` · `test/s2-eval-datasets`                    | `feat/s2-mobile-camera-capture` · `feat/s2-desktop-import`   |
-| S3     | `feat/s3-vault` · `feat/s3-nl-query` · `feat/s3-household` · `feat/s3-watcher-briefing` · `feat/s3-email-channel` · `feat/s3-fixed-costs-remittances` · `feat/s3-passport` · `feat/s3-tax-co` · `feat/s3-second-country` · `chore/s3-demo-ops` | `feat/s3-vault-ui` · `feat/s3-household-ui` · `feat/s3-protection-habits-close` · `feat/s3-push-ics` · `feat/s3-premium-polish` · `test/s3-evals-toloka` | `feat/s3-mobile-push-builds` · `feat/s3-desktop-builds`      |
-| S4     | `fix/s4-bug-bash-*` · `chore/s4-release`                                                                                                                                                                                                       | `docs/s4-readme-devpost` · `fix/s4-bug-bash-*`                                                                                                           | `fix/s4-bug-bash-*`                                          |
+| Sprint | `area/backend`                                                                                                                                                                                                                                 | `area/design` · `area/web`                                                                                                                                                                   |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| S1     | `feat/s1-engine-credit-co` · `feat/s1-engine-personal-finance` · `test/s1-golden-vectors` · `feat/s1-ai-gateway` · `feat/s1-agent-receipts` · `feat/s1-payday-engine` · `docs/s1-threat-model`                                                 | `feat/s1-core-components` · `feat/s1-payday-ui` · `feat/s1-money-screens` · `feat/s1-afford-ui` · `feat/s1-receipt-panel`                                                                    |
+| S2     | `feat/s2-market-truth-tavily` · `feat/s2-opportunity-engine` · `feat/s2-import-recurring-anomalies` · `feat/s2-receipt-pipeline` · `feat/s2-decision-cards-ultra` · `feat/s2-memory` · `feat/s2-rights-docs`                                   | `feat/s2-decision-patterns` · `feat/s2-brand-motion` · `feat/s2-opportunities-ui` · `feat/s2-camera-capture-ui` · `feat/s2-simulators-ui` · `feat/s2-rights-flows` · `test/s2-eval-datasets` |
+| S3     | `feat/s3-vault` · `feat/s3-nl-query` · `feat/s3-household` · `feat/s3-watcher-briefing` · `feat/s3-email-channel` · `feat/s3-fixed-costs-remittances` · `feat/s3-passport` · `feat/s3-tax-co` · `feat/s3-second-country` · `chore/s3-demo-ops` | `feat/s3-vault-ui` · `feat/s3-household-ui` · `feat/s3-protection-habits-close` · `feat/s3-push-ics` · `feat/s3-premium-polish` · `test/s3-evals-toloka`                                     |
+| S4     | `fix/s4-bug-bash-*` · `chore/s4-release`                                                                                                                                                                                                       | `docs/s4-readme-devpost` · `fix/s4-bug-bash-*`                                                                                                                                               |
 
-## 7. 🔁 Flujo de trabajo: de la historia al merge
+Desktop and mobile branches for phases 2–4 are listed in
+[`docs/delivery/DELEGATION.md`](docs/delivery/DELEGATION.md) §4.
+
+<a id="dev-07"></a>
+<img src="assets/brand/headings/dev-07.png" alt="7. Workflow" width="100%" />
 
 ```text
-Historia (tablero, "Ready") → rama de tarea desde area/<área> (o stage/sN si es transversal) → TDD donde aplique → commits pequeños
-→ pnpm check → PR a su área (plantilla) → revisión del otro fundador (≤ 4 h) → CI verde
-→ merge (squash) → PR área → stage (≤ 2 días) → preview → actualizar estado en README público → tarjeta a "Done"
+Story (board, "Ready") → task branch from area/<area> (or stage/sN if cross-cutting) → TDD where it applies → small commits
+→ pnpm check → PR to its area (template) → review by the other founder (≤ 4 h) → green CI
+→ merge (squash) → PR area → stage (≤ 2 days) → preview → update status in the public README → card to "Done"
 ```
 
-**Commits:** [Conventional Commits](https://www.conventionalcommits.org/), en inglés, sin
-atribución de IA.
+**Commits:** [Conventional Commits](https://www.conventionalcommits.org/), in English, with no AI
+attribution.
 
 ```text
 feat(budgeting): allocate paycheck across obligations and goals
@@ -313,141 +320,179 @@ test(financial-engine): add golden vectors for rate conversion
 docs(adr): add channel hub decision
 ```
 
-**Descripción del PR (en este orden, AGENTS.md):** archivos cambiados · resumen · tests ejecutados ·
-resultado · impacto de seguridad · impacto de arquitectura · función del catálogo (ID) · capturas
-si es UI.
+**PR description (in this order, AGENTS.md):** files changed · summary · tests run · result ·
+security impact · architecture impact · catalog feature (ID) · screenshots if UI.
 
-## 8. 🧪 Método: XP · Agile · CRISP-ML(Q)
+<a id="dev-08"></a>
+<img src="assets/brand/headings/dev-08.png" alt="8. Method" width="100%" />
 
-Detalle en [`docs/architecture/SOFTWARE-ARCHITECTURE.md`](docs/architecture/SOFTWARE-ARCHITECTURE.md) §5–§7.
+Detail in [`docs/architecture/SOFTWARE-ARCHITECTURE.md`](docs/architecture/SOFTWARE-ARCHITECTURE.md)
+§5–§7.
 
-| Día     | Ceremonia    | Duración | Resultado                                                                           |
-| ------- | ------------ | -------- | ----------------------------------------------------------------------------------- |
-| Lunes   | **Planning** | 60 min   | Objetivo del sprint, historias elegidas, riesgos, ramas de tarea creadas.           |
-| Diario  | **Daily**    | 15 min   | Bloqueos resueltos o escalados.                                                     |
-| Domingo | **Review**   | 45 min   | Demo en la URL pública contra el hito; merge `stage → main` o contingencia (05 §5). |
-| Domingo | **Retro**    | 30 min   | Mantener · cambiar · probar; métricas de IA (CRISP-ML(Q) fase 6).                   |
+| Day    | Ceremony     | Duration | Outcome                                                                                    |
+| ------ | ------------ | -------- | ------------------------------------------------------------------------------------------ |
+| Monday | **Planning** | 60 min   | Sprint goal, chosen stories, risks, task branches created.                                 |
+| Daily  | **Daily**    | 15 min   | Blockers resolved or escalated.                                                            |
+| Sunday | **Review**   | 45 min   | Demo at the public URL against the milestone; merge `stage → main` or contingency (05 §5). |
+| Sunday | **Retro**    | 30 min   | Keep · change · try; AI metrics (CRISP-ML(Q) phase 6).                                     |
 
-**XP en una línea por práctica:** TDD obligatorio en motor, autorización, verificador y DSL ·
-parejas en lo crítico · integración continua · releases pequeñas · diseño simple · refactor continuo ·
-propiedad colectiva · estándares comunes · ritmo sostenible · cliente en sitio (PO rotativo +
-testers) · planning game semanal · metáfora "CFO con recibos".
+**XP in one line per practice:** TDD mandatory in the engine, authorization, verifier and DSL ·
+pairing on the critical parts · continuous integration · small releases · simple design · continuous
+refactoring · collective ownership · shared standards · sustainable pace · on-site customer (rotating
+PO + testers) · weekly planning game · the "CFO with receipts" metaphor.
 
-**CRISP-ML(Q) para cada componente de IA (ML-1…ML-10):** comprensión del negocio y datos →
-ingeniería de datos (datasets sintéticos) → ingeniería del modelo (nivel, prompt, esquema) →
-evaluación (batch, Toloka, Ultra) → despliegue (flag, fallback, presupuesto) → monitoreo (verificador,
-fallbacks, costo, latencia). **Ningún prompt o modelo nuevo entra sin pasar la evaluación.**
+**CRISP-ML(Q) for every AI component (ML-1…ML-10):** business and data understanding → data
+engineering (synthetic datasets) → model engineering (tier, prompt, schema) → evaluation (batch,
+Toloka, Ultra) → deployment (flag, fallback, budget) → monitoring (verifier, fallbacks, cost,
+latency). **No new prompt or model ships without passing evaluation.**
 
-<img src="assets/brand/finch-divider.png" width="100%" alt="" />
+<a id="dev-09"></a>
+<img src="assets/brand/headings/dev-09.png" alt="9. Ready and Done" width="100%" />
 
-## 9. ✅ Definition of Ready y Definition of Done
+**Ready** (before starting):
 
-**Ready** (antes de empezar):
+- [ ] Catalog feature ID and clear acceptance criteria.
+- [ ] Formula/skill identified (and its version) if there are figures.
+- [ ] Design available if it is UI; copy in ES/EN.
+- [ ] Risk tier R0–R4 assigned; ADR identified if applicable.
 
-- [ ] ID de función del catálogo y criterios de aceptación claros.
-- [ ] Fórmula/skill identificada (y su versión) si hay cifras.
-- [ ] Diseño disponible si es UI; copy en ES/EN.
-- [ ] Riesgo R0–R4 asignado; ADR identificado si aplica.
+**Done** (before merging; complements Constitution §75):
 
-**Done** (antes del merge; complementa la Constitución §75):
-
-- [ ] Criterios de aceptación del catálogo cumplidos y demostrados.
-- [ ] Tests: unitarios; golden vectors para fórmulas; autorización para datos compartidos; E2E del flujo principal.
-- [ ] `pnpm check` verde local y en CI.
-- [ ] Toda cifra visible con recibo; clases de verdad correctas.
-- [ ] Sin PII en logs/analítica; secretos fuera del código.
-- [ ] Estados vacío / cargando / error / desactualizado diseñados.
-- [ ] Accesible (teclado, lector de pantalla, contraste AA) y responsive.
+- [ ] Catalog acceptance criteria met and demonstrated.
+- [ ] Tests: unit; golden vectors for formulas; authorization for shared data; E2E of the main flow.
+- [ ] `pnpm check` green locally and in CI.
+- [ ] Every visible figure with a receipt; correct truth classes.
+- [ ] No PII in logs/analytics; secrets out of the code.
+- [ ] Empty / loading / error / stale states designed.
+- [ ] Accessible (keyboard, screen reader, AA contrast) and responsive.
 - [ ] ES/EN.
-- [ ] Modos de fallo y observabilidad documentados en el README del módulo.
-- [ ] Para IA: prompt versionado, eval ejecutada, resultado registrado.
-- [ ] Revisado y aprobado por el otro fundador.
+- [ ] Failure modes and observability documented in the module README.
+- [ ] For AI: versioned prompt, eval run, result recorded.
+- [ ] Reviewed and approved by the other founder.
 
-## 10. 📐 Estándares de código
+<a id="dev-10"></a>
+<img src="assets/brand/headings/dev-10.png" alt="10. Coding standards" width="100%" />
 
-- **TypeScript estricto**; sin `any`; errores con la taxonomía de `packages/contracts`.
-- **Dinero:** `Money` de `packages/financial-engine`; redondeo siempre explícito; nunca `toNumber()`.
-- **Fórmulas:** registradas con `formulaId@version`; cambiar = nueva versión; nunca editar en sitio.
-- **Módulos hexagonales:** `domain/ · application/ · ports/ · adapters/`; sin lecturas cruzadas de tablas.
-- **Validación en fronteras** con Zod; respuestas de IA siempre validadas por esquema.
-- **Idempotencia** en comandos sensibles y consumidores de eventos.
-- **UI:** solo tokens de `packages/design-tokens`; nada comunicado solo por color; badges de verdad con texto e ícono.
-- **i18n:** ningún texto visible hardcodeado; formatos por locale; reglas de país en `jurisdictions/`.
-- **Nombres:** código y commits en inglés; documentación interna en español.
+- **Strict TypeScript**; no `any`; errors from the `packages/contracts` taxonomy.
+- **Money:** `Money` from `packages/financial-engine`; rounding always explicit; never `toNumber()`.
+- **Formulas:** registered as `formulaId@version`; a change = a new version; never edited in place.
+- **Hexagonal modules:** `domain/ · application/ · ports/ · adapters/`; no cross-table reads.
+- **Validation at boundaries** with Zod; AI responses always schema-validated.
+- **Idempotency** in sensitive commands and event consumers.
+- **UI:** only tokens from `packages/design-tokens`; nothing conveyed by color alone; truth badges with
+  text and icon.
+- **i18n:** no hardcoded visible text; per-locale formats; country rules in `jurisdictions/`.
+- **Language:** the repository is in English — code, commits, documentation, images and assets. The
+  product UI is bilingual (es-CO / en) through message files.
 
-## 11. 🤖 IA: en el producto y como herramienta
+<a id="dev-11"></a>
+<img src="assets/brand/headings/dev-11.png" alt="11. AI in the product and as a tool" width="100%" />
 
-**En el producto (runtime):**
+**In the product (runtime):**
 
-- Todo acceso a modelos pasa por el **AI Gateway** (`packages/ai-core`).
-- El modelo escribe **marcadores**, nunca cifras; el verificador rinde números solo desde recibos.
-- Contenido de web, correo y documentos = **dato no confiable**, nunca instrucciones.
-- Solo modelos NVIDIA Nemotron en Token Factory para razonamiento (requisito de la hackathon);
-  Claude **no** se usa dentro del producto.
+- All model access goes through the **AI Gateway** (`packages/ai-core`).
+- The model writes **placeholders**, never figures; the verifier renders numbers only from receipts.
+- Web, email and document content = **untrusted data**, never instructions.
+- Only NVIDIA Nemotron models on Token Factory for reasoning (hackathon requirement); Claude is
+  **not** used inside the product.
 
-**Como herramienta de desarrollo:**
+**As a development tool:**
 
-- Claude y Cursor son herramientas; nunca aprueban su propio cambio crítico.
-- Nunca editan simultáneamente el mismo worktree.
-- Todo lo que generan pasa por `pnpm check` y por la revisión del otro fundador.
-- Verificar versiones y APIs contra documentación oficial; nunca inventar.
+- Claude and Cursor are tools; they never approve their own critical change.
+- They never edit the same worktree at the same time.
+- Everything they generate goes through `pnpm check` and the other founder's review.
+- Verify versions and APIs against official documentation; never invent.
 
-## 12. 🔐 Seguridad, secretos y datos
+<a id="dev-12"></a>
+<img src="assets/brand/headings/dev-12.png" alt="12. Security, secrets and data" width="100%" />
 
-- Secretos solo en `.env` local (ignorado) y en el gestor de secretos del host. Rotación inmediata ante cualquier exposición.
-- `pnpm security:check` antes de hacer público el repo y en CI.
-- Datos **sintéticos** en desarrollo y demo; datos reales solo en espacios privados del propio usuario.
-- PII redactada antes de cualquier LLM; nunca en logs, traces ni analítica.
-- Documentos: cuarentena, tipos permitidos, cifrado en reposo, borrado real.
-- Threat model por función R1+ en `docs/architecture/threat-models/`.
+- Secrets only in the local `.env` (ignored) and the host secret store. Immediate rotation on any
+  exposure.
+- `pnpm security:check` before making the repository public and in CI.
+- **Synthetic** data in development and the demo; real data only in the user's own private spaces.
+- PII redacted before any LLM; never in logs, traces or analytics.
+- Documents: quarantine, allowed types, encryption at rest, real deletion.
+- A threat model per R1+ feature in `docs/architecture/threat-models/`.
 
-## 13. 💳 Créditos y costos
+<a id="dev-13"></a>
+<img src="assets/brand/headings/dev-13.png" alt="13. Credits and costs" width="100%" />
 
-| Servicio             | Crédito                                                           | Dueño de la cuenta       |
-| -------------------- | ----------------------------------------------------------------- | ------------------------ |
-| Nebius Token Factory | USD 25 promo + USD 25 Builders (por persona)                      | Cada fundador, su cuenta |
-| Tavily               | Plan gratuito + add-on del Builders (HELL: 4.125 créditos add-on) | Cada fundador, su cuenta |
-| LangSmith · Toloka   | USD 100 c/u (Builders)                                            | HELL                     |
+| Service              | Credit                                                   | Account owner                   |
+| -------------------- | -------------------------------------------------------- | ------------------------------- |
+| Nebius Token Factory | USD 25 promo + USD 25 Builders (per person)              | Each founder, their own account |
+| Tavily               | Free plan + Builders add-on (HELL: 4,125 add-on credits) | Each founder, their own account |
+| LangSmith · Toloka   | USD 100 each (Builders)                                  | HELL                            |
 
-- Registrar saldos (nunca llaves) en `docs/hackathon/credits.md` cada lunes.
-- **Reservar ≥ 40 % del crédito de inferencia para el periodo de jurados (01–15-dic).**
-- Presupuesto de caja máximo según decisión D-08.
+- Record balances (never keys) in `docs/hackathon/credits.md` every Monday.
+- **Reserve ≥ 40 % of the inference credit for the judging period (1–15 Dec).**
+- Maximum cash budget per decision D-08.
 
-## 14. 📟 Operación del demo y guardia
+<a id="dev-14"></a>
+<img src="assets/brand/headings/dev-14.png" alt="14. Demo operations and on-call" width="100%" />
 
-- Monitor de uptime con alertas a ambos; revisión diaria de salud y créditos.
-- Despliegues solo desde CI; tras el envío, solo desde `release/v0.1.0-hackathon`.
-- **Guardia 01–15-dic:** HELL días impares, Nairy días pares; runbook en `docs/operations/runbooks/hackathon-demo.md`.
-- Incidente: estabilizar → comunicar al otro fundador → registrar → postmortem breve.
+- Uptime monitor alerting both founders; daily review of health and credits.
+- Deploys only from CI; after submission, only from `release/v0.1.0-hackathon`.
+- **On-call 1–15 Dec:** HELL on odd days, Nairy on even days; runbook in
+  `docs/operations/runbooks/hackathon-demo.md`.
+- Incident: stabilize → tell the other founder → record → short postmortem.
 
-## 15. 🧯 Decisiones y escalamiento
+<a id="dev-15"></a>
+<img src="assets/brand/headings/dev-15.png" alt="15. Decisions and escalation" width="100%" />
 
 ```text
-STOP → EXPLAIN → PROPOSE → WAIT (si la decisión es material)
+STOP → EXPLAIN → PROPOSE → WAIT (when the decision is material)
 ```
 
-- Decisiones de arquitectura → **ADR** antes de implementar (Constitución §76).
-- Decisiones de producto/alcance → catálogo (08) + acuerdo de ambos fundadores.
-- Decisiones abiertas → `docs/hackathon/07-risks-and-decisions.md` (D-01…D-13).
-- Desacuerdo → cada uno expone en 5 min; decide el Product Owner de la semana; se registra.
+- Architecture decisions → **ADR** before implementing (Constitution §76).
+- Product/scope decisions → catalog (08) + agreement of both founders.
+- Open decisions → `docs/hackathon/07-risks-and-decisions.md` (D-01…D-13).
+- Disagreement → each presents in 5 minutes; the Product Owner of the week decides; it is recorded.
 
-## 16. 🗺️ Mapa de documentación
+<a id="dev-16"></a>
+<img src="assets/brand/headings/dev-16.png" alt="16. Documentation map" width="100%" />
 
-| Documento                                                                                  | Contenido                                                                                                         |
-| ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-| [`README.md`](README.md)                                                                   | Documentación pública del producto (inglés)                                                                       |
-| [`docs/architecture/CONSTITUTION.md`](docs/architecture/CONSTITUTION.md)                   | Constitución de ingeniería y producto                                                                             |
-| [`docs/architecture/SOFTWARE-ARCHITECTURE.md`](docs/architecture/SOFTWARE-ARCHITECTURE.md) | Arquitectura de software, CRISP-ML(Q), XP, Agile                                                                  |
-| [`docs/architecture/adr/`](docs/architecture/adr/)                                         | Decisiones de arquitectura (ADR-0001…0040)                                                                        |
-| [`docs/hackathon/`](docs/hackathon/)                                                       | Plan de la hackathon: reglas, estrategia, producto, arquitectura, IA, cronograma, kit de envío, riesgos, catálogo |
-| [`docs/financial-formulas/`](docs/financial-formulas/)                                     | Contratos matemáticos del motor                                                                                   |
-| [`AGENTS.md`](AGENTS.md) · [`CLAUDE.md`](CLAUDE.md)                                        | Reglas para agentes de IA                                                                                         |
-| [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md)                        | Contribución y seguridad                                                                                          |
+| Document                                                                                   | Contents                                                                                             |
+| ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------- |
+| [`README.md`](README.md)                                                                   | Public product documentation                                                                         |
+| [`docs/architecture/CONSTITUTION.md`](docs/architecture/CONSTITUTION.md)                   | Engineering and product Constitution                                                                 |
+| [`docs/architecture/SOFTWARE-ARCHITECTURE.md`](docs/architecture/SOFTWARE-ARCHITECTURE.md) | Software architecture, CRISP-ML(Q), XP, Agile                                                        |
+| [`docs/architecture/adr/`](docs/architecture/adr/)                                         | Architecture decisions (ADR-0001…0041)                                                               |
+| [`docs/hackathon/`](docs/hackathon/)                                                       | Hackathon plan: rules, strategy, product, architecture, AI, schedule, submission kit, risks, catalog |
+| [`docs/financial-formulas/`](docs/financial-formulas/)                                     | The engine's mathematical contracts                                                                  |
+| [`AGENTS.md`](AGENTS.md) · [`CLAUDE.md`](CLAUDE.md)                                        | Rules for AI agents                                                                                  |
+| [`CONTRIBUTING.md`](CONTRIBUTING.md) · [`SECURITY.md`](SECURITY.md)                        | Contribution and security                                                                            |
+| [`docs/design/`](docs/design/)                                                             | Design principles, Figma, toolchain, front-end architecture, component map                           |
+| [`docs/delivery/DELEGATION.md`](docs/delivery/DELEGATION.md)                               | Delegation by branch, sprints and platform phases                                                    |
+| [`docs/quality/HARNESS.md`](docs/quality/HARNESS.md)                                       | Quality harness and its status                                                                       |
+| [`.ai/`](.ai/)                                                                             | Source of rules and skills for every agent                                                           |
+
+<a id="dev-17"></a>
+<img src="assets/brand/headings/dev-17.png" alt="17. Agents, rules, skills and Figma" width="100%" />
+
+One context system for **Claude Code, Cursor, Codex and Antigravity**.
+
+| Piece                    | Where                                                                                                                                              | What it does                                                                                                                                                                                                                                                                        |
+| ------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Rules** (source)       | `.ai/rules/*.md`                                                                                                                                   | 9 rules: core, financial correctness, architecture, AI runtime, security, premium front end (anti-slop), testing, Figma handoff, platforms.                                                                                                                                         |
+| **Skills** (source)      | `.ai/skills/<name>/SKILL.md`                                                                                                                       | 14 executable playbooks: `financial-formula`, `domain-module`, `api-endpoint`, `ai-component`, `market-truth-source`, `premium-screen`, `ui-component`, `figma-to-code`, `design-critique`, `platform-port`, `db-migration`, `security-review`, `pr-ready`, `hackathon-submission`. |
+| **Adapters** (generated) | `.claude/skills/` · `.cursor/rules/` · block in `AGENTS.md` (Codex) · imports in `CLAUDE.md` · `.agent/rules` and `.agent/workflows` (Antigravity) | Generated with `pnpm ai:sync`; **never edited by hand**.                                                                                                                                                                                                                            |
+| **Verification**         | `pnpm ai:check` (inside `pnpm check` and CI)                                                                                                       | Fails when an adapter is missing, stale or hand-edited.                                                                                                                                                                                                                             |
+| **Figma**                | `.mcp.json` (Claude Code) · `.cursor/mcp.json` (Cursor)                                                                                            | Figma's official MCP server (`https://mcp.figma.com/mcp`); Codex and Antigravity are configured per user. Guide: [`docs/design/FIGMA.md`](docs/design/FIGMA.md).                                                                                                                    |
+
+**Changing a rule or skill:** edit the source in `.ai/` → `pnpm ai:sync` → commit source and
+adapters in the same PR.
+
+**Design and quality:** principles and anti-slop blacklist in
+[`docs/design/DESIGN-PRINCIPLES.md`](docs/design/DESIGN-PRINCIPLES.md) · front-end architecture in
+[`docs/design/FRONTEND-ARCHITECTURE.md`](docs/design/FRONTEND-ARCHITECTURE.md) · tokens with verified
+AA contrast in [`packages/design-tokens`](packages/design-tokens/README.md) · harness in
+[`docs/quality/HARNESS.md`](docs/quality/HARNESS.md) · delegation by branch and platform in
+[`docs/delivery/DELEGATION.md`](docs/delivery/DELEGATION.md).
 
 <div align="center">
 <br/>
 <img src="assets/brand/finch-app-icon-green.png" width="64" alt="FINCH" />
 
-<sub><b>FINCH</b> · construido por sus fundadores · Nemotron explica. La matemática decide.</sub>
+<sub><b>FINCH</b> · built by its founders · Nemotron explains. Math decides.</sub>
 
 </div>

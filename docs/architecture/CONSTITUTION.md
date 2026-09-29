@@ -1,24 +1,24 @@
 # FINCH
 ## Financial Decision & Action OS
 
-> **Estado:** `APPROVED FOR SCAFFOLD`  
-> **Documento:** README raíz / Engineering & Product Constitution  
-> **Versión:** 1.0.0  
-> **Baseline:** 17 de septiembre de 2026  
-> **Mercado inicial:** Colombia  
-> **Plataformas:** Android · iOS · Web · Windows · macOS · Linux  
-> **Modelo de construcción:** founder-led, AI-assisted engineering con Claude + Cursor; GitHub como source of truth  
-> **Principio rector:** el tamaño del equipo no limita el nivel arquitectónico. La complejidad se acepta cuando una capacidad real de FINCH la justifica.
+> **Status:** `APPROVED FOR SCAFFOLD`  
+> **Document:** Engineering & Product Constitution (the root README until 2026-09-28, ADR-0040)  
+> **Version:** 1.0.0  
+> **Baseline:** 17 September 2026  
+> **Initial market:** Colombia  
+> **Platforms:** Android · iOS · Web · Windows · macOS · Linux  
+> **Build model:** founder-led, AI-assisted engineering with Claude + Cursor; GitHub as the source of truth  
+> **Guiding principle:** team size does not limit the architectural level. Complexity is accepted when a real FINCH capability justifies it.
 
 ---
 
-# 1. Qué es FINCH
+# 1. What FINCH is
 
-FINCH es una plataforma financiera cuyo objetivo es evolucionar desde una aplicación de inteligencia financiera personal hacia un **Financial Decision & Action OS**: un sistema capaz de comprender el estado financiero de una persona, hogar o empresa, simular decisiones, comparar alternativas, explicar consecuencias y, cuando exista autorización y una infraestructura regulada apropiada, ejecutar acciones financieras de forma controlada y auditable.
+FINCH is a financial platform whose goal is to evolve from a personal financial intelligence application into a **Financial Decision & Action OS**: a system able to understand the financial state of a person, household or company, simulate decisions, compare alternatives, explain consequences and, when there is authorization and appropriate regulated infrastructure, execute financial actions in a controlled and auditable way.
 
-FINCH no se concibe como un simple presupuesto, una hoja de cálculo con interfaz bonita, un chatbot que genera consejos genéricos ni un agregador de cuentas. Su núcleo es una representación verificable y versionada de la realidad financiera del usuario —el **Financial Twin**— sobre la cual operan motores deterministas de cálculo, forecast, comparación, detección de oportunidades y workflows de acción.
+FINCH is not conceived as a simple budget, a spreadsheet with a pretty interface, a chatbot that generates generic advice or an account aggregator. Its core is a verifiable, versioned representation of the user's financial reality —the **Financial Twin**— on top of which deterministic engines for calculation, forecasting, comparison, opportunity detection and action workflows operate.
 
-La arquitectura conceptual del producto tiene tres capas:
+The product's conceptual architecture has three layers:
 
 ```text
 FINCH UNDERSTANDS
@@ -31,33 +31,33 @@ FINCH ACTS
 Approval + workflow + provider + execution + reconciliation + outcome
 ```
 
-FINCH no pretende reemplazar bancos, BRE-B, ACH, PSE, adquirentes, entidades vigiladas ni rails financieros. La visión defendible es convertirse en una **capa de inteligencia, decisión y orquestación** por encima de infraestructura financiera existente.
+FINCH does not aim to replace banks, BRE-B, ACH, PSE, acquirers, supervised entities or financial rails. The defensible vision is to become an **intelligence, decision and orchestration layer** on top of existing financial infrastructure.
 
 ---
 
-# 2. Alcance de este README
+# 2. Scope of this document
 
-Este archivo es la puerta de entrada oficial al repositorio. Debe permitir que una persona o agente de software entienda:
+This file is the official entry point to the repository's engineering rules. It must allow a person or a software agent to understand:
 
-- qué es FINCH;
-- cómo está estructurado;
-- cuáles son sus invariantes;
-- qué tecnología utiliza;
-- qué tecnología puede incorporar después;
-- cómo se modelan identidad, tenancy y datos financieros;
-- cómo se desarrolla con Claude y Cursor;
-- cómo se prueba;
-- cómo se despliega;
-- cómo se observa;
-- cómo se recupera de fallos;
-- qué artefactos debe producir cada cambio;
-- qué decisiones requieren ADR;
-- qué significa que una feature esté terminada;
-- cuáles son las etapas de implementación.
+- what FINCH is;
+- how it is structured;
+- what its invariants are;
+- what technology it uses;
+- what technology it may adopt later;
+- how identity, tenancy and financial data are modelled;
+- how it is developed with Claude and Cursor;
+- how it is tested;
+- how it is deployed;
+- how it is observed;
+- how it recovers from failures;
+- what artifacts every change must produce;
+- which decisions require an ADR;
+- what it means for a feature to be done;
+- what the implementation stages are.
 
-El README **no sustituye** la documentación especializada. Actúa como índice y contrato de alto nivel.
+This document **does not replace** specialized documentation. It acts as an index and a high-level contract.
 
-Jerarquía normativa recomendada del repositorio:
+Recommended order of authority for the repository:
 
 ```text
 1. Architecture Constitution / Security invariants
@@ -70,48 +70,48 @@ Jerarquía normativa recomendada del repositorio:
 8. Issues / PR descriptions
 ```
 
-Un ADR aceptado puede superseder una decisión previa del masterplan, pero no puede romper silenciosamente una cláusula constitucional: para ello debe declarar explícitamente qué cláusula cambia y por qué.
+An accepted ADR may supersede an earlier masterplan decision, but it may not silently break a constitutional clause: to do so it must state explicitly which clause changes and why.
 
 ---
 
-# 3. Resultado del último architecture review
+# 3. Outcome of the latest architecture review
 
-Antes de declarar este README listo para scaffold se revisó el masterplan v0.2.0. Los principales cambios incorporados aquí son los siguientes.
+Before declaring this document ready for scaffolding, masterplan v0.2.0 was reviewed. The main changes incorporated here are the following.
 
-## 3.1 El sistema deja de estar centrado en `user_id`
+## 3.1 The system stops being centered on `user_id`
 
-Este es el cambio estructural más importante.
+This is the most important structural change.
 
-FINCH quiere servir progresivamente a:
+FINCH progressively wants to serve:
 
-- una persona;
-- un hogar;
-- una pareja;
-- un independiente;
-- una microempresa;
-- una empresa;
-- un equipo financiero;
-- usuarios delegados.
+- a person;
+- a household;
+- a couple;
+- a self-employed worker;
+- a micro-business;
+- a company;
+- a finance team;
+- delegated users.
 
-Por ello `User` no puede ser a la vez identidad, tenant, dueño financiero y unidad contable.
+Therefore `User` cannot be identity, tenant, financial owner and accounting unit all at once.
 
-FINCH separará:
+FINCH will separate:
 
 ```text
 Principal
-    quién se autentica
+    who authenticates
 
 Party
-    quién es la persona/organización económicamente representada
+    which person/organization is economically represented
 
 Workspace
-    frontera de aislamiento, colaboración y configuración
+    boundary of isolation, collaboration and configuration
 
 Membership / Grant
-    qué puede hacer un Principal dentro de un Workspace o sobre un recurso
+    what a Principal may do inside a Workspace or on a resource
 ```
 
-Ejemplo:
+Example:
 
 ```text
 Helmut (Principal)
@@ -121,7 +121,7 @@ Personal Workspace
 Helmut Person Party
 ```
 
-Ejemplo hogar:
+Household example:
 
 ```text
 Principal A ─┐
@@ -132,7 +132,7 @@ Principal B ─┘                     │
                                    └─ selectively shared accounts
 ```
 
-Ejemplo empresa:
+Company example:
 
 ```text
 Principal CFO ─┐
@@ -140,23 +140,23 @@ Principal Ops ─┼─ Membership → ACME Workspace → Organization Party
 Principal CEO ─┘
 ```
 
-Todas las tablas tenant-owned deben usar `workspace_id`. `principal_id` se usa para actor/auditoría; `party_id` para propiedad económica cuando aplique.
+Every tenant-owned table must use `workspace_id`. `principal_id` is used for actor/audit; `party_id` for economic ownership where applicable.
 
-Esto evita una migración traumática cuando aparezca FINCH Business.
+This avoids a traumatic migration when FINCH Business arrives.
 
-## 3.2 Se formaliza una arquitectura de autorización relacional
+## 3.2 A relational authorization architecture is formalized
 
-RBAC simple no es suficiente para:
+Simple RBAC is not enough for:
 
-- cuentas compartidas;
-- hogares;
-- organizaciones;
-- delegaciones;
-- soporte;
-- administradores;
-- acciones de alto riesgo.
+- shared accounts;
+- households;
+- organizations;
+- delegations;
+- support;
+- administrators;
+- high-risk actions.
 
-El contrato conceptual será:
+The conceptual contract will be:
 
 ```text
 authorize(
@@ -168,54 +168,54 @@ authorize(
 )
 ```
 
-La implementación inicial puede ser código TypeScript tipado y testeado. Si la complejidad de políticas lo justifica se podrá evaluar Cedar/AWS Verified Permissions, OPA u otro policy engine sin cambiar los dominios.
+The initial implementation can be typed, tested TypeScript code. If policy complexity justifies it, Cedar/AWS Verified Permissions, OPA or another policy engine may be evaluated without changing the domains.
 
-PostgreSQL Row Level Security puede añadirse como defensa en profundidad para datasets adecuados, pero no sustituye autorización de aplicación ni debe habilitarse sin un harness que valide session scoping y pooling.
+PostgreSQL Row Level Security may be added as defense in depth for suitable datasets, but it does not replace application authorization and must not be enabled without a harness that validates session scoping and pooling.
 
-## 3.3 Se formalizan cuatro clases de verdad
+## 3.3 Four truth classes are formalized
 
-FINCH nunca debe confundir un dato observado con una predicción o un texto de IA.
+FINCH must never confuse an observed fact with a prediction or an AI text.
 
 ```text
 OBSERVED / VERIFIED
-Provider, documento confirmado o acción reconciliada.
+Provider, confirmed document or reconciled action.
 
 USER_ASSERTED
-Dato ingresado o confirmado por el usuario.
+Data entered or confirmed by the user.
 
 DERIVED_DETERMINISTIC
-Resultado de fórmula/regla reproducible.
+Result of a reproducible formula/rule.
 
 ESTIMATED / MODELLED
-Forecast, clasificación probabilística o inferencia.
+Forecast, probabilistic classification or inference.
 
 GENERATED_NARRATIVE
-Texto/explicación producida por un LLM.
+Text/explanation produced by an LLM.
 ```
 
-Una explicación LLM puede describir un cálculo, pero no elevar su propia salida a `VERIFIED`.
+An LLM explanation may describe a calculation, but it may not raise its own output to `VERIFIED`.
 
-## 3.4 Se separan cuatro zonas de datos
+## 3.4 Four data zones are separated
 
 ```text
 RAW
-payload original / documento / evidencia
+original payload / document / evidence
    ↓ normalization
 CANONICAL
-modelo financiero normalizado
+normalized financial model
    ↓ deterministic/model computation
 DERIVED
 snapshots, forecasts, opportunities, decision cards
    ↓ privacy controlled export
 ANALYTICAL
-pseudonimizado/agregado para métricas, BI o ML autorizado
+pseudonymized/aggregated for metrics, BI or authorized ML
 ```
 
-Esta separación simplifica lineage, privacidad, reprocessing y debugging.
+This separation simplifies lineage, privacy, reprocessing and debugging.
 
-## 3.5 Se añade riesgo por capacidad
+## 3.5 Risk by capability is added
 
-FINCH clasificará features:
+FINCH will classify features:
 
 ```text
 R0 — Read / education / visualization
@@ -225,11 +225,11 @@ R3 — Money movement / sensitive regulated execution
 R4 — Custody / ledger-critical capabilities
 ```
 
-A mayor riesgo, más gates, observabilidad, revisión, SLO y controles.
+The higher the risk, the more gates, observability, review, SLOs and controls.
 
-## 3.6 Se fortalece supply-chain y release provenance
+## 3.6 Supply chain and release provenance are strengthened
 
-Una release profesional debe tener:
+A professional release must have:
 
 - immutable git SHA;
 - SBOM;
@@ -241,21 +241,21 @@ Una release profesional debe tener:
 - migration bundle;
 - OpenAPI diff;
 - financial correctness report;
-- build provenance/attestation cuando se active;
-- signing/notarization para desktop/mobile;
+- build provenance/attestation once enabled;
+- signing/notarization for desktop/mobile;
 - rollback plan.
 
-## 3.7 Se corrige OpenAPI
+## 3.7 OpenAPI is corrected
 
-La especificación OpenAPI más reciente a la fecha de referencia es **3.2.1**, publicada el 10 de septiembre de 2026. Sin embargo, el repositorio no debe adoptar una revisión que rompa generadores o tooling. El ADR de API fijará la versión efectiva —3.1.x o 3.2.x— después de ejecutar compatibility tests del toolchain.
+The most recent OpenAPI specification at the reference date is **3.2.1**, published on 10 September 2026. However, the repository must not adopt a revision that breaks generators or tooling. The API ADR will pin the effective version —3.1.x or 3.2.x— after running toolchain compatibility tests.
 
 ## 3.8 OpenTelemetry JS
 
-Traces y Metrics son estables; Logs continúan en desarrollo en la documentación actual. FINCH usará OpenTelemetry principalmente para traces/metrics y logs estructurados mediante el pipeline de logging elegido, evitando depender de OTel Logs como único mecanismo.
+Traces and Metrics are stable; Logs remain in development in the current documentation. FINCH will use OpenTelemetry mainly for traces/metrics, and structured logs through the chosen logging pipeline, avoiding reliance on OTel Logs as the only mechanism.
 
-## 3.9 Well-Architected se convierte en review framework
+## 3.9 Well-Architected becomes a review framework
 
-Las revisiones periódicas deben evaluar explícitamente los seis pilares de AWS Well-Architected:
+Periodic reviews must explicitly assess the six pillars of AWS Well-Architected:
 
 - Operational Excellence;
 - Security;
@@ -264,62 +264,63 @@ Las revisiones periódicas deben evaluar explícitamente los seis pilares de AWS
 - Cost Optimization;
 - Sustainability.
 
-No se usa como checklist ceremonial: cada revisión debe producir issues concretos.
+It is not used as a ceremonial checklist: every review must produce concrete issues.
 
 ---
 
 # 4. Architecture Constitution
 
-Las siguientes reglas son de máximo nivel.
+The following rules are of the highest level.
 
-1. **El tamaño del equipo no determina el nivel de arquitectura.**
-2. **Financial truth no depende de un LLM.**
-3. **Money jamás usa floating point binario como representación financiera autoritativa.**
-4. **Toda cifra financiera importante debe tener provenance.**
-5. **Toda decisión histórica debe poder reproducirse o explicar por qué ya no puede reproducirse.**
-6. **Una acción financiera irreversible requiere autorización explícita y actual del usuario o un mandato previamente acordado y técnicamente verificable.**
-7. **Un documento no confirmado no puede activar una acción monetaria irreversible.**
-8. **Recommendation, Action, PaymentIntent, ExecutionAttempt y Reconciliation son conceptos diferentes.**
-9. **Los adapters de proveedores externos no definen el dominio de FINCH.**
-10. **Los secretos no viven en el repositorio ni en clientes.**
-11. **Los cambios productivos pasan por CI/CD y producen evidencia.**
-12. **Los consumidores de eventos son idempotentes.**
-13. **El sistema asume entrega at-least-once salvo prueba formal de otra semántica.**
-14. **Audit log y application log son mecanismos diferentes.**
-15. **La monetización no altera el ranking financiero.**
-16. **Privacidad, propósito y consentimiento se validan en backend, no solo en UI.**
-17. **Admin no equivale a acceso irrestricto.**
-18. **Production data no se copia a desarrollo local.**
-19. **Cada tecnología nueva debe resolver una capacidad real y documentar sus costos.**
-20. **FINCH debe poder degradarse sin inventar certeza.**
+1. **Team size does not determine the level of architecture.**
+2. **Financial truth does not depend on an LLM.**
+3. **Money never uses binary floating point as an authoritative financial representation.**
+4. **Every important financial figure must have provenance.**
+5. **Every historical decision must be reproducible, or explain why it can no longer be reproduced.**
+6. **An irreversible financial action requires explicit, current authorization from the user or a previously agreed and technically verifiable mandate.**
+7. **An unconfirmed document cannot trigger an irreversible monetary action.**
+8. **Recommendation, Action, PaymentIntent, ExecutionAttempt and Reconciliation are different concepts.**
+9. **External provider adapters do not define FINCH's domain.**
+10. **Secrets do not live in the repository or in clients.**
+11. **Production changes go through CI/CD and produce evidence.**
+12. **Event consumers are idempotent.**
+13. **The system assumes at-least-once delivery unless another semantic is formally proven.**
+14. **Audit log and application log are different mechanisms.**
+15. **Monetization does not alter the financial ranking.**
+16. **Privacy, purpose and consent are validated in the backend, not only in the UI.**
+17. **Admin does not mean unrestricted access.**
+18. **Production data is not copied to local development.**
+19. **Every new technology must solve a real capability and document its costs.**
+20. **FINCH must be able to degrade without inventing certainty.**
 
 ---
 
 # 5. Quality Attributes
 
-La arquitectura se evalúa contra atributos explícitos.
+The architecture is evaluated against explicit attributes.
 
-| Atributo | Objetivo arquitectónico |
+| Attribute | Architectural objective |
 |---|---|
-| Correctness | cálculos reproducibles, invariantes y fixtures independientes |
+| Correctness | reproducible calculations, invariants and independent fixtures |
 | Security | least privilege, zero trust, defense in depth |
-| Privacy | purpose limitation, minimización, consent y lifecycle |
-| Reliability | tolerancia a fallos, retries acotados, DLQ, recovery probado |
-| Auditability | provenance, traceability y decisiones versionadas |
-| Availability | degradación por capability, no caída total innecesaria |
-| Performance | budgets medibles, async para procesos costosos |
-| Scalability | scale-out donde sea útil sin replatforming prematuro |
+| Privacy | purpose limitation, minimization, consent and lifecycle |
+| Reliability | fault tolerance, bounded retries, DLQ, proven recovery |
+| Auditability | provenance, traceability and versioned decisions |
+| Availability | degradation per capability, no unnecessary total outage |
+| Performance | measurable budgets, async for expensive processes |
+| Scalability | scale-out where useful without premature replatforming |
 | Maintainability | bounded contexts, contracts, fitness functions |
-| Portability | dominio desacoplado de vendors; cloud pragmáticamente AWS-first |
-| Operability | observabilidad, runbooks, kill switches, IaC |
-| Cost | costos observables y presupuestos por workload/provider |
-| Accessibility | WCAG-oriented UX y equivalentes textuales de información crítica |
+| Portability | domain decoupled from vendors; pragmatically AWS-first cloud |
+| Operability | observability, runbooks, kill switches, IaC |
+| Cost | observable costs and budgets per workload/provider |
+| Accessibility | WCAG-oriented UX and text equivalents for critical information |
 
 ---
 
-# 6. Arquitectura de plataforma
+# 6. Platform architecture
 
 ```mermaid
+%%{init: {'theme':'base','themeVariables':{'primaryColor':'#0E4331','primaryTextColor':'#FFFFFF','nodeTextColor':'#FFFFFF','primaryBorderColor':'#6FCF97','lineColor':'#1F7A55','secondaryColor':'#A7E3C1','tertiaryColor':'#F4F7F5','textColor':'#053F2B','titleColor':'#053F2B','edgeLabelBackground':'#145C40','clusterBkg':'#F4F7F5','clusterBorder':'#A7E3C1'}}}%%
 flowchart TB
   subgraph EXP[Experience Plane]
     IOS[iOS]
@@ -389,13 +390,13 @@ flowchart TB
   APP --> EXT
 ```
 
-La arquitectura objetivo puede ser sofisticada; la topología desplegada debe ser la mínima que satisfaga correctamente el workload actual. “Mínima” no significa insegura ni amateur: significa sin componentes que no aporten capacidad.
+The target architecture may be sophisticated; the deployed topology must be the minimum that correctly satisfies the current workload. "Minimum" does not mean insecure or amateur: it means without components that add no capability.
 
 ---
 
-# 7. Planos arquitectónicos
+# 7. Architectural planes
 
-FINCH se divide en planos para evitar mezclar responsabilidades.
+FINCH is divided into planes to avoid mixing responsibilities.
 
 ## 7.1 Experience Plane
 
@@ -405,7 +406,7 @@ FINCH se divide en planos para evitar mezclar responsabilidades.
 - admin;
 - notifications.
 
-No es source of truth.
+It is not a source of truth.
 
 ## 7.2 Domain Plane
 
@@ -465,13 +466,13 @@ No es source of truth.
 
 ---
 
-# 8. Identity, tenancy y ownership
+# 8. Identity, tenancy and ownership
 
 ## 8.1 Principal
 
-Entidad que puede autenticarse o actuar.
+An entity that can authenticate or act.
 
-Tipos:
+Types:
 
 ```text
 HUMAN
@@ -482,7 +483,7 @@ ADMIN
 
 ## 8.2 Party
 
-Entidad económica/legal representada:
+The economic/legal entity represented:
 
 ```text
 PERSON
@@ -491,9 +492,9 @@ ORGANIZATION
 
 ## 8.3 Workspace
 
-Frontera principal de aislamiento y colaboración.
+The main boundary of isolation and collaboration.
 
-Tipos iniciales:
+Initial types:
 
 ```text
 PERSONAL
@@ -503,28 +504,28 @@ BUSINESS
 
 ## 8.4 Membership
 
-Relaciona Principal con Workspace y roles/capabilities.
+Relates a Principal to a Workspace and roles/capabilities.
 
 ## 8.5 Grant
 
-Permiso más granular sobre recursos concretos.
+A more granular permission on specific resources.
 
-Ejemplo: un miembro de un hogar puede ver una meta compartida sin ver la tarjeta personal de la pareja.
+Example: a household member can see a shared goal without seeing their partner's personal card.
 
-## 8.6 Reglas de datos
+## 8.6 Data rules
 
-- cada recurso tenant-owned tiene `workspace_id`;
-- `party_id` se usa cuando la propiedad económica es relevante;
-- `created_by_principal_id` identifica actor, no owner;
-- IDs externos no son claves de dominio;
-- un `Workspace` no se deduce de email;
-- los servicios actúan con service principals.
+- every tenant-owned resource has a `workspace_id`;
+- `party_id` is used when economic ownership is relevant;
+- `created_by_principal_id` identifies the actor, not the owner;
+- external IDs are not domain keys;
+- a `Workspace` is not inferred from an email;
+- services act with service principals.
 
 ---
 
 # 9. Authorization Architecture
 
-Modelo inicial:
+Initial model:
 
 ```text
 Subject = Principal
@@ -534,7 +535,7 @@ Workspace = tenant boundary
 Context = device/session/risk/purpose/etc.
 ```
 
-Ejemplo:
+Example:
 
 ```text
 can(
@@ -546,9 +547,9 @@ can(
 )
 ```
 
-Políticas críticas deben tener tests negativos, no solo happy path.
+Critical policies must have negative tests, not only the happy path.
 
-Harness mínimo:
+Minimum harness:
 
 ```text
 owner allowed
@@ -564,7 +565,7 @@ service principal least privilege
 
 # 10. Canonical Financial Data Model
 
-Conceptos principales:
+Main concepts:
 
 ```text
 Workspace
@@ -606,13 +607,13 @@ AuditEvent
 OutboxEvent
 ```
 
-Los modelos de pago/ledger pueden existir como contratos desde el principio aunque no estén operativos.
+Payment/ledger models may exist as contracts from the start even if they are not operational.
 
 ---
 
 # 11. Data Truth & Provenance
 
-Todo dato significativo debe declarar origen.
+Every significant piece of data must declare its origin.
 
 ```text
 source_type
@@ -626,22 +627,22 @@ normalizer_version
 schema_version
 ```
 
-`confidence` nunca reemplaza `source_type`.
+`confidence` never replaces `source_type`.
 
-Ejemplo:
+Example:
 
 ```text
-Balance COP 4.200.000
+Balance COP 4,200,000
 source: provider
 observed_at: 2026-09-17T...
 truth_class: observed
 freshness: fresh
 ```
 
-Ejemplo forecast:
+Forecast example:
 
 ```text
-Projected balance COP 3.850.000
+Projected balance COP 3,850,000
 truth_class: estimated
 model: cashflow-forecast/2
 snapshot: fs_...
@@ -654,12 +655,12 @@ range: 3.4M–4.2M
 
 ## 12.1 RAW
 
-- payloads de provider;
+- provider payloads;
 - webhooks;
-- documentos;
+- documents;
 - import files.
 
-Inmutabilidad y retención controlada.
+Immutability and controlled retention.
 
 ## 12.2 CANONICAL
 
@@ -679,19 +680,19 @@ Inmutabilidad y retención controlada.
 
 ## 12.4 ANALYTICAL
 
-- eventos pseudonimizados;
+- pseudonymized events;
 - cohort metrics;
-- datasets autorizados.
+- authorized datasets.
 
-No usar analytical store como financial truth.
+Never use the analytical store as financial truth.
 
 ---
 
 # 13. Financial Twin
 
-El Financial Twin es una representación versionada del estado financiero de un Workspace/Party.
+The Financial Twin is a versioned representation of the financial state of a Workspace/Party.
 
-Un snapshot puede incluir:
+A snapshot may include:
 
 ```text
 liquid accounts
@@ -707,7 +708,7 @@ data freshness
 uncertainty
 ```
 
-Toda simulación importante referencia un snapshot immutable.
+Every important simulation references an immutable snapshot.
 
 ```text
 FinancialStateSnapshot
@@ -722,9 +723,9 @@ FinancialStateSnapshot
 
 # 14. Financial Engine
 
-`packages/financial-engine` debe ser una librería pura.
+`packages/financial-engine` must be a pure library.
 
-No imports desde:
+No imports from:
 
 ```text
 NestJS
@@ -734,7 +735,7 @@ Drizzle
 LLM SDKs
 ```
 
-Subdominios:
+Subdomains:
 
 ```text
 money
@@ -754,18 +755,18 @@ purchase-comparison
 
 ## 14.1 Money
 
-Preferencia:
+Preference:
 
 ```text
 settled amount → bigint minor units
 rates/intermediate calculations → arbitrary precision decimal
 ```
 
-Nunca `float/double` como financial truth.
+Never `float/double` as financial truth.
 
 ## 14.2 Formula Registry
 
-Cada fórmula tiene:
+Every formula has:
 
 ```text
 formula_id
@@ -782,22 +783,22 @@ implementation path
 test vectors
 ```
 
-Cambiar una fórmula crea una nueva versión.
+Changing a formula creates a new version.
 
 ---
 
 # 15. Financial Correctness Harness
 
-Debe existir antes de recomendaciones reales.
+It must exist before real recommendations.
 
-Incluye:
+It includes:
 
 - golden vectors;
 - property-based tests;
 - boundary cases;
 - regression fixtures;
 - independent reference calculations;
-- optional Python cross-checks para fórmulas críticas.
+- optional Python cross-checks for critical formulas.
 
 Artifacts:
 
@@ -807,7 +808,7 @@ financial-correctness.html
 formula-diff.md
 ```
 
-Ejemplos de invariantes:
+Example invariants:
 
 ```text
 principal repaid == original principal within declared rounding
@@ -843,38 +844,38 @@ User action
 Outcome
 ```
 
-Commercial commission **no entra** en ranking.
+Commercial commission **does not enter** the ranking.
 
 ---
 
 # 17. Decision Card
 
-Una Decision Card debe poder contestar:
+A Decision Card must be able to answer:
 
-- qué detectó FINCH;
-- por qué importa;
-- impacto estimado;
-- datos usados;
+- what FINCH detected;
+- why it matters;
+- estimated impact;
+- data used;
 - assumptions;
 - freshness;
 - confidence;
-- alternativas;
+- alternatives;
 - downside;
-- siguiente acción;
-- conflicto de interés comercial.
+- next action;
+- commercial conflict of interest.
 
-Persistir estructura, no solo prose.
+Persist the structure, not only prose.
 
 ---
 
-# 18. Risk Tiers por feature
+# 18. Risk Tiers per feature
 
 ## R0 — Information
 
-Ejemplos:
-- visualización;
-- educación;
-- categorización editable.
+Examples:
+- visualization;
+- education;
+- editable categorization.
 
 ## R1 — Financial Intelligence
 
@@ -883,16 +884,16 @@ Ejemplos:
 - safe-to-spend;
 - opportunity.
 
-Requiere correctness/provenance.
+Requires correctness/provenance.
 
 ## R2 — External Action
 
-- iniciar solicitud de cotización;
+- start a quote request;
 - deep-link;
-- cambio de proveedor;
-- enviar formulario.
+- provider switch;
+- submit a form.
 
-Requiere explicit action/audit.
+Requires explicit action/audit.
 
 ## R3 — Money Movement
 
@@ -900,11 +901,11 @@ Requiere explicit action/audit.
 - transfer;
 - autopay.
 
-Requiere fuerte idempotencia, risk checks, reconciliation, dedicated runbooks y external security review.
+Requires strong idempotency, risk checks, reconciliation, dedicated runbooks and an external security review.
 
 ## R4 — Custody / Ledger Critical
 
-Si FINCH llegara a custodiar/intermediar fondos, exige una arquitectura y revisión regulatoria/operativa adicional. No es v1.
+If FINCH were ever to hold or intermediate funds, it would require additional architecture and regulatory/operational review. It is not v1.
 
 ---
 
@@ -912,16 +913,16 @@ Si FINCH llegara a custodiar/intermediar fondos, exige una arquitectura y revisi
 
 ## 19.1 Core style
 
-**Modular monolith con deployable boundaries**.
+**Modular monolith with deployable boundaries**.
 
-Esto permite:
+This allows:
 
-- transacciones ACID donde tienen sentido;
-- contratos estrictos;
-- extracción futura;
-- menor coupling operacional accidental.
+- ACID transactions where they make sense;
+- strict contracts;
+- future extraction;
+- less accidental operational coupling.
 
-No se elige por headcount.
+It is not chosen because of headcount.
 
 ## 19.2 API
 
@@ -932,11 +933,11 @@ No se elige por headcount.
 - typed codegen;
 - Zod/boundary validation;
 - stable error codes;
-- idempotency para comandos sensibles.
+- idempotency for sensitive commands.
 
 ## 19.3 Worker
 
-Mismo monorepo, entrypoint distinto.
+Same monorepo, different entrypoint.
 
 - outbox publication;
 - provider sync;
@@ -986,9 +987,9 @@ ai-gateway
 admin-ops
 ```
 
-Un módulo posee sus invariantes y tablas.
+A module owns its invariants and tables.
 
-Cross-module DB reads directos están prohibidos salvo read-model explícito documentado.
+Direct cross-module DB reads are forbidden except through an explicit, documented read model.
 
 ---
 
@@ -996,7 +997,7 @@ Cross-module DB reads directos están prohibidos salvo read-model explícito doc
 
 ## 21.1 Transactional Outbox
 
-En la misma transacción:
+In the same transaction:
 
 ```text
 update domain state
@@ -1004,7 +1005,7 @@ insert outbox event
 commit
 ```
 
-Publisher asíncrono publica a SQS/EventBridge.
+An asynchronous publisher publishes to SQS/EventBridge.
 
 ## 21.2 Event envelope
 
@@ -1025,9 +1026,9 @@ payload
 
 ## 21.3 Delivery
 
-At-least-once por defecto.
+At-least-once by default.
 
-Todos los consumers:
+All consumers are:
 
 - idempotent;
 - bounded retries;
@@ -1038,15 +1039,15 @@ Todos los consumers:
 
 # 22. Durable Workflows
 
-SQS no debe usarse para modelar arbitrariamente workflows de días.
+SQS must not be used to model multi-day workflows arbitrarily.
 
-Evaluar Temporal o AWS Step Functions cuando aparezcan:
+Evaluate Temporal or AWS Step Functions when these appear:
 
-- timers largos;
+- long timers;
 - human approval;
-- múltiples sistemas externos;
-- compensaciones;
-- retries complejos;
+- multiple external systems;
+- compensations;
+- complex retries;
 - resume after deploy/failure;
 - auditable workflow history.
 
@@ -1062,53 +1063,53 @@ KYCWorkflow
 DisputeWorkflow
 ```
 
-Temporal documenta durable execution capaz de retomar workflows tras fallos de proceso, red o infraestructura.
+Temporal documents durable execution able to resume workflows after process, network or infrastructure failures.
 
 ---
 
 # 23. Compute Strategy
 
-No existe una única tecnología “correcta”.
+There is no single "correct" technology.
 
-| Workload | Primera opción | Evolución |
+| Workload | First option | Evolution |
 |---|---|---|
-| Core API | ECS/Fargate | EKS si capabilities lo justifican |
+| Core API | ECS/Fargate | EKS if capabilities justify it |
 | Long-lived worker | ECS/Fargate | EKS |
-| Webhook ingress | Lambda o API | según volumen/latency |
-| S3 event/preflight | Lambda | container si pesado |
+| Webhook ingress | Lambda or API | by volume/latency |
+| S3 event/preflight | Lambda | container if heavy |
 | Scheduled lightweight trigger | Lambda/EventBridge | worker |
 | Durable workflow | Temporal/Step Functions | — |
-| GPU workload | managed endpoint/EKS | según necesidades |
-| Large stream processing | SQS first | MSK/Kafka cuando haya stream semantics |
+| GPU workload | managed endpoint/EKS | by need |
+| Large stream processing | SQS first | MSK/Kafka when there are stream semantics |
 
 ## 23.1 ECS/Fargate
 
-Default pragmático para containers estables.
+The pragmatic default for stable containers.
 
 ## 23.2 Lambda
 
-Primera clase dentro de FINCH cuando el workload sea:
+First-class within FINCH when the workload is:
 
 - event-driven;
 - stateless;
 - bounded;
 - bursty;
-- corto.
+- short.
 
-AWS señala S3, API Gateway, EventBridge y SQS como sources naturales para Lambda.
+AWS names S3, API Gateway, EventBridge and SQS as natural sources for Lambda.
 
 ## 23.3 EKS
 
-No está prohibido ni “reservado para equipos grandes”. EKS Auto Mode administra capacidades como compute autoscaling, networking, load balancing, DNS, block storage y GPU support. Se adopta cuando Kubernetes aporte capacidades que ECS/Lambda no resuelvan adecuadamente.
+It is neither forbidden nor "reserved for large teams". EKS Auto Mode manages capabilities such as compute autoscaling, networking, load balancing, DNS, block storage and GPU support. It is adopted when Kubernetes provides capabilities that ECS/Lambda do not solve adequately.
 
 ## 23.4 Kafka/MSK
 
-Adoptar solo cuando FINCH necesite realmente:
+Adopt only when FINCH genuinely needs:
 
 - retained event streams;
-- replay histórico;
-- múltiples consumidores independientes;
-- ordering por partición;
+- historical replay;
+- multiple independent consumers;
+- per-partition ordering;
 - high sustained throughput;
 - stream processing.
 
@@ -1118,13 +1119,13 @@ Adoptar solo cuando FINCH necesite realmente:
 
 ## 24.1 PostgreSQL
 
-Source of truth OLTP.
+The OLTP source of truth.
 
-Baseline actual: PostgreSQL 18.x; el repositorio debe fijar el patch soportado en IaC/container tooling.
+Current baseline: PostgreSQL 18.x; the repository must pin the supported patch in IaC/container tooling.
 
 ## 24.2 Schemas
 
-Posible división:
+Possible split:
 
 ```text
 identity
@@ -1140,19 +1141,19 @@ audit
 
 ## 24.3 Multi-tenancy
 
-`workspace_id` obligatorio en recursos tenant-owned.
+`workspace_id` is mandatory on tenant-owned resources.
 
-La aplicación realiza authorization explícita. RLS puede añadirse como defense in depth tras validación.
+The application performs explicit authorization. RLS may be added as defense in depth after validation.
 
 ## 24.4 Future data stores
 
-- Redis: cache/ephemeral coordination cuando exista caso medido;
-- OpenSearch: search dedicado;
-- Graph DB: traversals complejas;
+- Redis: cache/ephemeral coordination when there is a measured case;
+- OpenSearch: dedicated search;
+- Graph DB: complex traversals;
 - Warehouse/lake: analytics/ML;
 - Kafka: event streaming.
 
-Ninguno reemplaza Postgres por estética arquitectónica.
+None of them replaces Postgres for architectural aesthetics.
 
 ---
 
@@ -1160,15 +1161,15 @@ Ninguno reemplaza Postgres por estética arquitectónica.
 
 ## 25.1 PFM Transaction Store
 
-Representa transacciones observadas.
+Represents observed transactions.
 
-No es un ledger interno de fondos.
+It is not an internal ledger of funds.
 
-## 25.2 Double-entry Ledger futuro
+## 25.2 Future double-entry ledger
 
-Solo cuando FINCH deba registrar money movement/custody/settlement propio.
+Only when FINCH must record its own money movement/custody/settlement.
 
-Conceptos:
+Concepts:
 
 ```text
 LedgerAccount
@@ -1179,17 +1180,17 @@ Settlement
 BalanceProjection
 ```
 
-Invariante:
+Invariant:
 
 ```text
 Σ debits == Σ credits
 ```
 
-Append-only; correcciones mediante entries compensatorias.
+Append-only; corrections through compensating entries.
 
 ---
 
-# 26. Payment Architecture futura
+# 26. Future Payment Architecture
 
 ```text
 Decision
@@ -1213,7 +1214,7 @@ Reconciliation
 Outcome
 ```
 
-Estados no deben ser booleanos.
+States must not be booleans.
 
 ```text
 draft
@@ -1237,7 +1238,7 @@ manual_review
 
 # 27. Provider Architecture
 
-Ports internos:
+Internal ports:
 
 ```text
 AccountDataProvider
@@ -1249,9 +1250,9 @@ AIProvider
 ProductDataProvider
 ```
 
-El dominio nunca importa directamente un SDK de vendor.
+The domain never imports a vendor SDK directly.
 
-Cada adapter implementa:
+Each adapter implements:
 
 - auth;
 - timeout;
@@ -1261,13 +1262,13 @@ Cada adapter implementa:
 - health metrics;
 - contract fixtures;
 - error mapping;
-- webhook verification cuando aplique.
+- webhook verification where applicable.
 
 ---
 
 # 28. Provider Capability Registry
 
-Mantener capabilities normalizadas:
+Keep normalized capabilities:
 
 ```text
 provider
@@ -1284,7 +1285,7 @@ latency
 health
 ```
 
-Permite provider routing futuro sin hardcodear un vendor.
+This enables future provider routing without hardcoding a vendor.
 
 ---
 
@@ -1307,15 +1308,15 @@ upload
 → canonical model
 ```
 
-El original es evidencia; extracción y normalización son versiones distintas.
+The original is evidence; extraction and normalization are separate versions.
 
 ---
 
 # 30. AI Architecture
 
-FINCH usa IA como capa de comprensión y comunicación, no como autoridad financiera.
+FINCH uses AI as a layer of understanding and communication, not as a financial authority.
 
-## Permitido
+## Allowed
 
 - explanations;
 - document interpretation;
@@ -1323,16 +1324,16 @@ FINCH usa IA como capa de comprensión y comunicación, no como autoridad financ
 - intent parsing;
 - conversational UX;
 - support drafting;
-- structured extraction asistida.
+- assisted structured extraction.
 
-## Prohibido como source of truth
+## Forbidden as a source of truth
 
-- saldos;
-- autorización;
-- intereses;
+- balances;
+- authorization;
+- interest;
 - payment state;
 - reconciliation;
-- eligibility contractual no verificada;
+- unverified contractual eligibility;
 - money movement.
 
 ## AI Gateway
@@ -1350,13 +1351,13 @@ AI Gateway
   └─ provider adapter
 ```
 
-Claude como herramienta de desarrollo y Claude como runtime provider son decisiones independientes.
+Claude as a development tool and Claude as a runtime provider are independent decisions.
 
 ---
 
 # 31. AI Data Policy
 
-Antes de cada request se clasifica el contenido:
+Before every request the content is classified:
 
 ```text
 PUBLIC
@@ -1366,15 +1367,15 @@ RESTRICTED_FINANCIAL
 RESTRICTED_IDENTITY
 ```
 
-La policy determina:
+The policy determines:
 
-- si puede enviarse;
-- a qué proveedor;
-- qué redacción aplicar;
-- qué logging es permitido;
-- si requiere consentimiento/configuración específica.
+- whether it may be sent;
+- to which provider;
+- what redaction to apply;
+- what logging is allowed;
+- whether it requires specific consent/configuration.
 
-Document text se trata como input no confiable frente a prompt injection.
+Document text is treated as untrusted input with respect to prompt injection.
 
 ---
 
@@ -1395,7 +1396,7 @@ latency
 cost
 ```
 
-Un cambio de prompt/modelo puede fallar CI si degrada evals críticas.
+A prompt/model change may fail CI if it degrades critical evals.
 
 ---
 
@@ -1405,31 +1406,31 @@ Un cambio de prompt/modelo puede fallar CI si degrada evals críticas.
 
 **React Native + Expo**.
 
-Baseline actual de Expo docs: SDK 57 → React Native 0.86, React 19.2.3; fijar versión exacta en lockfile.
+Current Expo docs baseline: SDK 57 → React Native 0.86, React 19.2.3; pin the exact version in the lockfile.
 
-Estado:
+State:
 
-- TanStack Query para server state;
-- React state/Zustand para UI local;
+- TanStack Query for server state;
+- React state/Zustand for local UI;
 - React Hook Form;
 - Zod;
 - SecureStore;
 - LocalAuthentication;
-- development builds para native/security testing.
+- development builds for native/security testing.
 
 ## 33.2 Web
 
 **Next.js + React**.
 
-`apps/web` no se mezcla con `apps/admin`.
+`apps/web` is not mixed with `apps/admin`.
 
 ## 33.3 Desktop
 
-**Tauri 2 + React/Vite** para Windows/macOS/Linux.
+**Tauri 2 + React/Vite** for Windows/macOS/Linux.
 
-Tauri soporta múltiples plataformas, pero FINCH utiliza Expo como stack móvil primario para no sacrificar UX/ecosistema móvil.
+Tauri supports multiple platforms, but FINCH uses Expo as its primary mobile stack so as not to sacrifice mobile UX/ecosystem.
 
-Rust layer mínimo y privilegiado.
+Minimal, privileged Rust layer.
 
 ---
 
@@ -1459,7 +1460,7 @@ stale
 pending
 ```
 
-No depender de verde/rojo únicamente.
+Do not depend on green/red alone.
 
 Light/dark first-class.
 
@@ -1467,7 +1468,7 @@ Light/dark first-class.
 
 # 35. Accessibility
 
-Desde la primera beta:
+From the first beta:
 
 - screen readers;
 - dynamic type;
@@ -1476,15 +1477,15 @@ Desde la primera beta:
 - contrast;
 - reduced motion;
 - large touch targets;
-- textual fallback para charts.
+- textual fallback for charts.
 
-Todo gráfico financiero crítico debe tener una representación accesible equivalente.
+Every critical financial chart must have an equivalent accessible representation.
 
 ---
 
 # 36. Localization / Country Architecture
 
-Inicial:
+Initial:
 
 ```text
 locale: es-CO
@@ -1492,7 +1493,7 @@ timezone: America/Bogota
 currency: COP
 ```
 
-No hardcodear reglas colombianas dentro del core global.
+Do not hardcode Colombian rules inside the global core.
 
 ```text
 jurisdictions/
@@ -1504,13 +1505,13 @@ jurisdictions/
     capabilities/
 ```
 
-Future country adapters deben poder convivir.
+Future country adapters must be able to coexist.
 
 ---
 
 # 37. Regulatory Capability Layer
 
-Sin sustituir asesoría jurídica, el software debe saber qué clase de capacidad está ejecutando.
+Without replacing legal advice, the software must know what class of capability it is executing.
 
 ```text
 INFORMATION
@@ -1523,7 +1524,7 @@ MONEY_MOVEMENT
 CUSTODY
 ```
 
-Feature enablement puede depender de:
+Feature enablement may depend on:
 
 ```text
 jurisdiction
@@ -1533,20 +1534,20 @@ regulatory status
 feature risk tier
 ```
 
-Esto evita que una feature experimental pase accidentalmente a una actividad regulatoriamente distinta.
+This prevents an experimental feature from accidentally becoming a regulatorily different activity.
 
 ---
 
 # 38. Security Baseline
 
-Referencias mínimas:
+Minimum references:
 
-- OWASP ASVS 5.0.0 para web/application controls;
+- OWASP ASVS 5.0.0 for web/application controls;
 - OWASP API Security Top 10 2023;
-- OWASP MASVS/MASTG para mobile;
-- threat modeling por feature de riesgo.
+- OWASP MASVS/MASTG for mobile;
+- threat modeling per risky feature.
 
-## Threats prioritarias
+## Priority threats
 
 - account takeover;
 - BOLA/IDOR;
@@ -1570,7 +1571,7 @@ Referencias mínimas:
 
 # 39. Threat Modeling Process
 
-Features R1+ deben incluir:
+R1+ features must include:
 
 ```text
 assets
@@ -1585,7 +1586,7 @@ tests
 residual risk
 ```
 
-R3/R4 requieren revisión independiente antes de GA.
+R3/R4 require independent review before GA.
 
 ---
 
@@ -1595,17 +1596,17 @@ R3/R4 requieren revisión independiente antes de GA.
 - KMS;
 - short-lived AWS credentials;
 - GitHub OIDC;
-- no long-lived AWS keys en Actions;
-- no server secrets en clients;
+- no long-lived AWS keys in Actions;
+- no server secrets in clients;
 - rotation plan.
 
-GitHub documenta OIDC con AWS precisamente para evitar credenciales AWS de larga duración en GitHub secrets.
+GitHub documents OIDC with AWS precisely to avoid long-lived AWS credentials in GitHub secrets.
 
 ---
 
 # 41. AWS Account & Network Topology
 
-Objetivo maduro:
+Mature target:
 
 ```text
 finch-management
@@ -1615,7 +1616,7 @@ finch-security
 finch-log-archive
 ```
 
-No es necesario crear todas el día uno, pero prod y nonprod deben estar separados antes de datos financieros reales.
+It is not necessary to create all of them on day one, but prod and nonprod must be separated before real financial data.
 
 Production VPC:
 
@@ -1629,7 +1630,7 @@ isolated data subnets
   └─ RDS/cache
 ```
 
-VPC endpoints para servicios AWS donde reduzcan exposición/costo.
+VPC endpoints for AWS services where they reduce exposure/cost.
 
 ---
 
@@ -1647,7 +1648,7 @@ finch-payment-role
 finch-ci-deploy-role
 ```
 
-ECS task roles / Lambda execution roles / EKS workload identities según compute.
+ECS task roles / Lambda execution roles / EKS workload identities depending on compute.
 
 ---
 
@@ -1664,7 +1665,7 @@ ECS task roles / Lambda execution roles / EKS workload identities según compute
 - signed release artifacts where feasible;
 - future SLSA/Sigstore provenance when CI matures.
 
-Agents no pueden introducir una librería sensible sin referencia oficial y razón.
+Agents may not introduce a sensitive library without an official reference and a reason.
 
 ---
 
@@ -1707,13 +1708,13 @@ immutable build
 → release evidence
 ```
 
-Build once; promote same artifact.
+Build once; promote the same artifact.
 
 ---
 
 # 45. Release Certification
 
-Cada release candidate debe poder generar:
+Every release candidate must be able to generate:
 
 ```text
 release-manifest.json
@@ -1729,7 +1730,7 @@ known-risks.md
 architecture-diff.md
 ```
 
-Mobile/desktop añaden signing/notarization evidence.
+Mobile/desktop add signing/notarization evidence.
 
 ---
 
@@ -1744,9 +1745,9 @@ Server:
 - CloudWatch;
 - correlation IDs.
 
-OpenTelemetry JS actualmente marca Traces y Metrics como stable y Logs como development; por eso los logs estructurados no dependerán exclusivamente del SDK OTel Logs.
+OpenTelemetry JS currently marks Traces and Metrics as stable and Logs as development; that is why structured logs will not depend exclusively on the OTel Logs SDK.
 
-Telemetry debe viajar:
+Telemetry must travel:
 
 ```text
 HTTP
@@ -1756,17 +1757,17 @@ HTTP
 → provider
 ```
 
-con `trace_id`, `correlation_id` y `causation_id` cuando sea posible.
+with `trace_id`, `correlation_id` and `causation_id` whenever possible.
 
 ---
 
 # 47. SLO / SLI Baseline
 
-Antes de money movement:
+Before money movement:
 
-| SLI | Objetivo inicial |
+| SLI | Initial target |
 |---|---:|
-| API availability | 99.9% mensual |
+| API availability | 99.9% monthly |
 | Simple API read p95 | < 500 ms |
 | Simple internal write p95 | < 800 ms |
 | Deterministic simulation | < 300 ms typical |
@@ -1774,13 +1775,13 @@ Antes de money movement:
 | Crash-free mobile sessions | > 99.5% |
 | Critical deterministic reproducibility | 100% |
 
-R3/R4 deben tener SLO propios más estrictos.
+R3/R4 must have their own stricter SLOs.
 
 ---
 
 # 48. Graceful Degradation
 
-Ejemplos:
+Examples:
 
 ```text
 LLM down
@@ -1799,13 +1800,13 @@ Payment rail down
 → analysis works; execution disabled.
 ```
 
-FINCH no inventa datos para mantener una pantalla “bonita”.
+FINCH does not invent data to keep a screen "pretty".
 
 ---
 
 # 49. Resilience Patterns
 
-External dependencies deben evaluar:
+External dependencies must consider:
 
 - timeout;
 - bounded retry;
@@ -1817,7 +1818,7 @@ External dependencies deben evaluar:
 - DLQ;
 - stale fallback.
 
-No retry infinito.
+No infinite retry.
 
 ---
 
@@ -1835,22 +1836,22 @@ S3:
 - versioning;
 - SSE-KMS;
 - lifecycle;
-- Object Lock donde la evidencia requiera WORM.
+- Object Lock where evidence requires WORM.
 
-Baseline pre-payments:
+Pre-payments baseline:
 
 ```text
 RPO target <= 15 min
 RTO target <= 4 h
 ```
 
-No se consideran válidos hasta haber probado recovery.
+They are not considered valid until recovery has been tested.
 
 ---
 
 # 51. Data Lifecycle & Privacy Operations
 
-FINCH debe soportar desde arquitectura:
+FINCH must support, from the architecture up:
 
 - consent grant/revoke;
 - purpose;
@@ -1861,15 +1862,15 @@ FINCH debe soportar desde arquitectura:
 - provider revocation;
 - anonymization where appropriate.
 
-`DELETE FROM users CASCADE` no es un sistema de privacidad.
+`DELETE FROM users CASCADE` is not a privacy system.
 
 ---
 
 # 52. Admin / Ops
 
-Admin es una aplicación independiente y una superficie crítica.
+Admin is an independent application and a critical surface.
 
-Permitido de forma controlada:
+Allowed in a controlled way:
 
 - connection health;
 - support cases;
@@ -1881,7 +1882,7 @@ Permitido de forma controlada:
 - DLQ metadata;
 - provider health.
 
-Prohibido por defecto:
+Forbidden by default:
 
 - unrestricted impersonation;
 - plaintext secrets;
@@ -1889,30 +1890,30 @@ Prohibido por defecto:
 - payment approval on behalf of user;
 - unrestricted document download.
 
-Toda acción admin produce audit.
+Every admin action produces an audit record.
 
 ---
 
 # 53. Product Analytics
 
-Herramienta sugerida: PostHog o equivalente con adapter/policy.
+Suggested tool: PostHog or equivalent, behind an adapter/policy.
 
-Jamás enviar sin aprobación explícita:
+Never send without explicit approval:
 
 - full balances;
 - account numbers;
 - raw transaction descriptions;
-- IDs oficiales;
+- official IDs;
 - document contents;
 - tokens.
 
-CI puede bloquear propiedades analytics prohibidas.
+CI may block forbidden analytics properties.
 
 ---
 
 # 54. Event / Product Analytics Separation
 
-No confundir:
+Do not confuse:
 
 ```text
 Domain event
@@ -1921,7 +1922,7 @@ Telemetry event
 Product analytics event
 ```
 
-Tienen objetivos, retention y sensibilidad distintos.
+They have different goals, retention and sensitivity.
 
 ---
 
@@ -1995,7 +1996,7 @@ finch/
 
 # 56. Toolchain Baseline
 
-| Área | Baseline recomendado |
+| Area | Recommended baseline |
 |---|---|
 | Runtime | Node.js 24 LTS |
 | Package manager | pnpm |
@@ -2023,7 +2024,7 @@ finch/
 | Mobile E2E | Maestro |
 | Product analytics | PostHog adapter/policy |
 
-No usar `latest` en producción; versions se pinnean en lockfile/IaC.
+Do not use `latest` in production; versions are pinned in the lockfile/IaC.
 
 ---
 
@@ -2037,9 +2038,9 @@ noImplicitOverride=true
 useUnknownInCatchVariables=true
 ```
 
-No `any` salvo adapter documentado.
+No `any` except in a documented adapter.
 
-No business logic en:
+No business logic in:
 
 - controllers;
 - React components;
@@ -2061,35 +2062,35 @@ Stable errors:
 {
   "error": {
     "code": "FINCH_VALIDATION_ERROR",
-    "message": "La solicitud contiene datos inválidos.",
+    "message": "The request contains invalid data.",
     "correlationId": "...",
     "details": []
   }
 }
 ```
 
-Sensitive create/execute endpoints usan `Idempotency-Key`.
+Sensitive create/execute endpoints use `Idempotency-Key`.
 
-OpenAPI se genera en CI y produce diff.
+OpenAPI is generated in CI and produces a diff.
 
 ---
 
 # 59. API Compatibility
 
-Mobile clients sobreviven más tiempo que backend versions.
+Mobile clients outlive backend versions.
 
-Política:
+Policy:
 
-- server backward-compatible dentro de supported client window;
-- breaking changes requieren deprecation;
-- usage telemetry antes de removal;
-- forced mobile upgrade solo por incompatibilidad crítica/security.
+- server backward-compatible within the supported client window;
+- breaking changes require deprecation;
+- usage telemetry before removal;
+- forced mobile upgrade only for critical incompatibility/security.
 
 ---
 
 # 60. Time / Calendar / Currency
 
-Store timestamps en UTC.
+Store timestamps in UTC.
 
 Default presentation:
 
@@ -2097,17 +2098,17 @@ Default presentation:
 America/Bogota
 ```
 
-Usar `Clock` inyectable en dominio.
+Use an injectable `Clock` in the domain.
 
-Financial calendar se abstrae para:
+The financial calendar is abstracted for:
 
 - business days;
 - holidays;
 - due-date rules.
 
-Money siempre incluye ISO currency.
+Money always includes an ISO currency.
 
-FX es entidad separada con source/freshness.
+FX is a separate entity with source/freshness.
 
 ---
 
@@ -2115,7 +2116,7 @@ FX es entidad separada con source/freshness.
 
 Typed, validated at startup.
 
-Separar:
+Separate:
 
 ```text
 public config
@@ -2126,15 +2127,15 @@ provider config
 risk limits
 ```
 
-Critical configuration changes generan audit.
+Critical configuration changes generate an audit record.
 
 ---
 
 # 62. Feature Flags & Kill Switches
 
-Flags para rollout.
+Flags for rollout.
 
-Kill switches explícitos:
+Explicit kill switches:
 
 ```text
 disable_bank_sync
@@ -2145,7 +2146,7 @@ disable_payment_execution
 disable_ai_explanations
 ```
 
-Tipos de kill:
+Kill types:
 
 ```text
 prevent_new
@@ -2160,7 +2161,7 @@ hard_stop
 
 ## Financial Correctness
 
-Fórmulas, invariantes, regression.
+Formulas, invariants, regression.
 
 ## Authorization
 
@@ -2194,33 +2195,33 @@ Dependency boundaries, forbidden imports, cycles.
 
 # 64. Architecture Fitness Functions
 
-CI debe comprobar progresivamente:
+CI must progressively check that:
 
-- financial-engine no depende de frameworks;
-- domain no depende de infrastructure;
-- provider SDKs solo aparecen en adapters;
+- financial-engine does not depend on frameworks;
+- domain does not depend on infrastructure;
+- provider SDKs only appear in adapters;
 - no direct cross-domain DB access;
-- no money APIs con float/number autoritativo;
+- no money APIs with an authoritative float/number;
 - no secret patterns;
-- generated API client sync;
+- generated API client in sync;
 - analytics property allowlist;
 - no forbidden package cycles.
 
-Herramientas:
+Tools:
 
-- ESLint custom rules;
+- custom ESLint rules;
 - dependency-cruiser;
-- scripts propios.
+- our own scripts.
 
 ---
 
 # 65. Claude + Cursor Operating Model
 
-Claude y Cursor son multiplicadores de capacidad, no autoridades finales.
+Claude and Cursor are capacity multipliers, not final authorities.
 
 ## Claude
 
-Principal para:
+Primary for:
 
 - architecture reasoning;
 - specs;
@@ -2232,7 +2233,7 @@ Principal para:
 
 ## Cursor
 
-Principal para:
+Primary for:
 
 - repository navigation;
 - multi-file implementation;
@@ -2244,7 +2245,7 @@ Principal para:
 
 GitHub + repo docs + accepted ADRs.
 
-No memoria conversacional como única fuente.
+Never conversational memory as the only source.
 
 ---
 
@@ -2259,7 +2260,7 @@ L4 inspect sanitized nonprod telemetry
 L5 deploy nonprod through CI
 ```
 
-No prod DB console, unrestricted AWS admin, raw secrets ni payment execution para coding agents.
+No prod DB console, unrestricted AWS admin, raw secrets or payment execution for coding agents.
 
 ---
 
@@ -2285,7 +2286,7 @@ Issue
 → observe
 ```
 
-Claude y Cursor no editan simultáneamente el mismo worktree.
+Claude and Cursor never edit the same worktree at the same time.
 
 ---
 
@@ -2319,7 +2320,7 @@ performance
 recovery-test
 ```
 
-Cada skill contiene:
+Each skill contains:
 
 ```text
 SKILL.md
@@ -2332,7 +2333,7 @@ checks/
 
 # 69. FINCH Superpowers
 
-Superpowers son capabilities compuestas, no shortcuts arquitectónicos.
+Superpowers are composite capabilities, not architectural shortcuts.
 
 ```text
 Financial Second Opinion
@@ -2345,7 +2346,7 @@ Financial Twin
 Action Orchestrator
 ```
 
-Ejemplo Financial Second Opinion:
+Financial Second Opinion example:
 
 ```text
 Document/Input
@@ -2361,7 +2362,7 @@ Document/Input
 
 # 70. Branching
 
-Trunk-oriented.
+Trunk-oriented. (Superseded for the hackathon period by ADR-0040: `main` ← `stage/sN` ← `area/*` ← task branches.)
 
 ```text
 main
@@ -2371,9 +2372,9 @@ security/FIN-...
 spike/FIN-...
 ```
 
-`main` siempre deployable.
+`main` is always deployable.
 
-No `develop` permanente salvo ADR.
+No permanent `develop` branch without an ADR.
 
 ---
 
@@ -2381,11 +2382,11 @@ No `develop` permanente salvo ADR.
 
 Conventional Commits.
 
-PR pequeño y coherente.
+Small, coherent PRs.
 
-Cambios críticos no mezclan refactor cosmético + schema + financial logic si puede evitarse.
+Critical changes do not mix cosmetic refactoring + schema + financial logic when it can be avoided.
 
-PR artifacts cuando apliquen:
+PR artifacts where applicable:
 
 - tests;
 - screenshots;
@@ -2404,10 +2405,10 @@ Expand → migrate/backfill → contract.
 
 Production:
 
-- migrations versionadas;
-- no `push` directo de schema;
+- versioned migrations;
+- no direct schema `push`;
 - lock impact reviewed;
-- online index strategy cuando scale lo requiera;
+- online index strategy when scale requires it;
 - checkpointed backfills.
 
 ---
@@ -2416,7 +2417,7 @@ Production:
 
 - domain unit tests;
 - financial property/golden tests;
-- PostgreSQL integration con Testcontainers;
+- PostgreSQL integration with Testcontainers;
 - API contract tests;
 - provider fixture tests;
 - web E2E Playwright;
@@ -2424,15 +2425,15 @@ Production:
 - desktop smoke;
 - security tests;
 - load tests;
-- recovery/chaos tests en nonprod.
+- recovery/chaos tests in nonprod.
 
-100% global coverage no es objetivo. Critical correctness coverage sí.
+100% global coverage is not a goal. Critical correctness coverage is.
 
 ---
 
-# 74. Security Gates por risk tier
+# 74. Security Gates per risk tier
 
-| Tier | Gate mínimo |
+| Tier | Minimum gate |
 |---|---|
 | R0 | normal CI + auth/privacy review |
 | R1 | correctness/provenance + threat notes |
@@ -2444,7 +2445,7 @@ Production:
 
 # 75. Definition of Done
 
-Una feature termina únicamente cuando los elementos aplicables están completos:
+A feature is done only when the applicable items are complete:
 
 - [ ] spec;
 - [ ] non-goals;
@@ -2457,7 +2458,7 @@ Una feature termina únicamente cuando los elementos aplicables están completos
 - [ ] schema/migration;
 - [ ] provenance;
 - [ ] tests;
-- [ ] financial vectors si aplica;
+- [ ] financial vectors if applicable;
 - [ ] accessibility;
 - [ ] localization;
 - [ ] analytics allowlisted;
@@ -2474,21 +2475,21 @@ Una feature termina únicamente cuando los elementos aplicables están completos
 
 # 76. ADR Trigger
 
-ADR obligatorio si se propone:
+An ADR is mandatory when proposing:
 
-- nueva base de datos;
-- nuevo runtime/language;
+- a new database;
+- a new runtime/language;
 - microservice extraction;
 - EKS;
 - Kafka/MSK;
 - Temporal/Step Functions as core workflow;
-- vendor core;
-- auth architecture change;
-- payment/ledger change;
-- new trust boundary;
-- change to Architecture Constitution;
-- data residency change;
-- breaking contract.
+- a core vendor;
+- an auth architecture change;
+- a payment/ledger change;
+- a new trust boundary;
+- a change to the Architecture Constitution;
+- a data residency change;
+- a breaking contract.
 
 ---
 
@@ -2510,15 +2511,13 @@ Candidate materially improves required quality?
 ADR + prototype + operational plan + exit plan
 ```
 
-Complejidad necesaria es bienvenida; complejidad accidental no.
+Necessary complexity is welcome; accidental complexity is not.
 
 ---
 
 # 78. Build vs Buy
 
-Para cada capability externa:
-
-Evaluar:
+For every external capability, evaluate:
 
 - strategic differentiation;
 - security;
@@ -2531,7 +2530,7 @@ Evaluar:
 - data handling;
 - exit strategy.
 
-FINCH construye aquello que constituye su core diferenciador; compra/integra commodity cuando hacerlo propio no crea ventaja.
+FINCH builds what constitutes its differentiating core; it buys/integrates commodities when building them in-house creates no advantage.
 
 ---
 
@@ -2545,11 +2544,11 @@ staging
 prod
 ```
 
-`preprod` puede añadirse si payments/compliance lo justifican.
+`preprod` may be added if payments/compliance justify it.
 
-No usar production data en nonprod.
+Never use production data in nonprod.
 
-Synthetic Colombian financial personas para fixtures/E2E.
+Synthetic Colombian financial personas for fixtures/E2E.
 
 ---
 
@@ -2565,13 +2564,13 @@ saver_goal_oriented
 microbusiness_owner
 ```
 
-Permiten probar escenarios realistas sin PII.
+They allow testing realistic scenarios without PII.
 
 ---
 
 # 81. Bootstrap
 
-Objetivo de developer experience:
+Developer experience target:
 
 ```bash
 git clone <repo>
@@ -2584,13 +2583,13 @@ pnpm db:seed
 pnpm dev
 ```
 
-`env:doctor` verifica toolchain y prerequisitos.
+`env:doctor` verifies the toolchain and prerequisites.
 
 ---
 
 # 82. Root Commands
 
-Objetivo:
+Target:
 
 ```text
 pnpm dev
@@ -2608,13 +2607,13 @@ pnpm openapi:generate
 pnpm release:verify
 ```
 
-Evolución: `finch` CLI interno.
+Evolution: an internal `finch` CLI.
 
 ---
 
 # 83. Initial Vertical Slices
 
-## Slice 1 — Analiza mi crédito
+## Slice 1 — Analyze my loan
 
 ```text
 auth
@@ -2626,7 +2625,7 @@ auth
 → audit
 ```
 
-## Slice 2 — Mi panorama de 30 días
+## Slice 2 — My 30-day outlook
 
 ```text
 accounts + income + obligations
@@ -2636,7 +2635,7 @@ accounts + income + obligations
 → safe-to-spend
 ```
 
-## Slice 3 — Sube una oferta
+## Slice 3 — Upload an offer
 
 ```text
 document
@@ -2647,7 +2646,7 @@ document
 → Decision Card
 ```
 
-Estos slices validan arquitectura real mejor que construir dashboards vacíos.
+These slices validate real architecture better than building empty dashboards.
 
 ---
 
@@ -2656,7 +2655,7 @@ Estos slices validan arquitectura real mejor que construir dashboards vacíos.
 ## Weeks 1–2 — Engineering System
 
 - monorepo;
-- clients shells;
+- client shells;
 - API/worker;
 - Postgres;
 - dev cloud;
@@ -2748,7 +2747,7 @@ Estos slices validan arquitectura real mejor que construir dashboards vacíos.
 
 ## Week 24 — Closed Beta Gate
 
-Beta solo si correctness, security, recovery y observability pasan.
+Beta only if correctness, security, recovery and observability pass.
 
 ---
 
@@ -2764,7 +2763,7 @@ M5 Payment Platform
 M6 Scaled Platform
 ```
 
-EKS/Kafka/graph/multi-region no se asocian a tamaño de equipo, sino a transición de maturity/capability.
+EKS/Kafka/graph/multi-region are not tied to team size, but to maturity/capability transitions.
 
 ---
 
@@ -2772,34 +2771,34 @@ EKS/Kafka/graph/multi-region no se asocian a tamaño de equipo, sino a transici�
 
 ## 1k users
 
-Arquitectura base.
+Base architecture.
 
 ## 10k
 
 - indexing;
 - pooling;
 - worker concurrency;
-- caching medido;
+- measured caching;
 - provider quotas.
 
 ## 100k+
 
-Evaluar:
+Evaluate:
 
 - read replicas;
 - table partitioning;
 - extracted services;
 - Redis;
 - dedicated processing;
-- EKS/Kafka donde capabilities lo justifiquen.
+- EKS/Kafka where capabilities justify them.
 
-No sharding preventivo.
+No preventive sharding.
 
 ---
 
 # 87. Service Extraction Criteria
 
-Un módulo se extrae cuando existe evidencia de:
+A module is extracted when there is evidence of:
 
 - independent scaling;
 - security isolation;
@@ -2810,7 +2809,7 @@ Un módulo se extrae cuando existe evidencia de:
 - ownership/team boundary;
 - regulatory/vendor requirement.
 
-Proceso:
+Process:
 
 ```text
 stable module contract
@@ -2825,23 +2824,23 @@ stable module contract
 
 # 88. Read Models & CQRS
 
-Commands/queries pueden estar separados conceptualmente.
+Commands/queries may be separated conceptually.
 
-No se necesitan dos databases inicialmente.
+Two databases are not needed initially.
 
-Physical CQRS entra si read/write patterns divergen de forma medible.
+Physical CQRS comes in if read/write patterns diverge measurably.
 
-Dashboard usa read model/projection, no 25 joins en cada apertura.
+The dashboard uses a read model/projection, not 25 joins on every open.
 
 ---
 
 # 89. Event Sourcing
 
-No global.
+Not global.
 
-Puede ser adecuado para dominios específicos donde history is truth.
+It may suit specific domains where history is truth.
 
-Ledger/audit append-only semantics no obligan a event-sourcear Accounts, Goals, etc.
+Ledger/audit append-only semantics do not force event-sourcing Accounts, Goals, etc.
 
 ---
 
@@ -2849,19 +2848,19 @@ Ledger/audit append-only semantics no obligan a event-sourcear Accounts, Goals, 
 
 ## Redis
 
-Cuando haya cache distribuida, lock o rate-limit concreto.
+When there is a concrete distributed cache, lock or rate-limit need.
 
 ## OpenSearch
 
-Cuando PostgreSQL FTS/trigram no satisfaga búsqueda.
+When PostgreSQL FTS/trigram does not satisfy search.
 
 ## Graph DB
 
-Cuando traversals/algorithms complejos tengan benchmark real.
+When complex traversals/algorithms have a real benchmark.
 
 ## Warehouse
 
-Cuando analytical load no deba tocar OLTP.
+When analytical load must not touch OLTP.
 
 ---
 
@@ -2875,15 +2874,15 @@ PostgreSQL / raw data
 → BI/ML
 ```
 
-Cada dataset tiene owner, purpose, classification y retention.
+Every dataset has an owner, purpose, classification and retention.
 
 ---
 
 # 92. Performance Engineering
 
-Medir antes de optimizar.
+Measure before optimizing.
 
-Budgets por:
+Budgets for:
 
 - API;
 - app startup;
@@ -2916,7 +2915,7 @@ owner=
 managed-by=tofu
 ```
 
-Alertar:
+Alert on:
 
 - AWS daily anomaly;
 - LLM token spike;
@@ -2939,7 +2938,7 @@ SEV-2 material feature/provider degradation
 SEV-3 minor defect
 ```
 
-Runbooks mínimos:
+Minimum runbooks:
 
 ```text
 provider-down
@@ -2958,7 +2957,7 @@ compromised-secret
 
 # 95. Financial Calculation Incident
 
-Si se detecta un cálculo incorrecto:
+If an incorrect calculation is detected:
 
 1. kill switch;
 2. preserve evidence;
@@ -2971,13 +2970,13 @@ Si se detecta un cálculo incorrecto:
 9. communicate where appropriate;
 10. postmortem.
 
-No editar historia silenciosamente.
+Never edit history silently.
 
 ---
 
 # 96. Vendor Governance
 
-Mantener inventory:
+Keep an inventory:
 
 ```text
 vendor
@@ -2992,7 +2991,7 @@ exit plan
 owner
 ```
 
-Core vendors necesitan exit strategy.
+Core vendors need an exit strategy.
 
 ---
 
@@ -3012,13 +3011,13 @@ docs/providers/
 docs/releases/
 ```
 
-Documentación viva, no ceremonial.
+Living documentation, not ceremonial.
 
 ---
 
 # 98. Module README
 
-Cada módulo debe declarar:
+Every module must declare:
 
 ```text
 responsibility
@@ -3040,7 +3039,7 @@ tests
 
 # 99. First ADRs
 
-Crear como mínimo:
+Create at least:
 
 ```text
 ADR-0001 architecture-style
@@ -3081,35 +3080,35 @@ ADR-0032 feature-risk-tiers
 
 # 100. Anti-Patterns
 
-No hacer:
+Do not:
 
-- user-centric schema que impida organizations;
-- microservice por entidad;
-- Kubernetes por prestigio;
-- evitar Kubernetes solo por headcount;
-- Kafka como job queue;
-- LLM como calculator;
-- floats para money;
-- direct provider SDK in domain;
-- admin omnipotente;
-- generic JSON column para todo;
-- shared `utils.ts` infinito;
+- a user-centric schema that prevents organizations;
+- a microservice per entity;
+- Kubernetes for prestige;
+- avoiding Kubernetes only because of headcount;
+- Kafka as a job queue;
+- an LLM as a calculator;
+- floats for money;
+- a provider SDK directly in the domain;
+- an omnipotent admin;
+- a generic JSON column for everything;
+- an endless shared `utils.ts`;
 - production secrets in `.env`;
-- retries infinitos;
-- queue sin DLQ;
-- webhook sin verification;
-- destructive migration single-step;
-- analytics con PII cruda;
-- giant AI-generated PR;
-- una sola AI implementando y aprobando cambio crítico;
-- hardcoded `user_id` como tenant universal;
+- infinite retries;
+- a queue without DLQ;
+- a webhook without verification;
+- a single-step destructive migration;
+- analytics with raw PII;
+- a giant AI-generated PR;
+- a single AI implementing and approving a critical change;
+- a hardcoded `user_id` as the universal tenant;
 - treating prediction as verified truth.
 
 ---
 
-# 101. Completeness Gate antes del scaffold
+# 101. Completeness Gate before the scaffold
 
-Este README se considera suficiente para comenzar si están explícitos:
+This document is considered sufficient to begin if the following are explicit:
 
 - [x] product architecture;
 - [x] target architecture;
@@ -3141,13 +3140,13 @@ Este README se considera suficiente para comenzar si están explícitos:
 - [x] extraction triggers;
 - [x] documentation/ADR governance.
 
-Esto no significa que la arquitectura sea inmutable. Significa que **ya existe suficiente claridad para construir sin improvisar los fundamentos**.
+This does not mean the architecture is immutable. It means **there is already enough clarity to build without improvising the foundations**.
 
 ---
 
 # 102. Scaffold Acceptance Criteria
 
-El Foundation Scaffold no termina hasta demostrar:
+The Foundation Scaffold is not done until it demonstrates:
 
 1. clean clone installs;
 2. toolchain doctor passes;
@@ -3177,7 +3176,7 @@ El Foundation Scaffold no termina hasta demostrar:
 ```text
 You are the principal platform architect and implementation agent for FINCH.
 
-README.md and accepted ADRs are normative.
+docs/architecture/CONSTITUTION.md and accepted ADRs are normative.
 
 Important:
 The founder currently works alone. This MUST NOT be interpreted as permission to create a smaller, toy, insecure, non-scalable, or poorly governed architecture.
@@ -3185,7 +3184,7 @@ The founder currently works alone. This MUST NOT be interpreted as permission to
 Architecture complexity is capability-driven, not headcount-driven.
 
 Before writing code:
-1. Read README.md, AGENTS.md, CLAUDE.md and accepted ADRs.
+1. Read docs/architecture/CONSTITUTION.md, AGENTS.md, CLAUDE.md and accepted ADRs.
 2. Verify current stable framework/tool versions using official documentation.
 3. Propose dependency/version matrix.
 4. Propose exact repository tree.
@@ -3239,7 +3238,7 @@ At the end:
 # 104. Cursor Implementation Contract
 
 ```text
-Read README.md, AGENTS.md, CLAUDE.md, relevant ADRs and .cursor/rules.
+Read docs/architecture/CONSTITUTION.md, AGENTS.md, CLAUDE.md, relevant ADRs and .cursor/rules.
 
 Implement the assigned issue only.
 
@@ -3320,7 +3319,7 @@ separate architecture/regulatory program; not implied by previous gates.
 
 # 107. Initial Repository Issues
 
-Prioridad de arranque:
+Start-up priority:
 
 ```text
 FIN-001 repo/bootstrap
@@ -3365,17 +3364,17 @@ FIN-039 Financial snapshot
 FIN-040 first vertical slice shell
 ```
 
-Después se expande según el roadmap de 24 semanas.
+It then expands following the 24-week roadmap.
 
 ---
 
 # 108. Architecture Review Cadence
 
-Durante Foundation:
+During Foundation:
 
-- review semanal.
+- weekly review.
 
-Después:
+Afterwards:
 
 - monthly architecture review;
 - quarterly Well-Architected review.
@@ -3396,7 +3395,7 @@ Inputs:
 
 # 109. Architecture Scorecard
 
-No vanity score. Cada dimensión exige evidencia:
+No vanity score. Every dimension requires evidence:
 
 ```text
 Correctness
@@ -3415,26 +3414,26 @@ Developer reproducibility
 
 # 110. Official Technical Baseline — September 2026
 
-Verificar de nuevo antes de ejecutar scaffold; esta sección documenta el estado revisado al emitir este README.
+Verify again before running the scaffold; this section documents the state reviewed when this document was issued.
 
-- **Node.js:** v24 `Krypton` está en LTS; v26 está Current.
-- **Expo:** la referencia actual lista SDK 57 → React Native 0.86 / React 19.2.3.
-- **PostgreSQL:** 18 es la major current; 18.6 fue publicada el 13 de agosto de 2026.
-- **OpenAPI:** 3.2.1 fue publicada el 10 de septiembre de 2026. Adoptar 3.2.x solo si codegen/toolchain del repo pasa compatibility tests; 3.1.x sigue siendo una opción válida de contrato si ecosystem compatibility lo requiere.
-- **OpenTofu:** documentación actual 1.12.x.
+- **Node.js:** v24 `Krypton` is in LTS; v26 is Current.
+- **Expo:** the current reference lists SDK 57 → React Native 0.86 / React 19.2.3.
+- **PostgreSQL:** 18 is the current major; 18.6 was released on 13 August 2026.
+- **OpenAPI:** 3.2.1 was released on 10 September 2026. Adopt 3.2.x only if the repo's codegen/toolchain passes compatibility tests; 3.1.x remains a valid contract option if ecosystem compatibility requires it.
+- **OpenTofu:** current documentation 1.12.x.
 - **OpenTelemetry JavaScript:** traces/metrics stable; logs development.
-- **Tauri:** Tauri 2 soporta Linux, macOS, Windows, Android e iOS; FINCH mantiene Expo para móvil.
-- **AWS EKS Auto Mode:** AWS administra componentes de compute autoscaling, pod/service networking, load balancing, DNS, block storage y GPU support.
-- **AWS Lambda:** AWS documenta arquitecturas event-driven con S3, API Gateway, EventBridge y SQS.
-- **Temporal:** durable workflow execution puede reanudar procesos tras crashes, network failures o infrastructure outages.
-- **OWASP ASVS:** latest stable indicado por OWASP: 5.0.0.
-- **OWASP API Security:** edición vigente listada: 2023.
+- **Tauri:** Tauri 2 supports Linux, macOS, Windows, Android and iOS; FINCH keeps Expo for mobile.
+- **AWS EKS Auto Mode:** AWS manages compute autoscaling, pod/service networking, load balancing, DNS, block storage and GPU support components.
+- **AWS Lambda:** AWS documents event-driven architectures with S3, API Gateway, EventBridge and SQS.
+- **Temporal:** durable workflow execution can resume processes after crashes, network failures or infrastructure outages.
+- **OWASP ASVS:** latest stable indicated by OWASP: 5.0.0.
+- **OWASP API Security:** current edition listed: 2023.
 
 ---
 
 # 111. Official Reference Set
 
-Arquitectura y cloud:
+Architecture and cloud:
 
 - https://docs.aws.amazon.com/wellarchitected/latest/framework/the-pillars-of-the-framework.html
 - https://docs.aws.amazon.com/eks/latest/userguide/automode.html
@@ -3466,22 +3465,22 @@ Security:
 - https://api-security.owasp.org/
 - https://mas.owasp.org/MASVS/
 
-Estas referencias no reemplazan verification durante implementación. Cada nueva integración crítica debe verificar documentación oficial actual.
+These references do not replace verification during implementation. Every new critical integration must verify current official documentation.
 
 ---
 
-# 112. Qué queda deliberadamente abierto
+# 112. What is deliberately left open
 
-Un documento profesional no debe fingir haber decidido lo que todavía no puede saberse.
+A professional document must not pretend to have decided what cannot yet be known.
 
-Queda para ADR/spikes:
+Left for ADRs/spikes:
 
-- Auth0 vs Cognito/otro OIDC provider definitivo;
-- OpenAPI 3.1.x vs 3.2.x según toolchain;
-- provider open-finance inicial;
+- Auth0 vs Cognito/another definitive OIDC provider;
+- OpenAPI 3.1.x vs 3.2.x depending on the toolchain;
+- initial open-finance provider;
 - document extraction provider;
-- Temporal vs Step Functions cuando aparezca primer durable workflow;
-- ECS-only vs EKS para workloads futuros;
+- Temporal vs Step Functions when the first durable workflow appears;
+- ECS-only vs EKS for future workloads;
 - Redis/OpenSearch/graph trigger;
 - warehouse technology;
 - AI runtime provider mix;
@@ -3490,18 +3489,18 @@ Queda para ADR/spikes:
 - enterprise authorization external policy engine;
 - exact payment ledger technology if custody/settlement arises.
 
-Mantener estas decisiones reversibles hoy es una fortaleza, no una carencia.
+Keeping these decisions reversible today is a strength, not a gap.
 
 ---
 
-# 113. Qué NO queda abierto
+# 113. What is NOT left open
 
-Sí está decidido:
+Decided:
 
-- FINCH es Financial Decision & Action OS;
+- FINCH is a Financial Decision & Action OS;
 - architecture is capability-driven;
 - Principal/Party/Workspace separation;
-- PostgreSQL source of truth initial;
+- PostgreSQL as the initial source of truth;
 - TypeScript primary;
 - Expo mobile;
 - Next.js web/admin;
@@ -3524,11 +3523,11 @@ Sí está decidido:
 
 # 114. Final Engineering Doctrine
 
-FINCH no debe ser fácil porque se eliminaron los problemas difíciles.
+FINCH must not be easy because the hard problems were removed.
 
-Debe ser **controlable** a pesar de resolver problemas difíciles.
+It must be **controllable** despite solving hard problems.
 
-La fórmula es:
+The formula is:
 
 ```text
 Necessary complexity
@@ -3543,35 +3542,35 @@ Necessary complexity
 = controlled sophistication
 ```
 
-El resultado esperado no es solamente una app que funcione.
+The expected result is not merely an app that works.
 
-Es una plataforma que pueda responder, ante cualquier cifra o acción importante:
+It is a platform that can answer, for any important figure or action:
 
 ```text
-¿Qué dato se usó?
-¿De dónde vino?
-¿Cuándo fue observado?
-¿Quién tenía permiso?
-¿Qué fórmula/modelo lo transformó?
-¿Qué versión estaba activa?
-¿Qué assumptions existieron?
-¿Qué resultado produjo?
-¿Qué usuario aprobó?
-¿Qué proveedor ejecutó?
-¿Se reconcilió?
-¿Qué ocurrió después?
+What data was used?
+Where did it come from?
+When was it observed?
+Who had permission?
+Which formula/model transformed it?
+Which version was active?
+What assumptions existed?
+What result did it produce?
+Which user approved?
+Which provider executed?
+Was it reconciled?
+What happened afterwards?
 ```
 
-Cuando FINCH pueda responder esas preguntas sistemáticamente, tendrá una base digna de una plataforma financiera profesional.
+When FINCH can answer those questions systematically, it will have a foundation worthy of a professional financial platform.
 
 ---
 
 
 # 115. Notifications Architecture
 
-Las notificaciones forman parte de la plataforma, pero no deben acceder libremente al dominio.
+Notifications are part of the platform, but they must not access the domain freely.
 
-Tipos:
+Types:
 
 ```text
 SECURITY
@@ -3582,7 +3581,7 @@ PRODUCT
 MARKETING
 ```
 
-`MARKETING` no puede camuflarse como `FINANCIAL_CRITICAL`.
+`MARKETING` may not be disguised as `FINANCIAL_CRITICAL`.
 
 Pipeline:
 
@@ -3598,81 +3597,81 @@ Domain Event
 → delivery outcome
 ```
 
-Canales iniciales:
+Initial channels:
 
 - in-app;
 - push;
 - email.
 
-SMS entra únicamente cuando una necesidad de seguridad/operación justifique costo y manejo de datos.
+SMS comes in only when a security/operational need justifies the cost and data handling.
 
-Cada template crítico debe versionarse. Alertas financieras deben registrar por qué se enviaron y qué snapshot/regla las originó.
+Every critical template must be versioned. Financial alerts must record why they were sent and which snapshot/rule originated them.
 
 ---
 
 # 116. Offline, Local Storage & Sync
 
-Una fintech no debe comportarse como si información cacheada fuera actual.
+A fintech must not behave as if cached information were current.
 
 ## Mobile
 
-Cache local permitida, de manera mínima:
+Local cache is allowed, minimally:
 
-- último home snapshot;
-- categorías;
-- preferencias no sensibles;
-- historial reciente estrictamente necesario.
+- latest home snapshot;
+- categories;
+- non-sensitive preferences;
+- strictly necessary recent history.
 
-No persistir sin necesidad:
+Do not persist without need:
 
 - provider access credentials;
-- documentos completos;
+- full documents;
 - raw bank payloads;
 - full transaction history;
 - sensitive debug payloads.
 
-Secure storage se usa para tokens pequeños y secretos de cliente permitidos por arquitectura; no como base de datos.
+Secure storage is used for small tokens and client secrets allowed by the architecture; not as a database.
 
-Si un local relational cache llega a ser necesario, SQLite es candidato y debe evaluarse cifrado/backup behavior por plataforma.
+If a local relational cache becomes necessary, SQLite is a candidate and its encryption/backup behavior must be evaluated per platform.
 
 ## Desktop
 
-Puede mantener un cache local mayor, pero sigue siendo cache, nunca source of truth.
+May keep a larger local cache, but it is still a cache, never a source of truth.
 
 ## Web
 
-Sensitive authenticated responses deben usar políticas de cache privadas/no-store según sensibilidad.
+Sensitive authenticated responses must use private/no-store cache policies depending on sensitivity.
 
-## UX de staleness
+## Staleness UX
 
-La UI debe poder mostrar:
+The UI must be able to show:
 
 ```text
-Actualizado hace 3 min
-Actualizado ayer
-Datos potencialmente desactualizados
-Sin conexión
-Esperando confirmación del servidor
+Updated 3 min ago
+Updated yesterday
+Data potentially out of date
+Offline
+Waiting for server confirmation
 ```
 
-Acciones R2+ no se consideran completadas offline. Una acción financiera solo existe como ejecutada después de confirmación server-side y, cuando aplique, reconciliación.
+R2+ actions are not considered completed offline. A financial action only exists as executed after server-side confirmation and, where applicable, reconciliation.
 
 ---
 
 # 117. Authentication Hardening, Passkeys & Recovery
 
-Biometría del dispositivo prueba presencia local; no reemplaza identidad backend.
+Device biometrics prove local presence; they do not replace backend identity.
 
-Arquitectura objetivo:
+Target architecture:
 
 - OIDC/OAuth 2.x;
-- Authorization Code + PKCE para native clients;
+- Authorization Code + PKCE for native clients;
 - short-lived access tokens;
 - refresh rotation/revocation;
 - MFA;
-- passkeys/WebAuthn cuando provider y UX estén listos;
+- passkeys/WebAuthn when provider and UX are ready;
 - active-session viewer/revoke;
-- step-up para operaciones de alto riesgo.
+- step-up for high-risk operations.
 
 Step-up candidates:
 
@@ -3688,23 +3687,23 @@ security settings change
 
 ## Recovery
 
-Account recovery es un flujo de riesgo alto.
+Account recovery is a high-risk flow.
 
-Debe producir:
+It must produce:
 
 - strong identity verification;
-- revocation/rotation de sesiones relevantes;
+- revocation/rotation of relevant sessions;
 - security notification;
 - audit;
-- risk-based delay/cooldown cuando proceda.
+- risk-based delay/cooldown where appropriate.
 
-No crear backdoors de soporte para recuperar cuentas.
+Do not create support backdoors to recover accounts.
 
 ---
 
 # 118. Device & Client Integrity Signals
 
-FINCH puede utilizar señales como:
+FINCH may use signals such as:
 
 - Apple App Attest/DeviceCheck;
 - Google Play Integrity;
@@ -3712,9 +3711,9 @@ FINCH puede utilizar señales como:
 - device/session anomaly;
 - root/jailbreak indicators.
 
-Estas señales contribuyen a riesgo, no deben ser verdad absoluta. Root/jailbreak detection es evadible y puede producir falsos positivos.
+These signals contribute to risk; they must not be absolute truth. Root/jailbreak detection can be evaded and can produce false positives.
 
-Certificate pinning solo se adopta mediante ADR después de evaluar:
+Certificate pinning is only adopted through an ADR after evaluating:
 
 - key rotation;
 - certificate lifecycle;
@@ -3726,11 +3725,11 @@ Certificate pinning solo se adopta mediante ADR después de evaluar:
 
 # 119. API Operational Contract
 
-Además del schema, toda API profesional necesita límites operativos explícitos.
+Beyond the schema, every professional API needs explicit operational limits.
 
 ## Pagination
 
-Colecciones de alto volumen usan cursor pagination.
+High-volume collections use cursor pagination.
 
 ```text
 items
@@ -3738,7 +3737,7 @@ next_cursor
 has_more
 ```
 
-No offset pagination para historiales masivos.
+No offset pagination for massive histories.
 
 ## Query guards
 
@@ -3763,11 +3762,11 @@ RATE_LIMIT_*
 INTERNAL_*
 ```
 
-Raw provider errors no se exponen al usuario.
+Raw provider errors are not exposed to the user.
 
 ## Rate limiting
 
-Diferenciado para:
+Differentiated for:
 
 - anonymous;
 - authenticated;
@@ -3791,15 +3790,15 @@ capture raw bytes
 
 # 120. Reconciliation, Conflict Resolution & Data Quality
 
-FINCH recibirá datos contradictorios. No puede resolverlos sobrescribiendo silenciosamente.
+FINCH will receive contradictory data. It cannot resolve it by silently overwriting.
 
-Ejemplo:
+Example:
 
 ```text
 manual debt balance != provider debt balance
 ```
 
-Representar:
+Represent:
 
 - candidate values;
 - provenance;
@@ -3809,7 +3808,7 @@ Representar:
 
 ## Transaction reconciliation
 
-Debe soportar:
+It must support:
 
 ```text
 pending → posted
@@ -3821,7 +3820,7 @@ late provider correction
 
 ## Data consistency scanner
 
-Jobs de integridad pueden detectar:
+Integrity jobs may detect:
 
 - orphan rows;
 - duplicate provider IDs;
@@ -3831,13 +3830,13 @@ Jobs de integridad pueden detectar:
 - unexpected negative principal;
 - broken snapshot lineage.
 
-Un scanner reporta/alarma; no borra datos automáticamente.
+A scanner reports/alerts; it never deletes data automatically.
 
 ---
 
 # 121. Support & Operational Cases
 
-Soporte financiero debe ser auditable.
+Financial support must be auditable.
 
 ```text
 SupportCase
@@ -3851,9 +3850,9 @@ SupportCase
   audit
 ```
 
-Un error visible al usuario puede mostrar un support code corto vinculado al `correlation_id`, sin exponer internals.
+An error visible to the user may show a short support code linked to the `correlation_id`, without exposing internals.
 
-Si FINCH entra en pagos, `Dispute` será un dominio distinto a soporte genérico.
+If FINCH enters payments, `Dispute` will be a domain separate from generic support.
 
 ---
 
@@ -3868,7 +3867,7 @@ closed beta
 production
 ```
 
-Signing material fuera del repositorio y gestionado con controles de acceso.
+Signing material lives outside the repository and is managed with access controls.
 
 ## iOS
 
@@ -3879,30 +3878,30 @@ TestFlight external
 App Store
 ```
 
-Certificates/profiles/keys tratados como secretos operacionales.
+Certificates/profiles/keys are treated as operational secrets.
 
 ## Desktop
 
 - Windows signing;
 - macOS code signing + notarization;
 - signed update metadata;
-- Linux packages con checksums/signatures cuando aplique.
+- Linux packages with checksums/signatures where applicable.
 
-Tauri updater requiere una cadena de confianza explícita; un update comprometido equivale a comprometer el cliente.
+The Tauri updater requires an explicit chain of trust; a compromised update equals a compromised client.
 
 ## Release rule
 
-Build reproducible/immutable cuando sea viable; no recompilar una release “igual” después de aprobación.
+Reproducible/immutable builds where viable; never recompile an "identical" release after approval.
 
 ---
 
 # 123. Security & Compliance Readiness Roadmap
 
-FINCH no necesita obtener todas las certificaciones antes del primer commit, pero sí debe producir evidencia compatible desde temprano.
+FINCH does not need every certification before the first commit, but it must produce compatible evidence from early on.
 
 ## ISO 27001 / SOC 2 readiness
 
-Diseñar desde el inicio evidencia para:
+Design evidence from the start for:
 
 - access management;
 - change management;
@@ -3916,31 +3915,31 @@ Diseñar desde el inicio evidencia para:
 
 ## PCI DSS trigger
 
-FINCH debe **evitar manejar PAN/cardholder data directamente** cuando partners/tokenization permitan no hacerlo.
+FINCH must **avoid handling PAN/cardholder data directly** whenever partners/tokenization allow it.
 
-Si una futura capability almacena, procesa o transmite cardholder data dentro del alcance definido por PCI DSS, se debe abrir un programa/ADR específico de PCI scope antes de implementación productiva.
+If a future capability stores, processes or transmits cardholder data within the scope defined by PCI DSS, a specific PCI scope program/ADR must be opened before production implementation.
 
 ## Payments/compliance
 
-R3/R4 features exigen revisión especializada sobre:
+R3/R4 features require specialized review of:
 
 - partner responsibilities;
-- KYC/AML obligations según rol;
+- KYC/AML obligations by role;
 - fraud operations;
 - incident obligations;
 - consumer/support flows;
 - data retention;
 - audit evidence.
 
-La arquitectura no asume que “usar un partner” elimina todas las responsabilidades.
+The architecture does not assume that "using a partner" removes all responsibilities.
 
 ---
 
 # 124. Business Continuity Beyond Backups
 
-Un backup existente no equivale a continuidad operativa.
+An existing backup does not equal operational continuity.
 
-FINCH debe probar escenarios:
+FINCH must test scenarios:
 
 ```text
 AWS service degradation
@@ -3956,15 +3955,15 @@ lost mobile signing material
 region-level disruption
 ```
 
-Multi-region no se adopta por marketing. Se activa cuando business continuity/SLA/regulatory requirements justifiquen la complejidad de consistencia.
+Multi-region is not adopted for marketing. It is activated when business continuity/SLA/regulatory requirements justify the consistency complexity.
 
-Antes de active-active financiero, definir claramente consistency semantics; no prometer multi-region write availability sin resolverlas.
+Before financial active-active, clearly define consistency semantics; do not promise multi-region write availability without resolving them.
 
 ---
 
 # 125. Dependency & Vendor Failure Strategy
 
-Para cada dependencia core registrar:
+For every core dependency record:
 
 ```text
 criticality
@@ -3977,39 +3976,39 @@ status source
 exit plan
 ```
 
-Ejemplos:
+Examples:
 
-- AI outage no impide cálculos;
-- auth outage puede bloquear new login pero sesiones existentes siguen según policy;
-- open-finance outage mantiene último snapshot stale;
-- provider product catalog stale deshabilita claims de actualidad;
-- payment partner outage bloquea execution sin afectar analysis.
+- an AI outage does not prevent calculations;
+- an auth outage may block new logins, but existing sessions continue per policy;
+- an open-finance outage keeps the last snapshot as stale;
+- a stale provider product catalog disables claims of currency;
+- a payment partner outage blocks execution without affecting analysis.
 
-Esto debe reflejarse tanto en arquitectura como en UX.
+This must be reflected both in the architecture and in the UX.
 
 ---
 
 # 126. Go-Live Operational Readiness Review
 
-Antes de cualquier beta con usuarios externos debe existir un ORR documentado.
+Before any beta with external users there must be a documented ORR.
 
-Checklist mínimo:
+Minimum checklist:
 
-- [ ] owners/on-call path definido aunque actualmente sea una sola persona;
-- [ ] dashboards útiles;
-- [ ] alerts accionables;
-- [ ] runbooks críticos;
-- [ ] backup restore probado;
+- [ ] owners/on-call path defined, even if it is currently a single person;
+- [ ] useful dashboards;
+- [ ] actionable alerts;
+- [ ] critical runbooks;
+- [ ] backup restore tested;
 - [ ] secrets rotation path;
-- [ ] privacy export/delete probado;
+- [ ] privacy export/delete tested;
 - [ ] support route;
 - [ ] status/incident communication path;
 - [ ] feature kill switches;
-- [ ] rollback probado;
-- [ ] dependency outage behavior probado;
+- [ ] rollback tested;
+- [ ] dependency outage behavior tested;
 - [ ] security scan clean/accepted exceptions;
 - [ ] financial correctness gate;
-- [ ] known risks documentados.
+- [ ] known risks documented.
 
 ---
 
@@ -4017,6 +4016,6 @@ Checklist mínimo:
 
 **Architecture baseline: COMPLETE FOR SCAFFOLD.**
 
-“Complete” no significa que nunca cambiará. Significa que el proyecto ya tiene suficientes decisiones, invariantes, boundaries, gates y mecanismos de evolución para comenzar el desarrollo sin improvisar sus fundamentos.
+"Complete" does not mean it will never change. It means the project already has enough decisions, invariants, boundaries, gates and evolution mechanisms to begin development without improvising its foundations.
 
-A partir de este punto, la forma correcta de mejorar FINCH es **código + tests + artifacts + ADRs + feedback de ejecución**, no seguir añadiendo abstracciones hipotéticas indefinidamente.
+From this point on, the right way to improve FINCH is **code + tests + artifacts + ADRs + execution feedback**, not to keep adding hypothetical abstractions indefinitely.
