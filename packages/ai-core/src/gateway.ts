@@ -33,6 +33,10 @@ const narrateRequestSchema = z.object({
   system: z.string().min(1).max(8_000),
   userText: z.string().trim().min(1).max(NARRATE_INPUT_MAX_CHARS),
   correlationId: z.string().min(1).max(128),
+  /** Versioned prompt identifier, e.g. `assistant.skeleton@1` (docs/hackathon/04 §8). */
+  promptId: z.string().regex(/^[a-z0-9._-]+@\d+$/),
+  /** Tenant the call is made for, when known; recorded in the audit trail. */
+  workspaceId: z.uuid().optional(),
 });
 
 export type NarrateRequest = z.infer<typeof narrateRequestSchema>;
@@ -50,6 +54,8 @@ export type AiCallOutcome = 'OK' | 'BLOCKED' | 'FAILED';
 /** One row of the `ai_calls` audit trail (docs/hackathon/04 §9). No content, ever. */
 export interface AiCallRecord {
   readonly correlationId: string;
+  readonly workspaceId: string | undefined;
+  readonly promptId: string;
   readonly tier: ModelTier;
   readonly model: string | undefined;
   readonly outcome: AiCallOutcome;
@@ -124,7 +130,13 @@ export class AiGateway {
     const request = narrateRequestSchema.parse(input);
     const started = this.now();
     const model = this.options.models[request.tier];
-    const base = { correlationId: request.correlationId, tier: request.tier, model };
+    const base = {
+      correlationId: request.correlationId,
+      workspaceId: request.workspaceId,
+      promptId: request.promptId,
+      tier: request.tier,
+      model,
+    };
 
     const refuse = (code: FinchErrorCode, reason: string, message: string): never => {
       this.options.audit.record({

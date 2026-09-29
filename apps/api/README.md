@@ -12,10 +12,11 @@ Fastify 5.12.5 · Zod 4.6.5 at the boundary.
 
 ## Endpoints
 
-| Method | Path                      | Purpose                                                 | Notes                                                                                                                                                                        |
-| ------ | ------------------------- | ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GET    | `/api/health`             | Liveness, build, environment, AI tiers and their models | Never calls the provider; never reports secrets.                                                                                                                             |
-| POST   | `/api/v1/assistant/turns` | One question → one explanation (FAST tier)              | Body `{ "message": string }` (1–4,000 chars). Answer tagged `GENERATED_NARRATIVE`; prompt `assistant.skeleton@1` forbids stating figures until the receipt verifier (S1-05). |
+| Method | Path                      | Purpose                                                                                                | Notes                                                                                                                                                                        |
+| ------ | ------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GET    | `/api/ready`              | Readiness: 200 when the database answers, 503 otherwise (`database`: `up` · `down` · `not_configured`) | For load balancers and platform health checks.                                                                                                                               |
+| GET    | `/api/health`             | Liveness, build, environment, AI tiers and their models                                                | Never calls the provider; never reports secrets.                                                                                                                             |
+| POST   | `/api/v1/assistant/turns` | One question → one explanation (FAST tier)                                                             | Body `{ "message": string }` (1–4,000 chars). Answer tagged `GENERATED_NARRATIVE`; prompt `assistant.skeleton@1` forbids stating figures until the receipt verifier (S1-05). |
 
 ## Owns
 
@@ -59,8 +60,27 @@ store and an ADR (README §90).
 ## Observability
 
 Fastify request logs (authorization header redacted) and one error log per unexpected
-failure, both carrying the correlation ID. AI calls are audited by @finch/ai-core.
+failure, both carrying the correlation ID; framework logs are JSON in production. Every
+AI call is persisted to `audit.ai_calls` through `DatabaseAiAuditSink` (queued so it
+never delays an answer; a failed write is logged with its correlation ID and no content).
 OpenTelemetry arrives with FIN-023.
+
+## Container
+
+`apps/api/Dockerfile` (build from the repository root): base image pinned by digest,
+frozen lockfile under the same supply-chain policy as CI, `pnpm deploy` for production
+dependencies only, runs as the unprivileged `node` user, Docker `HEALTHCHECK` on
+`/api/health`, no secrets baked in. Migrations run as a release step with the same image:
+
+```bash
+docker build -f apps/api/Dockerfile -t finch-api .
+docker run --env-file .env finch-api node node_modules/@finch/db/dist/cli.js migrate
+docker run --env-file .env -p 4000:4000 finch-api
+```
+
+Behind a TLS-intercepting proxy, pass its CA with
+`--secret id=extra_ca,src=/path/to/ca.pem`; it is mounted only during install and never
+stored in the image.
 
 ## Running
 
@@ -74,9 +94,11 @@ curl -s localhost:4000/api/health
 `pnpm --filter @finch/api test` — the real app, gateway and adapter over HTTP against a
 local server standing in for Token Factory: health, correlation IDs, security headers,
 assistant turn with redaction and audit, validation, kill switch, provider failure,
-both rate limits and unknown routes.
+both rate limits, unknown routes and readiness without or with a down database.
+`pnpm --filter @finch/api test:integration` — the production wiring against PostgreSQL
+18.6 (Testcontainers): readiness and the persisted `ai_calls` row, with no content.
 
 ## Next
 
 S1-04 (full AI Gateway), FIN-021 (auth port), FIN-020 (authorization), FIN-010
-(OpenAPI/codegen), S0-14 (database), deploy after S0-06 (topology decision).
+(OpenAPI/codegen), deploy after S0-06 (topology decision).
