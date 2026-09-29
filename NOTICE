@@ -1,0 +1,10 @@
+FINCH
+Copyright 2026 The FINCH authors
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The Apache License does not grant permission to use the FINCH name, logo or
+other brand assets; see TRADEMARKS.md.
+
+Third-party components are distributed under their own licenses, recorded in
+each package's dependency metadata and in the SBOM produced by CI.
