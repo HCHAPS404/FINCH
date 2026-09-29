@@ -1,0 +1,216 @@
+{
+  "formulaId": "debt.payoff_plan",
+  "version": 1,
+  "spec": "docs/financial-formulas/colombia-credit.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_credit_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "three debts with COP 500,000 extra",
+      "inputs": {
+        "currency": "COP",
+        "extra": "50000000",
+        "debts": [
+          {
+            "id": "card-a",
+            "balance": "450000000",
+            "rate": "0.028",
+            "minimum": "18000000"
+          },
+          {
+            "id": "card-b",
+            "balance": "120000000",
+            "rate": "0.021",
+            "minimum": "6000000"
+          },
+          {
+            "id": "loan-c",
+            "balance": "900000000",
+            "rate": "0.014",
+            "minimum": "30000000"
+          }
+        ]
+      },
+      "expected": {
+        "AVALANCHE": {
+          "monthsToDebtFree": "17",
+          "totalInterest": "220144615",
+          "totalPaid": "1690144615",
+          "payoffOrder": [
+            {
+              "id": "card-a",
+              "month": "8"
+            },
+            {
+              "id": "card-b",
+              "month": "9"
+            },
+            {
+              "id": "loan-c",
+              "month": "17"
+            }
+          ]
+        },
+        "SNOWBALL": {
+          "monthsToDebtFree": "17",
+          "totalInterest": "226287546",
+          "totalPaid": "1696287546",
+          "payoffOrder": [
+            {
+              "id": "card-b",
+              "month": "3"
+            },
+            {
+              "id": "card-a",
+              "month": "9"
+            },
+            {
+              "id": "loan-c",
+              "month": "17"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "description": "three debts with no extra: minimums still roll over",
+      "inputs": {
+        "currency": "COP",
+        "extra": "0",
+        "debts": [
+          {
+            "id": "card-a",
+            "balance": "450000000",
+            "rate": "0.028",
+            "minimum": "18000000"
+          },
+          {
+            "id": "card-b",
+            "balance": "120000000",
+            "rate": "0.021",
+            "minimum": "6000000"
+          },
+          {
+            "id": "loan-c",
+            "balance": "900000000",
+            "rate": "0.014",
+            "minimum": "30000000"
+          }
+        ]
+      },
+      "expected": {
+        "AVALANCHE": {
+          "monthsToDebtFree": "39",
+          "totalInterest": "627268564",
+          "totalPaid": "2097268564",
+          "payoffOrder": [
+            {
+              "id": "card-b",
+              "month": "27"
+            },
+            {
+              "id": "card-a",
+              "month": "39"
+            },
+            {
+              "id": "loan-c",
+              "month": "39"
+            }
+          ]
+        },
+        "SNOWBALL": {
+          "monthsToDebtFree": "39",
+          "totalInterest": "627268564",
+          "totalPaid": "2097268564",
+          "payoffOrder": [
+            {
+              "id": "card-b",
+              "month": "27"
+            },
+            {
+              "id": "card-a",
+              "month": "39"
+            },
+            {
+              "id": "loan-c",
+              "month": "39"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "description": "the smallest balance has the highest rate: both strategies agree",
+      "inputs": {
+        "currency": "COP",
+        "extra": "10000000",
+        "debts": [
+          {
+            "id": "small-high",
+            "balance": "100000000",
+            "rate": "0.03",
+            "minimum": "5000000"
+          },
+          {
+            "id": "big-low",
+            "balance": "600000000",
+            "rate": "0.012",
+            "minimum": "20000000"
+          }
+        ]
+      },
+      "expected": {
+        "AVALANCHE": {
+          "monthsToDebtFree": "24",
+          "totalInterest": "115452201",
+          "totalPaid": "815452201",
+          "payoffOrder": [
+            {
+              "id": "small-high",
+              "month": "8"
+            },
+            {
+              "id": "big-low",
+              "month": "24"
+            }
+          ]
+        },
+        "SNOWBALL": {
+          "monthsToDebtFree": "24",
+          "totalInterest": "115452201",
+          "totalPaid": "815452201",
+          "payoffOrder": [
+            {
+              "id": "small-high",
+              "month": "8"
+            },
+            {
+              "id": "big-low",
+              "month": "24"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "description": "error: the budget does not cover the interest, the debt never shrinks",
+      "inputs": {
+        "currency": "COP",
+        "extra": "5000000",
+        "debts": [
+          {
+            "id": "card",
+            "balance": "1000000000",
+            "rate": "0.03",
+            "minimum": "20000000"
+          }
+        ]
+      },
+      "expected": {
+        "error": "DEBT_NEVER_AMORTIZES"
+      }
+    }
+  ]
+}

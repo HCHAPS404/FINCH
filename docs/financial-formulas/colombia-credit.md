@@ -61,9 +61,10 @@ instalment would repay the whole principal before period `n` (amounts too small 
 whole minor units, e.g. 6 minor units over 8 periods at 0 %), the formula rejects the input with
 `UNAMORTIZABLE_IN_MINOR_UNITS` instead of producing a negative balance.
 
-**Implementation status (S1-01):** §1–§4 are implemented in `packages/financial-engine/src/credit/`
-(`rate.ts`, `french.ts`, `total-cost.ts`, `usury.ts`), registered as `rate.convert@1`,
-`amortization.french@1`, `credit.total_cost@1` and `credit.usury_check@1`, and tested
+**Implementation status (S1-01):** §1–§6 are implemented in `packages/financial-engine/src/credit/`
+(`rate.ts`, `french.ts`, `total-cost.ts`, `usury.ts`, `refinance.ts`, `payoff.ts`), registered as
+`rate.convert@1`, `amortization.french@1`, `credit.total_cost@1`, `credit.usury_check@1`,
+`credit.compare_refinance@1` and `debt.payoff_plan@1`, and tested
 against golden vectors in `packages/financial-engine/test/vectors/` produced by an independent
 Python `decimal` implementation. The negative-rate flag of §1 is `allowNegative`.
 
@@ -121,12 +122,25 @@ insurance, switching costs).
 Output with truth class `DERIVED_DETERMINISTIC`, **unless** any input is `ESTIMATED`, in which case the
 output inherits `ESTIMATED` (conservative propagation).
 
+Resolved definitions (version 1): the offer refinances exactly the outstanding balance; each side
+is a French schedule plus a fixed monthly charge; the instalments compared are the first-month
+outflows; `pv_savings` is computed at 40 digits and rounded `HALF_EVEN` once; break-even uses
+undiscounted cumulative savings, and months past the end of a schedule count as 0. A
+`GENERATED_NARRATIVE` input is refused (`UNTRUSTED_INPUT`).
+
 ## 6. Debt payoff plan — `debt.payoff_plan@1`
 
 Strategies: `AVALANCHE` (highest EA first) and `SNOWBALL` (smallest balance first). Monthly
 simulation with minimum payments plus a surplus `extra`. Outputs: months until debt-free, total
 interest and payment order. Both strategies are included so the user can compare; FINCH does not hide
 the alternative.
+
+Resolved definitions (version 1): constant monthly budget `B = Σ minimums + extra`, so the minimums
+of cleared debts roll over; each month, interest accrues (`HALF_EVEN` per debt), minimums are paid
+(capped at the balance), and the rest of `B` goes to the priority debt, cascading when it clears.
+SNOWBALL orders by the current balance; ties keep the input order. If `B` does not exceed the first
+month's interest, or the debt is not cleared within 1,200 months, the plan fails with
+`DEBT_NEVER_AMORTIZES` and an explanation instead of a payoff date that cannot happen.
 
 ## 7. 30-day cash-flow forecast — `cashflow.forecast_30d@1`
 

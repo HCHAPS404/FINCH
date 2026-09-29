@@ -273,3 +273,152 @@ registerFormula({
     },
   ],
 });
+
+registerFormula({
+  formulaId: 'credit.compare_refinance',
+  version: 1,
+  purpose:
+    'Compare keeping a debt with refinancing its balance under an offer: instalment change, ' +
+    'nominal and present-value savings, break-even month and the longer-term alert.',
+  inputs: [
+    { name: 'balance', unit: 'minor units', description: 'Outstanding balance to refinance.' },
+    { name: 'currency', unit: 'ISO 4217', description: 'Currency of every amount.' },
+    { name: 'currentRate', unit: 'fraction per month', description: 'Current effective rate.' },
+    { name: 'currentPeriods', unit: 'months', description: 'Remaining instalments.' },
+    { name: 'currentCharges', unit: 'minor units', description: 'Monthly charges today.' },
+    { name: 'offerRate', unit: 'fraction per month', description: 'Offered effective rate.' },
+    { name: 'offerPeriods', unit: 'months', description: 'Offered term.' },
+    { name: 'offerCharges', unit: 'minor units', description: 'Monthly charges of the offer.' },
+    { name: 'switchingCosts', unit: 'minor units', description: 'Paid out of pocket at t = 0.' },
+    {
+      name: 'opportunityRate',
+      unit: 'fraction per month',
+      description: 'Discount rate for the present value; USER_ASSERTED or ESTIMATED.',
+    },
+  ],
+  outputUnit: 'minor units; month number; boolean alert; truth class',
+  rounding:
+    'Schedules as amortization.french@1; present value computed at 40 digits and rounded ' +
+    'HALF_EVEN to the minor unit once, at the end.',
+  assumptions: [
+    'The offer refinances exactly the outstanding balance.',
+    'Charges are a fixed amount per month on each side.',
+    'Break-even uses undiscounted cumulative savings; months past a schedule’s end count 0.',
+    'Any ESTIMATED input makes the whole result ESTIMATED; GENERATED_NARRATIVE is refused.',
+  ],
+  reference: `${SPEC} §5.`,
+  edgeCases: [
+    'Identical offer with no switching costs: zero savings, break-even in month 1.',
+    'Lower instalment but higher total paid: longerTermAlert.',
+    'Savings that never cover the switching costs: breakEvenMonth null.',
+  ],
+  implementationPath: 'packages/financial-engine/src/credit/refinance.ts#compareRefinance',
+  testVectors: [
+    {
+      description: 'lower rate, same term, no switching costs: nominal savings',
+      inputs: {
+        balance: '800000000',
+        currency: 'COP',
+        currentRate: '0.025',
+        currentPeriods: '24',
+        offerRate: '0.017',
+        offerPeriods: '24',
+        switchingCosts: '0',
+        opportunityRate: '0.008',
+      },
+      expected: '92570833',
+    },
+    {
+      description: 'with COP 250,000 switching costs: nominal savings',
+      inputs: {
+        balance: '800000000',
+        currency: 'COP',
+        currentRate: '0.025',
+        currentPeriods: '24',
+        offerRate: '0.017',
+        offerPeriods: '24',
+        switchingCosts: '25000000',
+        opportunityRate: '0.008',
+      },
+      expected: '67570833',
+    },
+    {
+      description: 'longer term: the offer costs more in total',
+      inputs: {
+        balance: '800000000',
+        currency: 'COP',
+        currentRate: '0.02',
+        currentPeriods: '12',
+        offerRate: '0.018',
+        offerPeriods: '48',
+        switchingCosts: '0',
+        opportunityRate: '0.008',
+      },
+      expected: '-293737803',
+    },
+  ],
+});
+
+registerFormula({
+  formulaId: 'debt.payoff_plan',
+  version: 1,
+  purpose:
+    'Month-by-month payoff simulation of several debts under AVALANCHE and SNOWBALL, so the ' +
+    'user can compare both: months to debt-free, total interest and payoff order.',
+  inputs: [
+    { name: 'debts', unit: 'list', description: 'id, balance, monthly rate, minimum payment.' },
+    { name: 'extra', unit: 'minor units', description: 'Monthly surplus above the minimums.' },
+  ],
+  outputUnit: 'months; minor units; ordered debt ids',
+  rounding: 'Interest HALF_EVEN to the minor unit per debt per month.',
+  assumptions: [
+    'Constant monthly budget: Σ minimum payments + extra; cleared minimums roll over.',
+    'Interest accrues before the month’s payment; rates stay constant.',
+    'AVALANCHE: highest rate first. SNOWBALL: smallest current balance first. Ties keep ' +
+      'the input order.',
+  ],
+  reference: `${SPEC} §6.`,
+  edgeCases: [
+    'Budget ≤ first month’s interest, or not cleared within 1,200 months: ' +
+      'DEBT_NEVER_AMORTIZES.',
+    'extra = 0: minimums still roll over as debts are cleared.',
+    'Empty list, repeated ids or empty balances: INVALID_DEBT.',
+  ],
+  implementationPath: 'packages/financial-engine/src/credit/payoff.ts#payoffPlan',
+  testVectors: [
+    {
+      description: 'three debts with COP 500,000 extra: AVALANCHE total interest',
+      inputs: {
+        currency: 'COP',
+        extra: '50000000',
+        strategy: 'AVALANCHE',
+        debts:
+          'card-a:450000000:0.028:18000000;card-b:120000000:0.021:6000000;' +
+          'loan-c:900000000:0.014:30000000',
+      },
+      expected: '220144615',
+    },
+    {
+      description: 'three debts with COP 500,000 extra: SNOWBALL total interest',
+      inputs: {
+        currency: 'COP',
+        extra: '50000000',
+        strategy: 'SNOWBALL',
+        debts:
+          'card-a:450000000:0.028:18000000;card-b:120000000:0.021:6000000;' +
+          'loan-c:900000000:0.014:30000000',
+      },
+      expected: '226287546',
+    },
+    {
+      description: 'budget below the interest is rejected',
+      inputs: {
+        currency: 'COP',
+        extra: '5000000',
+        strategy: 'AVALANCHE',
+        debts: 'card:1000000000:0.03:20000000',
+      },
+      expected: 'DEBT_NEVER_AMORTIZES',
+    },
+  ],
+});

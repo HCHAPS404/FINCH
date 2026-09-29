@@ -27,6 +27,12 @@ export const FINANCIAL_INPUT_ERROR_CODES = [
   'INVALID_DATE',
   /** A validity period that ends before it starts. */
   'INVALID_VALIDITY_PERIOD',
+  /** A debt list that is empty, repeats an id, or has a non-positive balance. */
+  'INVALID_DEBT',
+  /** The payments never clear the debt (budget ≤ interest, or beyond the horizon). */
+  'DEBT_NEVER_AMORTIZES',
+  /** An input whose truth class may not feed a formula (GENERATED_NARRATIVE, §4.2). */
+  'UNTRUSTED_INPUT',
 ] as const;
 
 export type FinancialInputErrorCode = (typeof FINANCIAL_INPUT_ERROR_CODES)[number];

@@ -10,7 +10,9 @@ import { getFormula } from '../formula-registry.js';
 import { Money } from '../money.js';
 import './formulas.js';
 import { frenchAmortization } from './french.js';
+import { payoffPlan } from './payoff.js';
 import { convertRate, parseQuote } from './rate.js';
+import { compareRefinance } from './refinance.js';
 import { totalCost } from './total-cost.js';
 import { usuryCheck } from './usury.js';
 
@@ -97,6 +99,61 @@ describe('credit formula registry entries', () => {
               asOf,
             }).status,
         ),
+        v.description,
+      ).toBe(v.expected);
+    }
+  });
+
+  it('credit.compare_refinance@1 vectors reproduce', () => {
+    for (const v of getFormula('credit.compare_refinance', 1).testVectors) {
+      const {
+        balance = '',
+        currency = '',
+        currentRate = '',
+        currentPeriods = '',
+        offerRate = '',
+        offerPeriods = '',
+        switchingCosts = '',
+        opportunityRate = '',
+      } = v.inputs;
+      const money = (value: string): Money => Money.fromMinorUnits(BigInt(value), currency);
+      expect(
+        outcome(() =>
+          compareRefinance({
+            balance: money(balance),
+            current: { monthlyRate: decimal(currentRate), periods: Number(currentPeriods) },
+            offer: { monthlyRate: decimal(offerRate), periods: Number(offerPeriods) },
+            switchingCosts: money(switchingCosts),
+            opportunityRate: decimal(opportunityRate),
+            inputTruth: ['OBSERVED'],
+          }).nominalSavings.minorUnits.toString(),
+        ),
+        v.description,
+      ).toBe(v.expected);
+    }
+  });
+
+  it('debt.payoff_plan@1 vectors reproduce', () => {
+    for (const v of getFormula('debt.payoff_plan', 1).testVectors) {
+      const { currency = '', extra = '', strategy = '', debts = '' } = v.inputs;
+      expect(strategy === 'AVALANCHE' || strategy === 'SNOWBALL').toBe(true);
+      expect(
+        outcome(() => {
+          const plan = payoffPlan({
+            extra: Money.fromMinorUnits(BigInt(extra), currency),
+            debts: debts.split(';').map((entry) => {
+              const [id = '', balance = '', rate = '', minimum = ''] = entry.split(':');
+              return {
+                id,
+                balance: Money.fromMinorUnits(BigInt(balance), currency),
+                monthlyRate: decimal(rate),
+                minimumPayment: Money.fromMinorUnits(BigInt(minimum), currency),
+              };
+            }),
+          });
+          const result = strategy === 'SNOWBALL' ? plan.SNOWBALL : plan.AVALANCHE;
+          return result.totalInterest.minorUnits.toString();
+        }),
         v.description,
       ).toBe(v.expected);
     }

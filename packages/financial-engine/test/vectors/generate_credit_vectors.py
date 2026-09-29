@@ -371,6 +371,190 @@ def usury_vectors():
     return vectors
 
 
+# ---------------------------------------------------------------------------
+# credit.compare_refinance@1 — colombia-credit.md §5
+# The current debt keeps its French schedule on the remaining balance; the offer
+# refinances that same balance. Monthly charges are added to each instalment; switching
+# costs are paid out of pocket at t = 0. Present values are discounted at the monthly
+# opportunity rate and rounded HALF_EVEN to the minor unit once, at the end.
+# ---------------------------------------------------------------------------
+def flows(balance, rate, n, charges):
+    _, rows = french(balance, rate, n)
+    return [r["payment"] + charges for r in rows]
+
+
+def pv(values, rate):
+    r = D(rate)
+    return sum(D(v) / (1 + r) ** k for k, v in enumerate(values, start=1))
+
+
+def refinance(balance, cur_rate, cur_n, cur_charges, off_rate, off_n, off_charges, switching, opp, truths):
+    current = flows(balance, cur_rate, cur_n, cur_charges)
+    offer = flows(balance, off_rate, off_n, off_charges)
+    total_current = sum(current)
+    total_offer = sum(offer) + switching
+    pv_savings = round_minor(pv(current, opp) - pv(offer, opp) - D(switching))
+    break_even = None
+    cumulative = 0
+    for k in range(1, max(cur_n, off_n) + 1):
+        cumulative += (current[k - 1] if k <= cur_n else 0) - (offer[k - 1] if k <= off_n else 0)
+        if cumulative >= switching:
+            break_even = k
+            break
+    delta = offer[0] - current[0]
+    return {
+        "currentInstalment": str(current[0]),
+        "offerInstalment": str(offer[0]),
+        "instalmentDelta": str(delta),
+        "totalCurrent": str(total_current),
+        "totalOffer": str(total_offer),
+        "nominalSavings": str(total_current - total_offer),
+        "pvSavings": str(pv_savings),
+        "breakEvenMonth": "none" if break_even is None else str(break_even),
+        "longerTermAlert": "true" if delta < 0 and total_offer > total_current else "false",
+        "truthClass": "ESTIMATED" if "ESTIMATED" in truths else "DERIVED_DETERMINISTIC",
+    }
+
+
+REFINANCE_CASES = [
+    ("lower rate, same term, no switching costs: savings from month 1",
+     dict(balance=800_000_000, cur_rate="0.025", cur_n=24, cur_charges=0, off_rate="0.017", off_n=24,
+          off_charges=0, switching=0, opp="0.008", truths=["OBSERVED", "USER_ASSERTED"])),
+    ("lower rate with switching costs: break-even after a few months",
+     dict(balance=800_000_000, cur_rate="0.025", cur_n=24, cur_charges=0, off_rate="0.017", off_n=24,
+          off_charges=0, switching=25_000_000, opp="0.008", truths=["OBSERVED", "USER_ASSERTED"])),
+    ("longer term: lower instalment but more paid in total (alert)",
+     dict(balance=800_000_000, cur_rate="0.02", cur_n=12, cur_charges=0, off_rate="0.018", off_n=48,
+          off_charges=0, switching=0, opp="0.008", truths=["OBSERVED", "USER_ASSERTED"])),
+    ("worse offer: never breaks even",
+     dict(balance=500_000_000, cur_rate="0.015", cur_n=18, cur_charges=0, off_rate="0.019", off_n=18,
+          off_charges=500_000, switching=5_000_000, opp="0.008", truths=["OBSERVED", "USER_ASSERTED"])),
+    ("monthly charges on the current debt make the offer cheaper",
+     dict(balance=300_000_000, cur_rate="0.02", cur_n=36, cur_charges=1_800_000, off_rate="0.02", off_n=36,
+          off_charges=0, switching=2_000_000, opp="0.008", truths=["OBSERVED", "USER_ASSERTED"])),
+    ("estimated opportunity rate makes the whole result ESTIMATED",
+     dict(balance=800_000_000, cur_rate="0.025", cur_n=24, cur_charges=0, off_rate="0.017", off_n=24,
+          off_charges=0, switching=25_000_000, opp="0.01", truths=["OBSERVED", "ESTIMATED"])),
+]
+
+
+def refinance_vectors():
+    vectors = []
+    for d, c in REFINANCE_CASES:
+        inputs = {
+            "balance": str(c["balance"]), "currency": "COP",
+            "currentRate": c["cur_rate"], "currentPeriods": str(c["cur_n"]), "currentCharges": str(c["cur_charges"]),
+            "offerRate": c["off_rate"], "offerPeriods": str(c["off_n"]), "offerCharges": str(c["off_charges"]),
+            "switchingCosts": str(c["switching"]), "opportunityRate": c["opp"],
+            "currentTruth": c["truths"][0], "opportunityRateTruth": c["truths"][1],
+        }
+        vectors.append({"description": d, "inputs": inputs, "expected": refinance(**c)})
+    return vectors
+
+
+# ---------------------------------------------------------------------------
+# debt.payoff_plan@1 — colombia-credit.md §6
+# Constant monthly budget B = sum of minimum payments + extra. Each month: interest
+# accrues on every open debt (HALF_EVEN per debt), minimums are paid (capped at the
+# balance), and whatever is left of B goes to the priority debt, cascading to the next
+# one when a debt is cleared. Minimums of cleared debts roll into the surplus.
+# AVALANCHE: highest monthly rate first. SNOWBALL: smallest current balance first.
+# Ties keep the input order. The plan fails if the budget does not cover the first
+# month's interest, or if the debt is not cleared within 1,200 months.
+# ---------------------------------------------------------------------------
+def payoff(debts, extra, strategy):
+    balances = [d["balance"] for d in debts]
+    rates = [D(d["rate"]) for d in debts]
+    minimums = [d["minimum"] for d in debts]
+    budget = sum(minimums) + extra
+    first_interest = sum(round_minor(D(b) * r) for b, r in zip(balances, rates))
+    if budget <= first_interest:
+        raise ValueError("DEBT_NEVER_AMORTIZES")
+    total_interest = 0
+    total_paid = 0
+    order = []
+    month = 0
+    while any(b > 0 for b in balances):
+        month += 1
+        if month > 1200:
+            raise ValueError("DEBT_NEVER_AMORTIZES")
+        for j, b in enumerate(balances):
+            if b > 0:
+                interest = round_minor(D(b) * rates[j])
+                balances[j] = b + interest
+                total_interest += interest
+        remaining = budget
+        for j, b in enumerate(balances):
+            if b > 0:
+                pay = min(minimums[j], b)
+                balances[j] -= pay
+                remaining -= pay
+        open_ids = [j for j, b in enumerate(balances) if b > 0]
+        if strategy == "AVALANCHE":
+            open_ids.sort(key=lambda j: (-rates[j], j))
+        else:
+            open_ids.sort(key=lambda j: (balances[j], j))
+        for j in open_ids:
+            if remaining <= 0:
+                break
+            pay = min(remaining, balances[j])
+            balances[j] -= pay
+            remaining -= pay
+        total_paid += budget - remaining
+        for j, b in enumerate(balances):
+            if b == 0 and debts[j]["id"] not in [o["id"] for o in order]:
+                order.append({"id": debts[j]["id"], "month": str(month)})
+    return {
+        "monthsToDebtFree": str(month),
+        "totalInterest": str(total_interest),
+        "totalPaid": str(total_paid),
+        "payoffOrder": order,
+    }
+
+
+PAYOFF_DEBTS = [
+    {"id": "card-a", "balance": 450_000_000, "rate": "0.028", "minimum": 18_000_000},
+    {"id": "card-b", "balance": 120_000_000, "rate": "0.021", "minimum": 6_000_000},
+    {"id": "loan-c", "balance": 900_000_000, "rate": "0.014", "minimum": 30_000_000},
+]
+
+PAYOFF_CASES = [
+    ("three debts with COP 500,000 extra", PAYOFF_DEBTS, 50_000_000),
+    ("three debts with no extra: minimums still roll over", PAYOFF_DEBTS, 0),
+    ("the smallest balance has the highest rate: both strategies agree",
+     [{"id": "small-high", "balance": 100_000_000, "rate": "0.03", "minimum": 5_000_000},
+      {"id": "big-low", "balance": 600_000_000, "rate": "0.012", "minimum": 20_000_000}], 10_000_000),
+]
+
+
+def payoff_vectors():
+    vectors = []
+    for d, debts, extra in PAYOFF_CASES:
+        inputs = {
+            "currency": "COP",
+            "extra": str(extra),
+            "debts": [{"id": x["id"], "balance": str(x["balance"]), "rate": x["rate"], "minimum": str(x["minimum"])} for x in debts],
+        }
+        vectors.append({
+            "description": d,
+            "inputs": inputs,
+            "expected": {"AVALANCHE": payoff(debts, extra, "AVALANCHE"), "SNOWBALL": payoff(debts, extra, "SNOWBALL")},
+        })
+    impossible = [{"id": "card", "balance": 1_000_000_000, "rate": "0.03", "minimum": 20_000_000}]
+    try:
+        payoff(impossible, 5_000_000, "AVALANCHE")
+        raise AssertionError("expected DEBT_NEVER_AMORTIZES")
+    except ValueError as error:
+        assert str(error) == "DEBT_NEVER_AMORTIZES"
+    vectors.append({
+        "description": "error: the budget does not cover the interest, the debt never shrinks",
+        "inputs": {"currency": "COP", "extra": "5000000",
+                   "debts": [{"id": "card", "balance": "1000000000", "rate": "0.03", "minimum": "20000000"}]},
+        "expected": {"error": "DEBT_NEVER_AMORTIZES"},
+    })
+    return vectors
+
+
 def write(formula_id: str, version: int, vectors: list) -> None:
     doc = {
         "formulaId": formula_id,
@@ -390,3 +574,5 @@ if __name__ == "__main__":
     write("amortization.french", 1, french_vectors())
     write("credit.total_cost", 1, total_cost_vectors())
     write("credit.usury_check", 1, usury_vectors())
+    write("credit.compare_refinance", 1, refinance_vectors())
+    write("debt.payoff_plan", 1, payoff_vectors())

@@ -27,7 +27,14 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
     upfront costs and GMF; monthly IRR by bisection (`solveMonthlyIrr`) and the real
     effective annual rate;
   - `credit.usury_check@1` — `usuryCheck`: agreed EA vs certified usury EA, margin in
-    percentage points, and `STALE` when the certification window does not cover the date.
+    percentage points, and `STALE` when the certification window does not cover the date;
+  - `credit.compare_refinance@1` — `compareRefinance`: instalment delta, nominal and PV
+    savings, break-even month, longer-term alert, conservative truth propagation;
+  - `debt.payoff_plan@1` — `payoffPlan`: AVALANCHE and SNOWBALL side by side, months to
+    debt-free, total interest and payoff order.
+
+Dependencies: `decimal.js` and, among workspace packages, only `@finch/contracts` (for
+`TruthClass`), as dependency-cruiser enforces.
 
 ## Does not own
 
@@ -53,7 +60,7 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 Formula-domain errors throw `FinancialInputError` with a stable `code`
 (`RATE_OUT_OF_DOMAIN`, `UNSUPPORTED_QUOTE`, `INVALID_TERM`, `INVALID_PRINCIPAL`,
 `UNAMORTIZABLE_IN_MINOR_UNITS`, `INVALID_CHARGES`, `IRR_NOT_FOUND`, `INVALID_DATE`,
-`INVALID_VALIDITY_PERIOD`), which the API maps to `FINCH_FINANCIAL_<code>`.
+`INVALID_VALIDITY_PERIOD`, `INVALID_DEBT`, `DEBT_NEVER_AMORTIZES`, `UNTRUSTED_INPUT`), which the API maps to `FINCH_FINANCIAL_<code>`.
 Other invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
 currency, a fractional minor unit, too many decimals for the currency, division by zero,
 a non-plain decimal string, invalid decimal places. The engine never returns a

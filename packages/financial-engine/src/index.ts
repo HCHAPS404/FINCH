@@ -44,3 +44,17 @@ export {
 export type { TotalCostInput, TotalCostResult, InsuranceSpec } from './credit/total-cost.js';
 export { usuryCheck } from './credit/usury.js';
 export type { UsuryCheckInput, UsuryCheckResult } from './credit/usury.js';
+export { compareRefinance } from './credit/refinance.js';
+export type {
+  CompareRefinanceInput,
+  CompareRefinanceResult,
+  RefinanceSide,
+} from './credit/refinance.js';
+export { payoffPlan, PAYOFF_STRATEGIES, MAX_PAYOFF_MONTHS } from './credit/payoff.js';
+export type {
+  PayoffDebt,
+  PayoffPlanInput,
+  PayoffPlanResult,
+  PayoffStrategy,
+  PayoffStrategyResult,
+} from './credit/payoff.js';
