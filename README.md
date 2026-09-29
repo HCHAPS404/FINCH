@@ -165,19 +165,19 @@ Full specification: [`docs/hackathon/08-feature-catalog.md`](docs/hackathon/08-f
 <details>
 <summary><b>🛡️ Trust core (under every feature)</b></summary>
 
-|     | Capability                                                       | Status                      |
-| --- | ---------------------------------------------------------------- | --------------------------- |
-| A1  | Financial Twin — versioned facts with truth class and provenance | 🗓️                          |
-| A2  | Financial engine — `Money` value object and formula registry     | ✅ foundation · 🚧 formulas |
-| A3  | Proof-carrying answers + receipt verifier                        | 🗓️                          |
-| A4  | Tiered Nemotron agent (Lightning · Super · Ultra)                | 🗓️                          |
-| A5  | Nemotron 3 Ultra second opinion                                  | 🗓️                          |
-| A6  | Decision Cards                                                   | 🗓️                          |
-| A7  | Controllable memory — "What FINCH knows about you"               | 🗓️                          |
-| A8  | Privacy by design — redaction, consent, audit, export/delete     | 🗓️                          |
-| A9  | Published evaluations                                            | 🗓️                          |
-| A10 | Bilingual (EN/ES), locale-aware                                  | 🗓️                          |
-| A11 | Always-on watcher on Nebius Serverless Jobs                      | 🗓️                          |
+|     | Capability                                                                | Status                                                                       |
+| --- | ------------------------------------------------------------------------- | ---------------------------------------------------------------------------- |
+| A1  | Financial Twin — versioned facts with truth class and provenance          | 🗓️                                                                           |
+| A2  | Financial engine — `Money`, formula registry, credit & cash-flow formulas | ✅ foundation · ✅ 8 credit/cash-flow formulas (S1-01) · 🚧 personal finance |
+| A3  | Proof-carrying answers + receipt verifier                                 | 🗓️                                                                           |
+| A4  | Tiered Nemotron agent (Lightning · Super · Ultra)                         | 🗓️                                                                           |
+| A5  | Nemotron 3 Ultra second opinion                                           | 🗓️                                                                           |
+| A6  | Decision Cards                                                            | 🗓️                                                                           |
+| A7  | Controllable memory — "What FINCH knows about you"                        | 🗓️                                                                           |
+| A8  | Privacy by design — redaction, consent, audit, export/delete              | 🗓️                                                                           |
+| A9  | Published evaluations                                                     | 🗓️                                                                           |
+| A10 | Bilingual (EN/ES), locale-aware                                           | 🗓️                                                                           |
+| A11 | Always-on watcher on Nebius Serverless Jobs                               | 🗓️                                                                           |
 
 </details>
 
