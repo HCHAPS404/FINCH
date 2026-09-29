@@ -3,6 +3,8 @@
   "compilerOptions": {
     "rootDir": "src",
     "outDir": "dist",
+    // Build state lives inside dist/: deleting dist/ must force a rebuild, not a no-op.
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
     "types": ["node"],
     // NestJS uses TypeScript's legacy decorators. Injection is declared with explicit
     // @Inject tokens, so emitDecoratorMetadata is not needed (and would conflict with
