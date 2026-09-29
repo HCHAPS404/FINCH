@@ -1,0 +1,21 @@
+---
+name: security-review
+description: Security and privacy review of a change across front and back — authorization, input validation, secrets, PII, AI prompt injection, headers, dependencies, platform permissions. Use before merging anything R1+ or touching auth, uploads, AI, channels or clients.
+---
+
+# Skill: security review
+
+Check and report (pass / issue / n.a.) with file references:
+
+1. **AuthZ** — server-side, workspace-scoped, negative tests present (other workspace, revoked,
+   unshared household data, forged IDs).
+2. **Input** — zod at every boundary; uploads type/size-limited and quarantined; no SSRF via URLs.
+3. **Secrets** — none in code, fixtures, logs, client bundles, screenshots; `pnpm security:check`.
+4. **PII** — redacted before LLM, logs, traces, analytics; minimal in outbound channels.
+5. **AI** — untrusted content never becomes instructions; tool allowlist; budgets; verifier on.
+6. **Web** — CSP, security headers, cookies flags, no tokens in localStorage, no sensitive URLs.
+7. **Desktop/Mobile** — minimal Tauri capabilities; SecureStore use; biometric gate; push payloads.
+8. **Dependencies** — new deps justified, exact versions, license compatible, no known vulns.
+9. **Threat model** — exists/updated for R1+ in `docs/architecture/threat-models/`.
+
+Output: findings table + blocking items. Any blocking item → do not merge.

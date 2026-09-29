@@ -1,141 +1,140 @@
-# Fórmulas de finanzas personales (contrato del motor para la hackathon)
+# Personal finance formulas (engine contract for the hackathon)
 
-> Complementa [colombia-credit.md](colombia-credit.md). Mismas reglas: montos en `bigint` de
-> unidades menores, tasas en decimal de precisión arbitraria, redondeo explícito, cada fórmula en el
-> Formula Registry con versión y golden vectors verificados de forma independiente (S1-05).
-> Todo lo que depende de un país (impuestos, festivos, convenciones) llega como parámetro desde
-> `jurisdictions/<país>/`.
+> Complements [colombia-credit.md](colombia-credit.md). Same rules: amounts as `bigint` in minor
+> units, rates in arbitrary-precision decimal, explicit rounding, every formula in the Formula
+> Registry with a version and independently verified golden vectors (S1-03). Everything that depends
+> on a country (taxes, holidays, conventions) arrives as a parameter from `jurisdictions/<country>/`.
 
 ---
 
-## 1. Asignación del ingreso — `budget.allocate@1` (Payday Autopilot, B1)
+## 1. Income allocation — `budget.allocate@1` (Payday Autopilot, B1)
 
-Entrada: `ingreso` (Money), `fecha_ingreso`, `proximo_ingreso`, obligaciones con vencimiento, deudas
-con mínimos, colchón objetivo y actual, metas con prioridad/fecha/aporte sugerido, regla del usuario
+Input: `income` (Money), `income_date`, `next_income`, obligations with due dates, debts with
+minimums, target and current buffer, goals with priority/date/suggested contribution, user rule
 (`PAY_YOURSELF_FIRST(p)`, `RULE_50_30_20`, `CUSTOM`).
 
-Algoritmo determinista por capas (cada capa consume de `restante`):
+Deterministic layered algorithm (each layer consumes from `remaining`):
 
 ```text
-1. obligaciones con vencimiento ≤ proximo_ingreso              (orden por fecha)
-2. mínimos de deudas con vencimiento ≤ proximo_ingreso         (orden por fecha)
-3. "págate primero": p · ingreso a ahorro, si la regla lo pide
-4. colchón hasta objetivo, con tope por ciclo (parámetro)
-5. metas por prioridad; dentro de igual prioridad, por fecha
-6. excedente → estrategia elegida: abono extra a deuda (avalanche) o ahorro/inversión
-7. libre = restante
+1. obligations due ≤ next_income                         (ordered by date)
+2. debt minimums due ≤ next_income                       (ordered by date)
+3. "pay yourself first": p · income to savings, if the rule asks for it
+4. buffer up to target, capped per cycle (parameter)
+5. goals by priority; within equal priority, by date
+6. surplus → chosen strategy: extra debt payment (avalanche) or savings/investing
+7. free = remaining
 ```
 
-- Si `restante < 0` en la capa 1–2: **déficit** → no se asigna nada a capas 3+, se marca el faltante
-  y se genera Decision Card (C3 lógico).
-- **Invariante:** `Σ asignaciones + libre = ingreso` exacto (test de conservación).
-- Salida: lista `(destino, monto, fecha_objetivo, razón, capa)` + checklist de ejecución.
+- If `remaining < 0` in layers 1–2: **deficit** → nothing is allocated to layers 3+, the shortfall is
+  flagged and a Decision Card is generated (C3 logic).
+- **Invariant:** `Σ allocations + free = income` exactly (conservation test).
+- Output: list of `(destination, amount, target_date, reason, layer)` + execution checklist.
 
-## 2. Estado de sobres — `budget.envelope_state@1` (B2)
+## 2. Envelope state — `budget.envelope_state@1` (B2)
 
-`disponible_sobre = asignado − Σ gastos(sobre, ciclo) ± movimientos_entre_sobres`.
-Alertas en 80 % y 100 %. Mover entre sobres conserva el total del ciclo.
+`envelope_available = allocated − Σ expenses(envelope, cycle) ± transfers_between_envelopes`.
+Alerts at 80 % and 100 %. Moving between envelopes conserves the cycle total.
 
-## 3. Salud financiera — `health.score@1` (B7)
+## 3. Financial health — `health.score@1` (B7)
 
-Puntaje 0–100 = Σ `peso_i · subpuntaje_i`, con subpuntajes 0–100 por tramos publicados:
+Score 0–100 = Σ `weight_i · subscore_i`, with 0–100 subscores by published bands:
 
-| Componente                 | Métrica                                      | Peso inicial |
-| -------------------------- | -------------------------------------------- | ------------ |
-| Carga de deuda             | cuotas mensuales / ingreso neto              | 25           |
-| Colchón                    | meses de gastos esenciales cubiertos         | 20           |
-| Tasa de ahorro             | ahorro del mes / ingreso                     | 20           |
-| Uso de cupo                | saldo tarjetas / cupo total                  | 15           |
-| Puntualidad                | pagos a tiempo / pagos del periodo           | 10           |
-| Diversificación de ingreso | 1 − índice de concentración (HHI) de fuentes | 10           |
+| Component              | Metric                                    | Initial weight |
+| ---------------------- | ----------------------------------------- | -------------- |
+| Debt load              | monthly instalments / net income          | 25             |
+| Buffer                 | months of essential expenses covered      | 20             |
+| Savings rate           | month's savings / income                  | 20             |
+| Credit utilization     | card balances / total limit               | 15             |
+| Punctuality            | on-time payments / payments in the period | 10             |
+| Income diversification | 1 − concentration index (HHI) of sources  | 10             |
 
-Pesos y tramos son parámetros versionados; cambiar cualquiera crea `health.score@2`. Cada
-componente muestra "qué haría subir el puntaje". **No es un score crediticio.**
+Weights and bands are versioned parameters; changing any of them creates `health.score@2`. Each
+component shows "what would raise the score". **It is not a credit score.**
 
-## 4. Patrimonio neto — `networth.compute@1` (B8)
+## 4. Net worth — `networth.compute@1` (B8)
 
-`patrimonio = Σ activos(moneda base) − Σ pasivos(moneda base)`, conversión con `fx.convert@1` a la
-fecha del snapshot. Vehículos: depreciación lineal o por tabla configurable (`ESTIMATED`).
+`net_worth = Σ assets(base currency) − Σ liabilities(base currency)`, converted with `fx.convert@1`
+at the snapshot date. Vehicles: straight-line or configurable-table depreciation (`ESTIMATED`).
 
-## 5. ¿Me lo puedo permitir? — `purchase.afford@1` (C1)
+## 5. Can I afford it? — `purchase.afford@1` (C1)
 
-Para una compra `precio` en fecha `t`, con opciones `contado` o `n cuotas a tasa i`:
+For a purchase `price` on date `t`, with options `cash` or `n instalments at rate i`:
 
-1. Recalcular forecast (`cashflow.forecast_30d`, extendido al horizonte del plan) con el nuevo flujo.
-2. Veredicto determinista:
-   - `SI` si el saldo proyectado nunca cae bajo el colchón y ningún sobre esencial queda negativo;
-   - `SI_CON_AJUSTE` si cae bajo el colchón pero se recupera antes del próximo ingreso, indicando qué
-     sobre ajustar;
-   - `ESPERAR` si hay déficit → fecha más temprana `t*` en que sería `SI`;
-   - `NO_RECOMENDADO` si compromete obligaciones.
-3. Costo de financiar: `intereses = Σ cuotas − precio` (amortización francesa) y costo de oportunidad
-   del contado a la tasa de ahorro del usuario.
+1. Recompute the forecast (`cashflow.forecast_30d`, extended to the plan horizon) with the new flow.
+2. Deterministic verdict:
+   - `YES` if the projected balance never falls below the buffer and no essential envelope goes
+     negative;
+   - `YES_WITH_ADJUSTMENT` if it falls below the buffer but recovers before the next income, stating
+     which envelope to adjust;
+   - `WAIT` if there is a deficit → earliest date `t*` at which it would be `YES`;
+   - `NOT_RECOMMENDED` if it compromises obligations.
+3. Financing cost: `interest = Σ instalments − price` (French amortization) and the opportunity cost
+   of paying cash at the user's savings rate.
 
-## 6. Escenarios "¿Y si…?" — `scenario.project@1` (C2)
+## 6. "What if…?" scenarios — `scenario.project@1` (C2)
 
-Proyección mensual a `H` meses sobre **copia** del snapshot con cambios parametrizados (Δ ingreso,
-nueva deuda, nuevo gasto recurrente, evento único). Salidas por mes: saldo, deuda total, patrimonio,
-progreso de metas. Hasta 3 escenarios comparables. Nunca muta el estado canónico.
+Monthly projection over `H` months on a **copy** of the snapshot with parameterized changes (Δ income,
+new debt, new recurring expense, one-off event). Outputs per month: balance, total debt, net worth,
+goal progress. Up to 3 comparable scenarios. Never mutates canonical state.
 
-## 7. Modo tormenta — `stress.runway@1` (C3)
+## 7. Storm mode — `stress.runway@1` (C3)
 
-`runway_meses = liquidez_disponible / gastos_esenciales_mensuales` con recortes opcionales:
-gastos por tiers (esencial / reducible / eliminable). Salida: runway sin recortes, con recortes, y
-orden de prioridad de pagos (obligaciones legales y vivienda → mínimos de deuda → resto).
+`runway_months = available_liquidity / monthly_essential_expenses` with optional cuts: expenses by
+tier (essential / reducible / removable). Output: runway without cuts, with cuts, and payment
+priority order (legal obligations and housing → debt minimums → the rest).
 
-## 8. Metas — `goals.plan@1` (C4)
+## 8. Goals — `goals.plan@1` (C4)
 
-Para cada meta `g`: `aporte_requerido_g = (objetivo_g − ahorrado_g) / meses_restantes_g` (o con
-rendimiento esperado: fórmula de anualidad a tasa `r`). Si `Σ aportes > capacidad_de_ahorro`,
-asignación por prioridad y se recalculan fechas alcanzables → trade-offs explícitos
-(`meta X se atrasa k meses`).
+For each goal `g`: `required_contribution_g = (target_g − saved_g) / remaining_months_g` (or, with an
+expected return, the annuity formula at rate `r`). If `Σ contributions > savings_capacity`, allocation
+by priority and reachable dates are recomputed → explicit trade-offs (`goal X is delayed k months`).
 
-## 9. Rentabilidad neta de depósitos — `deposit.net_return@1` (D1)
+## 9. Net return on deposits — `deposit.net_return@1` (D1)
 
 ```text
-rendimiento_bruto = capital · ((1 + EA)^(plazo_días/365) − 1)        # base de días: parámetro por país/producto
-retención         = rendimiento_bruto · tasa_retención(país, producto) # VERIFICAR tasa vigente (CO)
-rendimiento_neto  = rendimiento_bruto − retención − costos
-EA_neta           = (1 + rendimiento_neto/capital)^(365/plazo_días) − 1
-EA_real_neta      = (1 + EA_neta)/(1 + inflación_esperada) − 1          # inflación: fuente oficial, fecha
+gross_return      = principal · ((1 + EA)^(term_days/365) − 1)      # day-count basis: parameter per country/product
+withholding       = gross_return · withholding_rate(country, product) # VERIFY current rate (CO)
+net_return        = gross_return − withholding − costs
+net_EA            = (1 + net_return/principal)^(365/term_days) − 1
+real_net_EA       = (1 + net_EA)/(1 + expected_inflation) − 1         # inflation: official source, date
 ```
 
-## 10. Tipo de cambio — `fx.convert@1` (G3)
+## 10. Exchange rate — `fx.convert@1` (G3)
 
-`monto_destino = round(monto_origen · tasa(origen→destino, fecha))` con tasa de referencia citada
-(fuente, fecha, hora). Sobrecosto de una conversión real: `markup = tasa_referencia/tasa_aplicada − 1`.
+`target_amount = round(source_amount · rate(source→target, date))` with a cited reference rate
+(source, date, time). Markup of a real conversion: `markup = reference_rate/applied_rate − 1`.
 
-## 11. Costo de remesa — `fx.remittance_cost@1` (D5)
+## 11. Remittance cost — `fx.remittance_cost@1` (D5)
 
-`costo_total = comisión + monto_enviado · (tasa_referencia − tasa_ofrecida)/tasa_referencia`
-expresado en moneda de origen y como % del envío; `recibe = (monto_enviado − comisión) · tasa_ofrecida`.
+`total_cost = fee + amount_sent · (reference_rate − offered_rate)/reference_rate`, expressed in the
+source currency and as a % of the transfer; `received = (amount_sent − fee) · offered_rate`.
 
-## 12. Detección de recurrentes — `recurring.detect@1` (D2)
+## 12. Recurring detection — `recurring.detect@1` (D2)
 
-Agrupar transacciones por comercio normalizado; recurrente si ≥ 3 ocurrencias con intervalo medio en
-{7, 14, 30, 90, 365} ± tolerancia (parámetro) y coeficiente de variación del monto ≤ umbral. Subida
-de precio: último monto > mediana previa · (1 + umbral).
+Group transactions by normalized merchant; recurring when ≥ 3 occurrences with a mean interval in
+{7, 14, 30, 90, 365} ± tolerance (parameter) and amount coefficient of variation ≤ threshold. Price
+rise: last amount > previous median · (1 + threshold).
 
-## 13. Liquidación de gastos compartidos — `split.settle@1` (F1)
+## 13. Shared-expense settlement — `split.settle@1` (F1)
 
-Balance por miembro = pagado − debido (según regla: partes iguales, proporcional al ingreso
-declarado, montos fijos). Liquidación: emparejamiento greedy deudor-mayor ↔ acreedor-mayor hasta
-saldar; produce ≤ `n − 1` transferencias. Invariante: `Σ balances = 0`.
+Balance per member = paid − owed (by rule: equal parts, proportional to declared income, fixed
+amounts). Settlement: greedy matching of largest debtor ↔ largest creditor until settled; produces
+≤ `n − 1` transfers. Invariant: `Σ balances = 0`.
 
-## 14. Brechas de protección — `protection.gaps@1` (F2)
+## 14. Protection gaps — `protection.gaps@1` (F2)
 
-Reglas publicadas y versionadas, p. ej.: colchón < 3 meses de gastos esenciales → brecha alta;
-dependientes > 0 sin cobertura de vida declarada → brecha; mismo tipo de seguro cobrado en ≥ 2
-productos → posible duplicidad. Solo educativo.
+Published, versioned rules, e.g.: buffer < 3 months of essential expenses → high gap; dependants > 0
+without declared life cover → gap; the same insurance type charged on ≥ 2 products → possible
+duplication. Educational only.
 
-## 15. Proyección de inversión educativa — `invest.project@1` (C5)
+## 15. Educational investment projection — `invest.project@1` (C5)
 
-Valor futuro de aportes periódicos `A` a tasa mensual `r` durante `n` meses:
-`VF = A · ((1 + r)^n − 1)/r` (+ capital inicial `C·(1+r)^n`), para 3 escenarios de `r`
-(conservador/base/optimista, parámetros con fuente o supuesto explícito), neto de impuestos e
-inflación con los mismos parámetros de §9.
+Future value of periodic contributions `A` at monthly rate `r` over `n` months:
+`FV = A · ((1 + r)^n − 1)/r` (+ initial principal `C·(1+r)^n`), for 3 scenarios of `r`
+(conservative/base/optimistic, parameters with a source or an explicit assumption), net of taxes and
+inflation with the same parameters as §9.
 
-## Vectores mínimos
+## Minimum vectors
 
-Cada fórmula de este documento entra con ≥ 4 golden vectors que incluyan: caso nominal, borde (cero,
-un solo elemento), conservación (donde aplique) y error explicativo.
+Each formula in this document enters with ≥ 4 golden vectors covering: nominal case, edge (zero, a
+single element), conservation (where applicable) and explanatory error.

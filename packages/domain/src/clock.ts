@@ -2,8 +2,8 @@
  * Clock port — README §60.
  *
  * The domain never reads ambient time. `Date.now()` inside a calculation makes that
- * calculation irreproducible, which directly violates Constitution §4.5 ("toda
- * decisión histórica debe poder reproducirse"). It also makes tests depend on when
+ * calculation irreproducible, which directly violates Constitution §4.5 ("every
+ * historical decision must be reproducible"). It also makes tests depend on when
  * they run, which is how date-boundary defects reach production.
  *
  * The ESLint rule `no-restricted-properties` in @finch/eslint-config blocks Date.now

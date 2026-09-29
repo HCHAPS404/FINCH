@@ -17,3 +17,8 @@ packages/db/migrations/
 target/
 artifacts/
 reports/
+
+# Generated agent adapters (scripts/ai-sync.mjs); the sources in .ai/ are formatted.
+.claude/skills/
+.cursor/rules/
+.agent/

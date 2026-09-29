@@ -1,73 +1,73 @@
-# FINCH × Nebius × NVIDIA Global AI Hackathon — Programa de hackathon
+# FINCH × Nebius × NVIDIA Global AI Hackathon — Hackathon program
 
-> **Estado:** PROPUESTO — requiere aprobación de ambos fundadores (HELL y Nairy).
-> **Fecha:** 2026-09-28
-> **Deadline de envío:** viernes 30 de octubre de 2026, 10:00 PT = **12:00 hora Colombia** (17:00 UTC).
-> **Días de construcción disponibles:** 32 (de lunes 28-sep a jueves 29-oct; el 30-oct es solo colchón).
+> **Status:** PROPOSED — requires approval from both founders (HELL and Nairy).
+> **Date:** 2026-09-28
+> **Submission deadline:** Friday 30 October 2026, 10:00 PT = **12:00 Colombia time** (17:00 UTC).
+> **Build days available:** 32 (Monday 28 Sep to Thursday 29 Oct; 30 Oct is buffer only).
 
-Este directorio convierte FINCH, que hoy es un **scaffold con arquitectura aprobada**, en un
-**envío ganador** para la hackathon, sin traicionar la Constitución (README §4). Al mismo tiempo
-deja a FINCH mejor posicionada como empresa. La hackathon no es un desvío: es el primer
-_vertical slice_ real del producto, con un deadline externo y validación de jurados.
+This directory turns FINCH — today a **scaffold with an approved architecture** — into a
+**winning hackathon submission** without betraying the Constitution (README §4), while leaving
+FINCH better positioned as a company. The hackathon is not a detour: it is the product's first
+real _vertical slice_, with an external deadline and expert judges.
 
-## Lectura en orden
+## Reading order
 
-| #   | Documento                                                                    | Para qué sirve                                                                           |
-| --- | ---------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| 00  | [Reglas y cumplimiento](00-rules-and-compliance.md)                          | Reglas oficiales, lista de verificación de cada requisito y trampas descalificatorias.   |
-| 01  | [Estrategia, track y premios](01-strategy-and-track.md)                      | Qué track elegir y por qué; cómo se puntúa; qué premios son alcanzables.                 |
-| 02  | [Especificación de producto](02-product-spec.md)                             | Qué es "FINCH: tu CFO personal": funcionalidades MoSCoW, flujos y personas.              |
-| 03  | [Arquitectura y stack Nebius/NVIDIA](03-architecture-and-nebius-stack.md)    | Topología, componentes, uso de cada herramienta Nebius/NVIDIA/Tavily/LangSmith/Toloka.   |
-| 04  | [Diseño de IA, seguridad y evaluación](04-ai-design-safety-evals.md)         | Enrutamiento Nemotron por niveles, agente, _proof-carrying answers_, guardrails y evals. |
-| 05  | [Roadmap y cronograma](05-roadmap-and-timeline.md)                           | Plan día a día hasta el envío, periodo de jurados y roadmap de empresa 2027.             |
-| 06  | [Kit de envío](06-submission-kit.md)                                         | Texto de Devpost (inglés), guion del video de 3 min, README para jurados, feedback.      |
-| 07  | [Riesgos y decisiones abiertas](07-risks-and-decisions.md)                   | Riesgos con mitigación, y las decisiones que **solo los fundadores** pueden tomar.       |
-| 08  | [Catálogo de funciones](08-feature-catalog.md)                               | **Fuente única de alcance:** 45 funciones H y la perspectiva P.                          |
-| —   | [Fórmulas Colombia (crédito)](../financial-formulas/colombia-credit.md)      | Matemática de tasas, amortización, costo total y usura: contrato del motor.              |
-| —   | [Fórmulas de finanzas personales](../financial-formulas/personal-finance.md) | Payday, sobres, salud, patrimonio, decisiones, CDT neto, FX, remesas, hogar compartido.  |
+| #   | Document                                                                    | Purpose                                                                                       |
+| --- | --------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| 00  | [Rules and compliance](00-rules-and-compliance.md)                          | Official rules, a checklist for every requirement and the traps that disqualify.              |
+| 01  | [Strategy, track and prizes](01-strategy-and-track.md)                      | Which track and why; how scoring works; which prizes are reachable.                           |
+| 02  | [Product specification](02-product-spec.md)                                 | What "FINCH, your personal CFO" is: vision, premium principles, personas, flows, skills.      |
+| 03  | [Architecture and Nebius/NVIDIA stack](03-architecture-and-nebius-stack.md) | Topology, components and how every Nebius/NVIDIA/Tavily/LangSmith/Toloka tool is used.        |
+| 04  | [AI design, safety and evaluation](04-ai-design-safety-evals.md)            | Tiered Nemotron routing, agent, _proof-carrying answers_, guardrails and evals.               |
+| 05  | [Roadmap and timeline](05-roadmap-and-timeline.md)                          | Day-by-day plan to submission, the judging period and the 2027 company roadmap.               |
+| 06  | [Submission kit](06-submission-kit.md)                                      | Devpost text, 3-minute video script, judges' README structure, feedback.                      |
+| 07  | [Risks and open decisions](07-risks-and-decisions.md)                       | Risks with mitigations, and the decisions **only the founders** can make.                     |
+| 08  | [Feature catalog](08-feature-catalog.md)                                    | **Single source of scope:** 45 H features and the future perspective (P).                     |
+| —   | [Colombia credit formulas](../financial-formulas/colombia-credit.md)        | Rate conversion, amortization, total cost and usury math: the engine contract.                |
+| —   | [Personal-finance formulas](../financial-formulas/personal-finance.md)      | Payday, envelopes, health, net worth, decisions, net CDT return, FX, remittances, households. |
 
-ADRs nuevos (en `docs/architecture/adr/`):
+New ADRs (in `docs/architecture/adr/`):
 
-- [ADR-0035](../architecture/adr/0035-hackathon-program-and-scope.md): programa de hackathon, alcance y precedencia sobre el programa de 24 semanas.
-- [ADR-0036](../architecture/adr/0036-ai-runtime-nebius-token-factory-nemotron.md): runtime de IA en Nebius Token Factory con NVIDIA Nemotron por niveles, detrás del AI Gateway.
-- [ADR-0037](../architecture/adr/0037-open-source-license.md): licencia open source (requisito de la hackathon) y estrategia _open core_.
-- [ADR-0038](../architecture/adr/0038-hackathon-demo-deployment-topology.md): topología de despliegue del demo (excepción acotada a ADR-0012).
-- [ADR-0039](../architecture/adr/0039-channel-hub.md): app autónoma; correo, SMS, WhatsApp y Telegram como canales opcionales.
-- [ADR-0040](../architecture/adr/0040-engineering-method-and-branching.md): método XP + Agile + CRISP-ML(Q) y ramas por etapa.
+- [ADR-0035](../architecture/adr/0035-hackathon-program-and-scope.md): hackathon program, scope and precedence over the 24-week program.
+- [ADR-0036](../architecture/adr/0036-ai-runtime-nebius-token-factory-nemotron.md): AI runtime on Nebius Token Factory with tiered NVIDIA Nemotron, behind the AI Gateway.
+- [ADR-0037](../architecture/adr/0037-open-source-license.md): open source license (hackathon requirement) and _open core_ strategy.
+- [ADR-0038](../architecture/adr/0038-hackathon-demo-deployment-topology.md): demo deployment topology (scoped exception to ADR-0012).
+- [ADR-0039](../architecture/adr/0039-channel-hub.md): autonomous app; email, SMS, WhatsApp and Telegram as optional channels.
+- [ADR-0040](../architecture/adr/0040-engineering-method-and-branching.md): XP + Agile + CRISP-ML(Q) method and stage/area branching.
+- [ADR-0041](../architecture/adr/0041-design-system-and-frontend-toolchain.md): design system, Figma channel and front-end toolchain.
 
-Arquitectura de software: [SOFTWARE-ARCHITECTURE.md](../architecture/SOFTWARE-ARCHITECTURE.md) ·
-Acuerdo de trabajo de los fundadores: [README-DEVELOPERS.md](../../README-DEVELOPERS.md).
+Software architecture: [SOFTWARE-ARCHITECTURE.md](../architecture/SOFTWARE-ARCHITECTURE.md) ·
+Founders' working agreement: [README-DEVELOPERS.md](../../README-DEVELOPERS.md).
 
-## La tesis en una frase
+## The thesis in one sentence
 
-> **FINCH es un CFO personal premium, privado y siempre activo: planifica tu sueldo, controla tus
-> tarjetas, te frena antes de una mala compra y encuentra dinero que pierdes. Nemotron razona y
-> explica, pero ninguna cifra la inventa un modelo: cada número viene con su recibo.**
+> **FINCH is a premium, private, always-on personal CFO: it plans your paycheck, controls your
+> cards, stops you before a bad purchase and finds money you are losing. Nemotron reasons and
+> explains, but no model ever invents a figure: every number comes with its receipt.**
 
-Esto encaja con el **Personal AI Track** (asistente privado, siempre activo, con memoria, _skills_
-reutilizables y herramientas elegidas por el usuario). Además es una respuesta directa a lo que
-los jurados puntúan: **Technological Implementation, Design, Potential Impact y Quality of the Idea**,
-con el mismo peso cada uno.
+This fits the **Personal AI Track** (a private, always-on assistant with memory, reusable _skills_
+and tools the user chooses). It is also a direct answer to what the judges score — **Technological
+Implementation, Design, Potential Impact and Quality of the Idea**, equally weighted.
 
-## Resumen del plan
+## Plan summary
 
 ```text
-Sem 0 (28-sep → 04-oct)  Fundación: licencia, créditos, ADRs, walking skeleton en producción con Nemotron
-Sem 1 (05-oct → 11-oct)  Motor + agente con recibos + "Me llegó el sueldo" (Payday, sobres, tarjetas, calendario)
-Sem 2 (12-oct → 18-oct)  Tavily + Opportunity Engine + recibos por foto + simuladores + Ultra + memoria
-Sem 3 (19-oct → 25-oct)  Bóveda, buscador, hogar compartido, protección, Vigía + push, correo, D3–D5, F3–F5, G4, evals
-Sem 4 (26-oct → 30-oct)  Code freeze 27-oct · video 27–28 · envío 29-oct · 30-oct colchón
-01-dic → 15-dic          Jurados: el demo DEBE seguir vivo y con crédito
-~11-ene-2027             Anuncio de ganadores
+Wk 0 (28 Sep → 04 Oct)  Foundation: license, credits, ADRs, walking skeleton in production with Nemotron
+Wk 1 (05 Oct → 11 Oct)  Engine + agent with receipts + "My paycheck arrived" (Payday, envelopes, cards, calendar)
+Wk 2 (12 Oct → 18 Oct)  Tavily + Opportunity Engine + receipts by photo + simulators + Ultra + memory
+Wk 3 (19 Oct → 25 Oct)  Vault, search, household, protection, Watcher + push, email, D3–D5, F3–F5, G4, evals
+Wk 4 (26 Oct → 30 Oct)  Code freeze 27 Oct · video 27–28 · submit 29 Oct · 30 Oct buffer
+01 Dec → 15 Dec         Judging: the demo MUST stay live and funded
+~11 Jan 2027            Winners announced
 ```
 
-## Equipo
+## Team
 
-| Persona                         | Rol en la hackathon                                                                                                                       |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **HELL** (Helmut, `@HCHAPS404`) | Representante del equipo ante Devpost. Líder de backend, motor financiero, AI Gateway, agente, infraestructura Nebius.                    |
-| **Nairy** (cofundadora)         | Líder de producto/UX, frontend web, sistema de diseño con la marca, app shell y PWA, evals humanas (Toloka), video y narrativa del envío. |
-| Claude / Cursor                 | Herramientas (AGENTS.md §1). No son autores. Claude: arquitectura, specs, revisión. Cursor: implementación multiarchivo.                  |
+| Person                          | Hackathon role                                                                                                                      |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| **HELL** (Helmut, `@HCHAPS404`) | Team Representative on Devpost. Lead for backend, financial engine, AI Gateway, agent, Nebius infrastructure.                       |
+| **Nairy** (co-founder)          | Lead for product/UX, web front end, branded design system, app shell and PWA, human evals (Toloka), video and submission narrative. |
+| Claude / Cursor                 | Tools (AGENTS.md §1), never authors. Claude: architecture, specs, review. Cursor: multi-file implementation.                        |
 
-La división es una **propuesta**. Si las fortalezas de Nairy son otras, se intercambian los
-bloques completos del cronograma (05) sin romper las dependencias.
+The split is a **proposal**. If Nairy's strengths lie elsewhere, whole blocks of the timeline (05)
+are swapped without breaking dependencies.

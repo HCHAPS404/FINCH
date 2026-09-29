@@ -1,0 +1,158 @@
+{
+  "$description": "FINCH primitive tokens (W3C Design Tokens / DTCG format). Raw values live only here. Brand greens sampled from the FINCH logo (#0E4331, #053F2B).",
+  "color": {
+    "$type": "color",
+    "green": {
+      "50": { "$value": "#EEF9F2" },
+      "100": { "$value": "#D5F2E1" },
+      "200": { "$value": "#A7E3C1" },
+      "300": { "$value": "#6FCF97" },
+      "400": { "$value": "#3FB47A" },
+      "500": { "$value": "#2A9565" },
+      "600": { "$value": "#1F7A55" },
+      "700": { "$value": "#146044" },
+      "800": { "$value": "#10513A" },
+      "900": { "$value": "#0E4331" },
+      "950": { "$value": "#053F2B" }
+    },
+    "neutral": {
+      "0": { "$value": "#FFFFFF" },
+      "25": { "$value": "#F6F8F6" },
+      "50": { "$value": "#EDF1EE" },
+      "100": { "$value": "#E2E8E4" },
+      "200": { "$value": "#CFD8D3" },
+      "300": { "$value": "#B4C2BB" },
+      "400": { "$value": "#93A39B" },
+      "500": { "$value": "#6F7E77" },
+      "600": { "$value": "#5F6C66" },
+      "700": { "$value": "#48554F" },
+      "800": { "$value": "#2A3531" },
+      "850": { "$value": "#1F2B26" },
+      "900": { "$value": "#152620" },
+      "925": { "$value": "#0F1D18" },
+      "950": { "$value": "#0A1511" },
+      "975": { "$value": "#07100D" },
+      "ink": { "$value": "#101A16" },
+      "mist": { "$value": "#EEF4F0" }
+    },
+    "red": {
+      "50": { "$value": "#FCEBE9" },
+      "300": { "$value": "#F4A29B" },
+      "700": { "$value": "#A4221A" },
+      "950": { "$value": "#2E1311" }
+    },
+    "amber": {
+      "50": { "$value": "#FDF1E1" },
+      "300": { "$value": "#F2C27A" },
+      "700": { "$value": "#8A4B08" },
+      "950": { "$value": "#2C1D08" }
+    },
+    "blue": {
+      "50": { "$value": "#E8EFFB" },
+      "300": { "$value": "#9DBDF5" },
+      "700": { "$value": "#1C4E9A" },
+      "950": { "$value": "#0F1B31" }
+    },
+    "brass": {
+      "50": { "$value": "#F7EFDD" },
+      "300": { "$value": "#E6C98A" },
+      "700": { "$value": "#6B4E12" },
+      "950": { "$value": "#2A2110" }
+    },
+    "slate": {
+      "100": { "$value": "#ECEFED" },
+      "700": { "$value": "#4E5A55" },
+      "900": { "$value": "#18221E" }
+    },
+    "greenTint": {
+      "50": { "$value": "#E6F4EC" },
+      "950": { "$value": "#10291F" }
+    }
+  },
+  "font": {
+    "family": {
+      "$type": "fontFamily",
+      "display": { "$value": ["Instrument Serif", "Georgia", "serif"] },
+      "sans": { "$value": ["Geist", "system-ui", "-apple-system", "Segoe UI", "sans-serif"] },
+      "mono": { "$value": ["Geist Mono", "ui-monospace", "SFMono-Regular", "monospace"] }
+    },
+    "weight": {
+      "$type": "fontWeight",
+      "regular": { "$value": 400 },
+      "medium": { "$value": 500 },
+      "semibold": { "$value": 600 }
+    },
+    "size": {
+      "$type": "dimension",
+      "xs": { "$value": "0.75rem" },
+      "sm": { "$value": "0.875rem" },
+      "md": { "$value": "1rem" },
+      "lg": { "$value": "1.125rem" },
+      "xl": { "$value": "1.375rem" },
+      "2xl": { "$value": "1.75rem" },
+      "3xl": { "$value": "2.25rem" },
+      "4xl": { "$value": "3rem" },
+      "5xl": { "$value": "4rem" }
+    },
+    "lineHeight": {
+      "$type": "number",
+      "tight": { "$value": 1.1 },
+      "snug": { "$value": 1.25 },
+      "normal": { "$value": 1.5 }
+    },
+    "tracking": {
+      "$type": "dimension",
+      "tight": { "$value": "-0.02em" },
+      "normal": { "$value": "0em" },
+      "wide": { "$value": "0.06em" }
+    }
+  },
+  "space": {
+    "$type": "dimension",
+    "0": { "$value": "0rem" },
+    "1": { "$value": "0.25rem" },
+    "2": { "$value": "0.5rem" },
+    "3": { "$value": "0.75rem" },
+    "4": { "$value": "1rem" },
+    "5": { "$value": "1.25rem" },
+    "6": { "$value": "1.5rem" },
+    "8": { "$value": "2rem" },
+    "10": { "$value": "2.5rem" },
+    "12": { "$value": "3rem" },
+    "16": { "$value": "4rem" },
+    "20": { "$value": "5rem" },
+    "24": { "$value": "6rem" }
+  },
+  "radius": {
+    "$type": "dimension",
+    "none": { "$value": "0rem" },
+    "sm": { "$value": "0.375rem" },
+    "md": { "$value": "0.625rem" },
+    "lg": { "$value": "1rem" },
+    "xl": { "$value": "1.5rem" },
+    "pill": { "$value": "999rem" }
+  },
+  "motion": {
+    "duration": {
+      "$type": "duration",
+      "instant": { "$value": "80ms" },
+      "fast": { "$value": "150ms" },
+      "base": { "$value": "200ms" },
+      "slow": { "$value": "280ms" },
+      "number": { "$value": "600ms" }
+    },
+    "easing": {
+      "$type": "cubicBezier",
+      "standard": { "$value": [0.2, 0, 0, 1] },
+      "enter": { "$value": [0, 0, 0, 1] },
+      "exit": { "$value": [0.3, 0, 1, 1] }
+    }
+  },
+  "size": {
+    "$type": "dimension",
+    "touchTarget": { "$value": "2.75rem" },
+    "focusRing": { "$value": "0.1875rem" },
+    "contentMax": { "$value": "72rem" },
+    "readingMax": { "$value": "42rem" }
+  }
+}

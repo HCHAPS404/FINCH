@@ -1,44 +1,41 @@
 # @finch/design-tokens
 
-Semantic design tokens shared by web, mobile and desktop. README §34.
+Semantic design tokens shared by web, desktop and mobile. Constitution §34–§35, ADR-0041,
+`docs/design/DESIGN-PRINCIPLES.md`.
 
-> **Status:** boundary only. No implementation yet — see _Unblocked by_ below.
-> This file is the module contract required by README §98. It is written before the
-> code so the package cannot quietly acquire responsibilities it was never meant to
-> have.
+> **Status:** implemented — DTCG JSON sources, alias resolution, CSS output and WCAG 2.2 AA
+> contrast tests.
 
 ## Responsibility
 
-Semantic design tokens shared by web, mobile and desktop. README §34.
+Hold every visual value (color, type, space, radius, motion, sizes) once, in the W3C Design Tokens
+(DTCG) format that Figma Variables mirror (`docs/design/FIGMA.md`), and render it for each platform.
 
 ## Owns
 
-- Semantic tokens: surface, text, border, positive, negative, warning, critical, verified, estimated, stale, pending.
-- Light and dark palettes as first-class peers.
+- `src/tokens/primitives.json` — raw values (brand greens sampled from the logo, neutrals, semantic
+  hues, type, space, radius, motion, sizes). Raw values live **only** here.
+- `src/tokens/semantic.light.json` · `semantic.dark.json` — semantic names (surface, text, border,
+  action, feedback, truth) as **aliases only**; same names in both themes.
+- `renderCss()` → `dist/finch-tokens.css` (`@finch/design-tokens/css`): light by default, dark via
+  `prefers-color-scheme` and `[data-theme='dark']`.
+- `themes`, `color()`, `contrastRatio()` for typed access and tests.
 
 ## Does not own
 
-- Component implementations — those are @finch/ui-web and @finch/ui-mobile.
+- Component implementations (`@finch/ui-web`, `@finch/ui-mobile`).
 
-## Invariants
+## Invariants (enforced by `src/index.test.ts`)
 
-- Financial state is never conveyed by colour alone; verified/estimated/stale need a non-colour signal too (§34, §35).
-- Every token pair meets contrast requirements in both themes (§35).
+- Light and dark define exactly the same names.
+- Semantic layers contain only aliases; every alias resolves to a primitive.
+- Every text token on every surface ≥ 4.5:1; focus ring and strong border ≥ 3:1; every
+  foreground/background pair (actions, feedback, truth classes) ≥ 4.5:1 — in both themes.
+- Financial state is never conveyed by color alone (components add text + icon).
 
-## Failure modes
+## Changing a token
 
-To be documented alongside the implementation. README §75 makes failure modes part of
-the Definition of Done, not an afterthought.
-
-## Observability
-
-To be documented alongside the implementation (README §46).
-
-## Tests
-
-To be documented alongside the implementation. See README §63 for the harness this
-package must satisfy.
-
-## Unblocked by
-
-FIN-015
+1. Edit the JSON (primitive value, or a semantic alias).
+2. `pnpm --filter @finch/design-tokens test` — contrast must stay AA.
+3. Mirror the change in Figma Variables in the same design review.
+4. `pnpm --filter @finch/design-tokens build` regenerates the CSS.

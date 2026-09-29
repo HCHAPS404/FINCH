@@ -20,7 +20,7 @@ are explicitly marked **Outstanding** rather than filled with plausible-sounding
 An ADR that fabricates the reasoning behind a decision is worse than one that admits
 the reasoning is not yet written down.
 
-ADR-0035 to ADR-0040 are complete proposals for the hackathon program (`docs/hackathon/`),
+ADR-0035 to ADR-0041 are complete proposals for the hackathon program (`docs/hackathon/`),
 awaiting the founders' decision.
 
 ADR-0033 and ADR-0034 are complete records: they document decisions actually taken
@@ -73,6 +73,7 @@ during the Foundation bootstrap, with the evidence that drove them.
 | [ADR-0038](0038-hackathon-demo-deployment-topology.md)       | Hackathon demo deployment topology                                           | Proposed | §41, §79                    |
 | [ADR-0039](0039-channel-hub.md)                              | Autonomous app with an optional Channel Hub                                  | Proposed | §27, §115                   |
 | [ADR-0040](0040-engineering-method-and-branching.md)         | Engineering method (XP + Agile + CRISP-ML(Q)) and stage branching            | Proposed | §67, §70                    |
+| [ADR-0041](0041-design-system-and-frontend-toolchain.md)     | Design system, Figma channel and front-end toolchain                         | Proposed | §34, §35                    |
 
 ## Open decisions
 

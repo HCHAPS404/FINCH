@@ -1,7 +1,7 @@
 /**
  * Money — README Constitution §4.3, §14.1.
  *
- *   "Money jamás usa floating point binario como representación financiera autoritativa."
+ *   "Money never uses binary floating point as an authoritative financial representation."
  *
  * A settled amount is stored as a `bigint` count of minor units (centavos, cents).
  * This is exact: there is no value a currency can express that a bigint cannot hold,

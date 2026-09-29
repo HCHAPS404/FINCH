@@ -55,6 +55,11 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Agent rules and skills (.ai/) must match every generated adapter
+      # (Claude, Cursor, Codex, Antigravity) — drift fails the build.
+      - name: Agent context in sync
+        run: pnpm ai:check
+
       - name: Lint
         run: pnpm lint
 
