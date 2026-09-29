@@ -47,7 +47,7 @@ instead of competing with it.
   transfer would save them money.
 - Generic financial chatbots **hallucinate numbers**. In personal finance, an invented number causes
   real harm.
-- Research task (S0-10, Nairy): gather 3–5 official figures (SFC, Banco de la República, DANE, Banca
+- Research task (S0-10, Irene): gather 3–5 official figures (SFC, Banco de la República, DANE, Banca
   de las Oportunidades) on consumer debt, card use and financial inclusion, **with URL and date**,
   for the description and the video. A figure without an official source is not used.
 

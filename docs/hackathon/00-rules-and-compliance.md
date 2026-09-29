@@ -27,7 +27,7 @@ if Devpost or YouTube fail.
 - Colombia is **not** excluded (exclusions: Brazil, Quebec, Russia, Crimea, Cuba, Iran, North Korea
   and countries under comprehensive OFAC sanctions).
 - Both founders must be of legal age in their country.
-- **Recommended entry: Team** (HELL + Nairy) with **HELL as Representative**. The prize is paid to
+- **Recommended entry: Team** (HELL + Irene) with **HELL as Representative**. The prize is paid to
   the Representative, who allocates it to the team. Alternative: enter as an _Organization_, only if
   the company (e.g. an S.A.S.) **already exists at submission time**; payment then goes to the
   company's account (see [07](07-risks-and-decisions.md), D-05).

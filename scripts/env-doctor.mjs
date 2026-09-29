@@ -8,7 +8,7 @@
  *
  * Exit codes: 0 = ready, 1 = blocking problem found.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { readFileSync, existsSync } from 'node:fs';
 import { createConnection } from 'node:net';
 import { fileURLToPath } from 'node:url';
@@ -32,11 +32,15 @@ const results = [];
 const record = (status, name, detail, fix) => results.push({ status, name, detail, fix });
 
 function run(cmd, args) {
+  const options = { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] };
   try {
-    return execFileSync(cmd, args, {
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'ignore'],
-    }).trim();
+    // On Windows pnpm and corepack are `.cmd` shims, which execFile cannot launch
+    // without a shell. The arguments here are fixed literals, so a shell is safe.
+    return (
+      process.platform === 'win32'
+        ? execSync([cmd, ...args].join(' '), options)
+        : execFileSync(cmd, args, options)
+    ).trim();
   } catch {
     return null;
   }

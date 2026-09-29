@@ -1,6 +1,6 @@
 # Front-end architecture (web → Windows → Android → macOS/iOS)
 
-> **Status:** PROPOSED (ADR-0041) · owners: Nairy (UI) and HELL (integration and platforms).
+> **Status:** PROPOSED (ADR-0041) · owners: Irene (UI) and HELL (integration and platforms).
 > Complements [`SOFTWARE-ARCHITECTURE.md`](../architecture/SOFTWARE-ARCHITECTURE.md) §8.
 
 ## 1. Shared layers

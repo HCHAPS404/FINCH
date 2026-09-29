@@ -14,7 +14,7 @@
  *
  * Exit codes: 0 = architecture intact, 1 = violation or broken checker.
  */
-import { execFileSync } from 'node:child_process';
+import { execFileSync, execSync } from 'node:child_process';
 import { writeFileSync, rmSync, mkdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
@@ -36,11 +36,21 @@ const SCAN_TARGETS = ['apps', 'packages'].filter((d) => existsSync(join(ROOT, d)
  */
 function cruise(extraArgs = []) {
   try {
-    const output = execFileSync(
-      'pnpm',
-      ['exec', 'depcruise', '--config', '.dependency-cruiser.cjs', ...extraArgs, ...SCAN_TARGETS],
-      { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] },
-    );
+    const args = [
+      'exec',
+      'depcruise',
+      '--config',
+      '.dependency-cruiser.cjs',
+      ...extraArgs,
+      ...SCAN_TARGETS,
+    ];
+    const options = { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] };
+    // On Windows pnpm is a `.cmd` shim, which execFile cannot launch without a shell.
+    // Every argument is a fixed literal or a directory name, so a shell is safe.
+    const output =
+      process.platform === 'win32'
+        ? execSync(['pnpm', ...args].join(' '), options)
+        : execFileSync('pnpm', args, options);
     return { ok: true, output };
   } catch (error) {
     const output = `${error.stdout ?? ''}${error.stderr ?? ''}`;

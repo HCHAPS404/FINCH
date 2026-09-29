@@ -41,7 +41,7 @@ executes git. The commit uses the configured human identity. The AI is the tool,
 the author.
 
 Authorship, ownership and responsibility for this code remain with the authorized
-human developers. Currently: **HELL**.
+human developers. Currently: **HELL** (`@HCHAPS404`) and **Irene** (`@Irene0911`).
 
 ---
 

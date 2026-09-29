@@ -2,7 +2,7 @@
 
 - **Status:** Proposed
 - **Date:** 2026-09-28
-- **Deciders:** HELL, Nairy
+- **Deciders:** HELL, Irene
 - **Supersedes:** none. Refines Constitution §34–§35 and ADR-0004/0005/0006 for the delivery order.
 
 ## Context

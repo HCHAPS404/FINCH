@@ -1,7 +1,7 @@
 # 05 — Roadmap and timeline
 
 Scope: **[08-feature-catalog.md](08-feature-catalog.md)** — **45 H features** (all complete); the
-**P** features stay documented. Conventions: **H** = HELL, **N** = Nairy. Every PR is reviewed by
+**P** features stay documented. Conventions: **H** = HELL, **I** = Irene. Every PR is reviewed by
 **the other founder** (README §100). Feature IDs (A1, B1…) follow the catalog.
 
 ---
@@ -17,20 +17,20 @@ or decisions.
 | Block                                                                                   | h         | Main owner          |
 | --------------------------------------------------------------------------------------- | --------- | ------------------- |
 | Foundation (repo, CI, deploy, license, credits, walking skeleton)                       | 25        | H                   |
-| Premium design system, app shell, navigation, PWA, onboarding                           | 45        | N                   |
-| Engine: CO credit + personal finance (≈ 25 formulas with vectors)                       | 55        | H (+ N vectors)     |
+| Premium design system, app shell, navigation, PWA, onboarding                           | 45        | I                   |
+| Engine: CO credit + personal finance (≈ 25 formulas with vectors)                       | 55        | H (+ I vectors)     |
 | AI Gateway, tiered agent, receipts, verifier, Ultra, memory                             | 45        | H                   |
 | Market Truth with Tavily (usury, rates, credit, deposits, FX, plans, remittances, DIAN) | 35        | H                   |
-| Capture: import, receipts by photo, vault, inbound email                                | 40        | H + N               |
-| B — Manage (Payday, envelopes, cards, calendar, close, income, health, net worth)       | 55        | N (UI) + H (engine) |
-| C — Decide (afford, what if…, storm, goals, investment)                                 | 35        | N + H               |
-| D — Find money (Opportunity, subscriptions, anomalies, fixed costs, remittances)        | 48        | H + N               |
-| E3 search · F1 household · F2 protection · G1 habits · G2 briefing                      | 40        | H + N               |
-| F3 passport · F4 rights (8 cases) · F5 full CO taxes · G4 full second country           | 55        | H + N               |
+| Capture: import, receipts by photo, vault, inbound email                                | 40        | H + I               |
+| B — Manage (Payday, envelopes, cards, calendar, close, income, health, net worth)       | 55        | I (UI) + H (engine) |
+| C — Decide (afford, what if…, storm, goals, investment)                                 | 35        | I + H               |
+| D — Find money (Opportunity, subscriptions, anomalies, fixed costs, remittances)        | 48        | H + I               |
+| E3 search · F1 household · F2 protection · G1 habits · G2 briefing                      | 40        | H + I               |
+| F3 passport · F4 rights (8 cases) · F5 full CO taxes · G4 full second country           | 55        | H + I               |
 | Watcher (Serverless Jobs), app push, .ics, full email (inbound and outbound)            | 25        | H                   |
 | Privacy, security, threat model                                                         | 15        | H                   |
-| Evals (datasets, batch, Toloka, LangSmith)                                              | 25        | N + H               |
-| Polish, bug bash, video, README, Devpost                                                | 35        | N + H               |
+| Evals (datasets, batch, Toloka, LangSmith)                                              | 25        | I + H               |
+| Polish, bug bash, video, README, Devpost                                                | 35        | I + H               |
 | **Total**                                                                               | **≈ 578** |                     |
 
 **Conclusion (honest):** with everything at H, effort (~580 h) exceeds capacity (430–500 h) by
@@ -62,20 +62,20 @@ or decisions.
 
 | ID    | Task                                                                                                                                                                                     | Owner | Due    |
 | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- | ------ |
-| S0-01 | Approve plan, catalog and ADR-0035…0039; resolve D-01…D-04, D-10, D-11, D-12 (07).                                                                                                       | H+N   | Mon 28 |
+| S0-01 | Approve plan, catalog and ADR-0035…0039; resolve D-01…D-04, D-10, D-11, D-12 (07).                                                                                                       | H+I   | Mon 28 |
 | S0-02 | Team on Devpost (HELL Representative), Personal AI track, draft saved.                                                                                                                   | H     | Mon 28 |
-| S0-03 | Credits: each founder with **their own** account (TF promo, Builders: TF, Tavily, LangSmith, Toloka, Academy). Never extra accounts (00 §8). Record balances in `credits.md`.            | H+N   | Tue 29 |
+| S0-03 | Credits: each founder with **their own** account (TF promo, Builders: TF, Tavily, LangSmith, Toloka, Academy). Never extra accounts (00 §8). Record balances in `credits.md`.            | H+I   | Tue 29 |
 | S0-04 | Apache-2.0 license + NOTICE + TRADEMARKS; `security:check`; public repository (D-01).                                                                                                    | H     | Wed 30 |
 | S0-05 | `GET /v1/models`: confirm L/S/U/V/E/guard IDs in ADR-0036.                                                                                                                               | H     | Tue 29 |
 | S0-06 | Verify topology A vs B (ADR-0038) and email provider (ADR-0039).                                                                                                                         | H     | Fri 2  |
 | S0-07 | **Walking skeleton**: API health + Nemotron chat; web shell; CI; deploy.                                                                                                                 | H     | Sun 4  |
-| S0-08 | **Premium design system**: tokens (§6), typography, base components (button, card, receipt sheet, truth badges, envelopes, charts), motion, dark mode; wireframes of the 5 destinations. | N     | Thu 1  |
-| S0-09 | App shell + navigation + 3-question onboarding + installable PWA (manifest, logo icons).                                                                                                 | N     | Sun 4  |
-| S0-10 | Research: 3–5 official figures with URL; 5 short interviews.                                                                                                                             | N     | Sun 4  |
+| S0-08 | **Premium design system**: tokens (§6), typography, base components (button, card, receipt sheet, truth badges, envelopes, charts), motion, dark mode; wireframes of the 5 destinations. | I     | Thu 1  |
+| S0-09 | App shell + navigation + 3-question onboarding + installable PWA (manifest, logo icons).                                                                                                 | I     | Sun 4  |
+| S0-10 | Research: 3–5 official figures with URL; 5 short interviews.                                                                                                                             | I     | Sun 4  |
 | S0-11 | Devpost clarification (prize stacking); Nebius office hours (VERIFY list).                                                                                                               | H     | Tue 29 |
-| S0-12 | Nairy in AGENTS.md and CODEOWNERS; branch protection.                                                                                                                                    | H     | Tue 29 |
+| S0-12 | Irene in AGENTS.md and CODEOWNERS; branch protection.                                                                                                                                    | H     | Tue 29 |
 | S0-13 | Decimal library (fractional powers) — note in ADR-0016.                                                                                                                                  | H     | Thu 1  |
-| S0-14 | DB schema v1 (twin, envelopes, cards, transactions, documents, receipts, cards, memories, shared workspaces, audit) + persona seeds.                                                     | H+N   | Sun 4  |
+| S0-14 | DB schema v1 (twin, envelopes, cards, transactions, documents, receipts, cards, memories, shared workspaces, audit) + persona seeds.                                                     | H+I   | Sun 4  |
 
 ### Week 1 — "My paycheck arrived" (Mon 5 Oct → Sun 11 Oct)
 
@@ -83,12 +83,12 @@ or decisions.
 | ----- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- | ------ |
 | S1-01 | CO credit engine (colombia-credit.md §1–8).                                                                                                                     | H                      | Wed 7  |
 | S1-02 | Personal finance engine: `budget.allocate`, `envelope_state`, `purchase.afford`, `health.score`, `networth.compute`, `cards.status` (personal-finance.md §1–5). | H                      | Fri 9  |
-| S1-03 | **Independent golden vectors** in a spreadsheet (without looking at the code).                                                                                  | N                      | Fri 9  |
+| S1-03 | **Independent golden vectors** in a spreadsheet (without looking at the code).                                                                                  | I                      | Fri 9  |
 | S1-04 | AI Gateway: tiers, PII redaction, prompt registry, zod, audit, budget, kill switch.                                                                             | H                      | Thu 8  |
 | S1-05 | Agent + skills + `CalcReceipt` + `ProofCarryingAnswer` + verifier + streaming.                                                                                  | H                      | Sun 11 |
-| S1-06 | **Today** and **Money** UI (envelopes B2, cards B3, income B6, health B7, net worth B8), **calendar** B4, receipt panel.                                        | N                      | Sun 11 |
-| S1-07 | **Payday Autopilot (B1)** end to end: detection (button + pasted notification), plan, sliders, checklist.                                                       | H (engine/AI) + N (UI) | Sun 11 |
-| S1-08 | **Can I afford it? (C1)**.                                                                                                                                      | H + N                  | Sun 11 |
+| S1-06 | **Today** and **Money** UI (envelopes B2, cards B3, income B6, health B7, net worth B8), **calendar** B4, receipt panel.                                        | I                      | Sun 11 |
+| S1-07 | **Payday Autopilot (B1)** end to end: detection (button + pasted notification), plan, sliders, checklist.                                                       | H (engine/AI) + I (UI) | Sun 11 |
+| S1-08 | **Can I afford it? (C1)**.                                                                                                                                      | H + I                  | Sun 11 |
 | S1-09 | Demo threat model.                                                                                                                                              | H                      | Fri 9  |
 
 ### Week 2 — Market, capture and decide (Mon 12 Oct holiday → Sun 18 Oct)
@@ -96,34 +96,34 @@ or decisions.
 | ID    | Task                                                                                                                                       | Owner                 | Due    |
 | ----- | ------------------------------------------------------------------------------------------------------------------------------------------ | --------------------- | ------ |
 | S2-01 | Market Truth (T): usury, reference rates, credit, CDTs/savings, **FX (G3)**; allowlist, deterministic parsing, cache, freshness, fallback. | H                     | Wed 14 |
-| S2-02 | **Opportunity Engine (D1)** + `deposit.net_return` + Opportunities UI.                                                                     | H + N                 | Fri 16 |
+| S2-02 | **Opportunity Engine (D1)** + `deposit.net_return` + Opportunities UI.                                                                     | H + I                 | Fri 16 |
 | S2-03 | Import (E4) + **subscriptions (D2)** + **anomalies (D3)** with a per-user baseline.                                                        | H                     | Thu 15 |
-| S2-04 | **Receipts and invoices by photo (E1)**: PWA camera, V extraction, confirmation.                                                           | H (pipeline) + N (UI) | Sat 17 |
+| S2-04 | **Receipts and invoices by photo (E1)**: PWA camera, V extraction, confirmation.                                                           | H (pipeline) + I (UI) | Sat 17 |
 | S2-05 | Decision Cards + **Ultra second opinion (A5)**.                                                                                            | H                     | Thu 15 |
-| S2-06 | Simulators: **What if… (C2)**, **storm (C3)**, **goals (C4)**, **investment (C5)**.                                                        | N (UI) + H (engine)   | Sun 18 |
-| S2-07 | Memory (A7) + "What FINCH knows about you".                                                                                                | H + N                 | Sat 17 |
-| S2-08 | E2/E3/E4 eval datasets (including E3 search and receipt questions).                                                                        | N                     | Sun 18 |
-| S2-09 | **Rights copilot (F4)**: 8 cases, PDF documents, deadline tracking.                                                                        | N (flows) + H (PDF)   | Sun 18 |
+| S2-06 | Simulators: **What if… (C2)**, **storm (C3)**, **goals (C4)**, **investment (C5)**.                                                        | I (UI) + H (engine)   | Sun 18 |
+| S2-07 | Memory (A7) + "What FINCH knows about you".                                                                                                | H + I                 | Sat 17 |
+| S2-08 | E2/E3/E4 eval datasets (including E3 search and receipt questions).                                                                        | I                     | Sun 18 |
+| S2-09 | **Rights copilot (F4)**: 8 cases, PDF documents, deadline tracking.                                                                        | I (flows) + H (PDF)   | Sun 18 |
 
 ### Week 3 — Complete every H (Mon 19 Oct → Sun 25 Oct)
 
 | ID    | Task                                                                                                                        | Owner                    | Due    |
 | ----- | --------------------------------------------------------------------------------------------------------------------------- | ------------------------ | ------ |
-| S3-01 | **Vault (E2)** with expiry dates and reminders.                                                                             | H + N                    | Tue 20 |
+| S3-01 | **Vault (E2)** with expiry dates and reminders.                                                                             | H + I                    | Tue 20 |
 | S3-02 | **NL search (E3)** with a bounded DSL + authorization tests.                                                                | H                        | Tue 20 |
-| S3-03 | **Shared household (F1)**: memberships, what is shared, splitting, settlement, shared goals.                                | H (auth/engine) + N (UI) | Thu 22 |
-| S3-04 | **Protection radar (F2)** + **habits (G1)** + **month-end close (B5)**.                                                     | N + H                    | Thu 22 |
-| S3-05 | **Watcher (A11)** on Nebius Serverless Jobs + **briefing (G2)** + **app push (H1)** + **.ics (H2)**.                        | H + N                    | Wed 21 |
+| S3-03 | **Shared household (F1)**: memberships, what is shared, splitting, settlement, shared goals.                                | H (auth/engine) + I (UI) | Thu 22 |
+| S3-04 | **Protection radar (F2)** + **habits (G1)** + **month-end close (B5)**.                                                     | I + H                    | Thu 22 |
+| S3-05 | **Watcher (A11)** on Nebius Serverless Jobs + **briefing (G2)** + **app push (H1)** + **.ics (H2)**.                        | H + I                    | Wed 21 |
 | S3-06 | **Email (H3)**: inbound (notifications, invoices, documents → E1/E2/E4) and outbound (briefing, alerts, branded templates). | H                        | Fri 23 |
-| S3-07 | **Fixed costs (D4)**, **remittances (D5)**, **passport (F3)**, **CO taxes (F5)**, **second country (G4)** — complete.       | H + N                    | Sat 24 |
-| S3-08 | Full evals (batch) + LangSmith + **Toloka** (set up Monday 19, results Friday 23) + harden guardrails.                      | N + H                    | Sat 24 |
+| S3-07 | **Fixed costs (D4)**, **remittances (D5)**, **passport (F3)**, **CO taxes (F5)**, **second country (G4)** — complete.       | H + I                    | Sat 24 |
+| S3-08 | Full evals (batch) + LangSmith + **Toloka** (set up Monday 19, results Friday 23) + harden guardrails.                      | I + H                    | Sat 24 |
 | S3-09 | Demo operations: uptime, alerts, credit guard, backups, runbook.                                                            | H                        | Fri 23 |
-| S3-10 | Premium polish (motion, states, accessibility, responsive, dark mode).                                                      | N                        | Sun 25 |
-| S3-11 | Video script and storyboard; English README (draft); THIRD_PARTY and media licenses.                                        | N + H                    | Sun 25 |
+| S3-10 | Premium polish (motion, states, accessibility, responsive, dark mode).                                                      | I                        | Sun 25 |
+| S3-11 | Video script and storyboard; English README (draft); THIRD_PARTY and media licenses.                                        | I + H                    | Sun 25 |
 
 ### Week 4 — Freeze and submission (Mon 26 Oct → Fri 30 Oct)
 
-| Day    | H                                                                 | N                                                                          |
+| Day    | H                                                                 | I                                                                          |
 | ------ | ----------------------------------------------------------------- | -------------------------------------------------------------------------- |
 | Mon 26 | Bug bash with 5 testers on phones; P0/P1.                         | Coordinates the bug bash; fixes UI.                                        |
 | Tue 27 | **18:00 code freeze**; tag `v0.1.0-rc`.                           | Video capture on the RC.                                                   |
@@ -149,10 +149,10 @@ S3-03 (shared authorization). Each has a plan B documented in 07.
 | Period          | What                                                                                                                                                                                   | Owner    |
 | --------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------- |
 | 31 Oct → 15 Dec | `main` frozen at `v0.1.0-hackathon` (exception to ADR-0026, ADR-0035); development continues on `next`; demo only from the tag.                                                        | H        |
-| November        | 30 interviews; landing page with waitlist; pitch deck; S.A.S. and trademark (D-05, D-09); data policy (VERIFY with a lawyer); start WhatsApp Business onboarding (H6) after the S.A.S. | N + H    |
+| November        | 30 interviews; landing page with waitlist; pitch deck; S.A.S. and trademark (D-05, D-09); data policy (VERIFY with a lawyer); start WhatsApp Business onboarding (H6) after the S.A.S. | I + H    |
 | November        | Startup programs (NVIDIA Inception, Nebius; VERIFY requirements).                                                                                                                      | H        |
 | 1–15 Dec        | Daily judging on-call.                                                                                                                                                                 | Rotation |
-| 16 Dec → 10 Jan | Merge `next` → `main`; native apps continue in the delivery order (web → Windows → Android → macOS + iOS).                                                                             | H + N    |
+| 16 Dec → 10 Jan | Merge `next` → `main`; native apps continue in the delivery order (web → Windows → Android → macOS + iOS).                                                                             | H + I    |
 | ~11 Jan 2027    | Winners; affidavits within 10 business days.                                                                                                                                           | H        |
 
 ## 5. Contingency plan (when a milestone is missed)

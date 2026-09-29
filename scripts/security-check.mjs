@@ -39,7 +39,9 @@ const fail = (msg) => {
 
 function has(cmd) {
   try {
-    execSync(`command -v ${cmd}`, { stdio: 'ignore' });
+    execSync(process.platform === 'win32' ? `where ${cmd}` : `command -v ${cmd}`, {
+      stdio: 'ignore',
+    });
     return true;
   } catch {
     return false;
@@ -149,11 +151,11 @@ if (!existsSync(join(ROOT, 'node_modules'))) {
   warn('dependencies not installed — run `pnpm install` first');
 } else {
   try {
-    execFileSync('pnpm', ['audit', '--audit-level', 'high', '--prod'], {
-      cwd: ROOT,
-      encoding: 'utf8',
-      stdio: ['ignore', 'pipe', 'pipe'],
-    });
+    const args = ['audit', '--audit-level', 'high', '--prod'];
+    const options = { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] };
+    // On Windows pnpm is a `.cmd` shim, which execFile cannot launch without a shell.
+    if (process.platform === 'win32') execSync(['pnpm', ...args].join(' '), options);
+    else execFileSync('pnpm', args, options);
     ok('no high or critical advisories in production dependencies');
   } catch (error) {
     fail('pnpm audit reported high/critical advisories');

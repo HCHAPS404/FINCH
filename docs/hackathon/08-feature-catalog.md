@@ -1,6 +1,6 @@
 # 08 — FINCH feature catalog
 
-> **Status:** PROPOSED — approved in conversation by HELL on 2026-09-28; pending Nairy's review.
+> **Status:** PROPOSED — approved in conversation by HELL on 2026-09-28; pending Irene's review.
 > This catalog is the **single source** of scope. `02-product-spec.md` describes the experience and
 > `05-roadmap-and-timeline.md` the sequence; on any scope conflict, this document wins.
 
@@ -30,7 +30,7 @@ Rules that apply to **every** feature (not repeated in each entry):
 
 Model legend: **L** = Nemotron 3.5 Lightning · **S** = Nemotron 3 Super · **U** = Nemotron 3 Ultra ·
 **V** = NVIDIA multimodal (VERIFY availability) · **E** = embeddings · **T** = Tavily. Owner: **H** =
-HELL, **N** = Nairy (proposal; see 05).
+HELL, **I** = Irene (proposal; see 05).
 
 ---
 
@@ -58,15 +58,15 @@ HELL, **N** = Nairy (proposal; see 05).
 | ID  | Feature                     | What it does (summary; detail in 02 and 04)                                                                                       | Accepted when                                                      | Owner |
 | --- | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | ----- |
 | A1  | **Financial Twin**          | Versioned financial state: accounts, debts, cards, income, obligations, goals, assets; each fact with truth class and provenance. | Immutable snapshot with checksum; every fact shows its origin.     | H     |
-| A2  | **Financial engine**        | Formulas in `docs/financial-formulas/` (CO credit + personal finance), versioned, with independent golden vectors.                | `pnpm financial:verify` green; vectors verified by N.              | H     |
+| A2  | **Financial engine**        | Formulas in `docs/financial-formulas/` (CO credit + personal finance), versioned, with independent golden vectors.                | `pnpm financial:verify` green; vectors verified by I.              | H     |
 | A3  | **Receipts + verifier**     | AI writes placeholders, not figures; a deterministic verifier blocks numbers without a receipt; clickable figures → receipt.      | E3 = 0 figures without a receipt in production.                    | H     |
 | A4  | **Tiered agent**            | L routes/extracts · S orchestrates skills · U audits. Per-tier fallback down to a template.                                       | E2 ≥ 90 % correct tool calls (the real figure is reported).        | H     |
 | A5  | **Second opinion (Ultra)**  | U reviews every Decision Card/action: APPROVE / WARN / BLOCK with visible findings.                                               | Findings rendered; BLOCK prevents the action.                      | H     |
-| A6  | **Decision Cards**          | README §17 structure, persisted as data; prioritized inbox.                                                                       | Every recommendation from B–F comes out as a Decision Card.        | H+N   |
-| A7  | **Controllable memory**     | Twin + memories (goals, preferences, constraints) with E; "What FINCH knows about you".                                           | Forgetting excludes the memory on the next turn (E2E).             | H+N   |
+| A6  | **Decision Cards**          | README §17 structure, persisted as data; prioritized inbox.                                                                       | Every recommendation from B–F comes out as a Decision Card.        | H+I   |
+| A7  | **Controllable memory**     | Twin + memories (goals, preferences, constraints) with E; "What FINCH knows about you".                                           | Forgetting excludes the memory on the next turn (E2E).             | H+I   |
 | A8  | **Privacy by design**       | PII redaction before the LLM, per-source consent, audit, export/delete everything.                                                | E4: 0 PII leaks to the provider.                                   | H     |
-| A9  | **Published evals**         | E1–E6 (04 §7) + scorecard in the README.                                                                                          | `evals/RESULTS.md` with real numbers.                              | H+N   |
-| A10 | **Bilingual, global-ready** | ES/EN; per-locale formats; country rules in `jurisdictions/`.                                                                     | Language/country switch without reloading state.                   | N     |
+| A9  | **Published evals**         | E1–E6 (04 §7) + scorecard in the README.                                                                                          | `evals/RESULTS.md` with real numbers.                              | H+I   |
+| A10 | **Bilingual, global-ready** | ES/EN; per-locale formats; country rules in `jurisdictions/`.                                                                     | Language/country switch without reloading state.                   | I     |
 | A11 | **Always-on Watcher**       | Daily Nebius Serverless Job: recomputes, checks the market, detects events, generates cards + briefing.                           | Runs by itself at 06:00 local; "run now" in the UI; log with cost. | H     |
 
 ---
@@ -90,7 +90,7 @@ HELL, **N** = Nairy (proposal; see 05).
   for the trip"); U checks no obligation is left uncovered.
 - **Accepted when:** with persona Laura, from "My paycheck arrived" to a plan with receipts < 10 s;
   the sum of allocations = income exactly (conservation verified by a test).
-- **Limit:** FINCH does not move money; the user executes the checklist. Owner: H (engine/AI) + N (UI).
+- **Limit:** FINCH does not move money; the user executes the checklist. Owner: H (engine/AI) + I (UI).
 
 ### B2. Envelopes and live budget
 
@@ -99,7 +99,7 @@ HELL, **N** = Nairy (proposal; see 05).
   money between envelopes with one gesture (a record, not a real transfer).
 - **Engine:** `budget.envelope_state@1`, conservation of totals.
 - **Accepted when:** recording an expense updates the envelope, projected balance and safe-to-spend
-  instantly. Owner: N (UI) + H (engine).
+  instantly. Owner: I (UI) + H (engine).
 
 ### B3. Credit-card control
 
@@ -109,18 +109,18 @@ HELL, **N** = Nairy (proposal; see 05).
 - **Recommendation:** which card to use for a purchase (by cut-off date → more interest-free days
   where applicable) and which to pay down first.
 - **Accepted when:** each card shows "if you pay the minimum, you will pay X in interest this month"
-  with a receipt. Owner: H + N.
+  with a receipt. Owner: H + I.
 
 ### B4. Financial calendar
 
 - All payments, cut-offs, incomes, expiries (E2) and goals in a calendar; holiday adjustment
-  (`jurisdictions/*/calendar`); month view and "next 7 days". .ics export (H2). Owner: N.
+  (`jurisdictions/*/calendar`); month view and "next 7 days". .ics export (H2). Owner: I.
 
 ### B5. Month-end close
 
 - Automatic report at close: plan vs actual per envelope, B1 checklist completion, debts reduced,
   savings achieved, 3 learnings and the proposed adjustment for next month (Decision Card).
-  Owner: N (UI) + H (engine).
+  Owner: I (UI) + H (engine).
 
 ### B6. Multiple incomes
 
@@ -132,12 +132,12 @@ HELL, **N** = Nairy (proposal; see 05).
 - A 0–100 score, **explainable and deterministic** (`health.score@1`): debt-to-income, credit
   utilization, months of buffer, savings rate, payment punctuality, income concentration. Every
   component has a published weight, its receipt and "how to gain 5 points". Never a "credit score"
-  (it does not replace credit bureaus). Owner: H + N.
+  (it does not replace credit bureaus). Owner: H + I.
 
 ### B8. Live net worth
 
 - Assets (accounts, CDTs, investments, vehicle with estimated depreciation, declared property) −
-  liabilities; monthly evolution; "what moved it". Multi-currency (G3). Owner: H + N.
+  liabilities; monthly evolution; "what moved it". Multi-currency (G3). Owner: H + I.
 
 ---
 
@@ -145,10 +145,10 @@ HELL, **N** = Nairy (proposal; see 05).
 
 | ID  | Feature                              | What it does                                                                                                                                                                                                                                                | Engine / AI                                                                                           | Accepted when                                                            | Owner |
 | --- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ | ----- |
-| C1  | **Can I afford it?**                 | Before buying: impact on the month, envelopes and goals; cash vs 1/12/36 instalments with real interest in pesos; opportunity cost; verdict "yes / yes but / better wait X days" with reasons.                                                              | `purchase.afford@1` (forecast + amortization). L understands "I want some headphones for 800k".       | Answer with receipts < 5 s; shows the date when it would be comfortable. | H + N |
-| C2  | **"What if…?" simulator**            | Scenarios in natural language or sliders: income rise/loss, purchase on credit, moving, going independent, a child; effect over 12–60 months on debts, goals, buffer, net worth; up to 3 scenarios side by side.                                            | Simulation on a copy of the snapshot (never mutates state). S translates text → validated parameters. | Visual comparison of 3 scenarios with receipts.                          | H + N |
+| C1  | **Can I afford it?**                 | Before buying: impact on the month, envelopes and goals; cash vs 1/12/36 instalments with real interest in pesos; opportunity cost; verdict "yes / yes but / better wait X days" with reasons.                                                              | `purchase.afford@1` (forecast + amortization). L understands "I want some headphones for 800k".       | Answer with receipts < 5 s; shows the date when it would be comfortable. | H + I |
+| C2  | **"What if…?" simulator**            | Scenarios in natural language or sliders: income rise/loss, purchase on credit, moving, going independent, a child; effect over 12–60 months on debts, goals, buffer, net worth; up to 3 scenarios side by side.                                            | Simulation on a copy of the snapshot (never mutates state). S translates text → validated parameters. | Visual comparison of 3 scenarios with receipts.                          | H + I |
 | C3  | **Storm mode**                       | "If I lose my income today": months of runway, order of cuts, debts to prioritize, what to ask the bank for (grace period, restructuring) and a week-by-week plan.                                                                                          | `stress.runway@1`. U reviews the plan.                                                                | Plan generated with exact runway and an action list.                     | H     |
-| C4  | **Goals with trade-offs**            | Several goals with date and priority: feasibility, monthly contribution, probability under a conservative scenario and explicit trade-offs ("bringing the trip forward delays the down payment by 4 months").                                               | `goals.plan@1` (allocation by priority/date).                                                         | Changing a priority recomputes all of them with receipts.                | H + N |
+| C4  | **Goals with trade-offs**            | Several goals with date and priority: feasibility, monthly contribution, probability under a conservative scenario and explicit trade-offs ("bringing the trip forward delays the down payment by 4 months").                                               | `goals.plan@1` (allocation by priority/date).                                                         | Changing a priority recomputes all of them with receipts.                | H + I |
 | C5  | **Educational investment simulator** | Risk profile (questionnaire), projection of periodic contributions with scenarios (conservative/base/optimistic) and the effect of inflation and taxes; compares product classes (CDT, money-market fund, etc.) — **never** recommends a specific security. | `invest.project@1`. S explains; simulation legal copy.                                                | Projection with 3 scenarios and visible assumptions.                     | H     |
 
 ---
@@ -167,7 +167,7 @@ HELL, **N** = Nairy (proposal; see 05).
 - **Ranking:** deterministic and published (criteria and weights visible). If referral revenue ever
   exists, it is declared and does **not** enter the ranking.
 - **Accepted when:** for Laura, top-3 CDTs and top-3 balance-transfer options with source, date and
-  savings in pesos. Owner: H (data/engine) + N (UI). **Central use of Tavily.**
+  savings in pesos. Owner: H (data/engine) + I (UI). **Central use of Tavily.**
 
 ### D2. Subscription and recurring-charge detective (H)
 
@@ -203,7 +203,7 @@ HELL, **N** = Nairy (proposal; see 05).
   lock-in/clauses) → annual savings with sources and date; Watcher alerts when a better option
   appears; draft change or cancellation request (F4).
 - **Accepted when:** for Laura it finds alternatives in ≥ 3 categories with computed annual savings
-  and sources; neutral ranking and visible criteria. Owner: H (data) + N (UI).
+  and sources; neutral ranking and visible criteria. Owner: H (data) + I (UI).
 
 ### D5. Remittance comparator (H)
 
@@ -231,7 +231,7 @@ HELL, **N** = Nairy (proposal; see 05).
 - **AI:** V extracts; L normalizes merchant and category; deterministic validations (sum of items ≈
   total, valid date, currency).
 - **Accepted when:** 10 varied synthetic receipts with ≥ 90 % correct fields before confirmation (the
-  real figure is reported); confirmation is never skipped. Owner: H (pipeline) + N (camera and
+  real figure is reported); confirmation is never skipped. Owner: H (pipeline) + I (camera and
   confirmation UI).
 
 ### E2. Document vault with expiry dates (H)
@@ -242,7 +242,7 @@ HELL, **N** = Nairy (proposal; see 05).
 - **Security:** encrypted at rest, access only by the workspace owner (or explicitly shared in F1),
   quarantine on upload, real deletion on delete.
 - **Accepted when:** uploading a synthetic SOAT creates its expiry and reminder after confirmation.
-  Owner: H + N.
+  Owner: H + I.
 
 ### E3. Natural-language search (H)
 
@@ -251,7 +251,7 @@ HELL, **N** = Nairy (proposal; see 05).
   groupings, ranges) validated by schema — **never free SQL** —; the backend executes; answer with a
   table/chart and a query receipt.
 - **Accepted when:** 30 questions from the E2 dataset with ≥ 90 % correct queries; 0 queries outside
-  the workspace (authorization test). Owner: H + N.
+  the workspace (authorization test). Owner: H + I.
 
 ### E4. Data import (H)
 
@@ -273,7 +273,7 @@ HELL, **N** = Nairy (proposal; see 05).
 - **Engine:** `split.settle@1` (minimal settlement, conservation of totals).
 - **Accepted when:** the Pérez household (2 people) sees shared expenses, income proportion and a
   correct settlement; authorization test: a member never sees the other's unshared accounts.
-  Owner: H (auth + engine) + N (UI).
+  Owner: H (auth + engine) + I (UI).
 
 ### F2. Protection radar (H)
 
@@ -283,7 +283,7 @@ HELL, **N** = Nairy (proposal; see 05).
   **It neither sells nor recommends insurers.**
 - **Engine:** `protection.gaps@1` (published deterministic rules).
 - **Accepted when:** for Laura it detects the credit life insurance duplicated across two loans and
-  the insufficient buffer, with receipts. Owner: H + N.
+  the insufficient buffer, with receipts. Owner: H + I.
 
 ### F3. Financial passport (H)
 
@@ -297,7 +297,7 @@ HELL, **N** = Nairy (proposal; see 05).
 - **Honesty:** each indicator states its truth class (declared by the user, derived from imported
   statements, observed); never presented as a bank certification.
 - **Accepted when:** create, open, expire and revoke work with security tests (revoked link → 410;
-  tampered link → rejected). Owner: H + N (document design).
+  tampered link → rejected). Owner: H + I (document design).
 
 ### F4. Financial consumer rights copilot (H)
 
@@ -314,7 +314,7 @@ HELL, **N** = Nairy (proposal; see 05).
   financial habeas data regime, response deadlines for petitions). Templates are reviewed before
   public launch.
 - **Accepted when:** the 8 cases generate a document and a case with deadlines; U reviews every
-  document. Owner: N (flows/templates) + H (PDF, cases, receipts).
+  document. Owner: I (flows/templates) + H (PDF, cases, receipts).
 
 ### F5. Colombian taxes (H)
 
@@ -341,8 +341,8 @@ HELL, **N** = Nairy (proposal; see 05).
 
 | ID  | Feature                        | Level | What it does                                                                                                                                                                                                                                                                                                           | Owner |
 | --- | ------------------------------ | ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----- |
-| G1  | **Commitments and habits**     | H     | Challenges chosen by the user ("7 days without delivery", "virtual round-up to savings", "don't use card X this month") with progress in real pesos and a sober celebration; the Watcher follows up. No childish gamification.                                                                                         | N + H |
-| G2  | **Daily and weekly briefing**  | H     | In the app every morning: 3 things that matter today (payments, alerts, opportunity); weekly: achievements, deviations, adjustment. Figures with receipts. Optionally by email too (H3).                                                                                                                               | N + H |
+| G1  | **Commitments and habits**     | H     | Challenges chosen by the user ("7 days without delivery", "virtual round-up to savings", "don't use card X this month") with progress in real pesos and a sober celebration; the Watcher follows up. No childish gamification.                                                                                         | I + H |
+| G2  | **Daily and weekly briefing**  | H     | In the app every morning: 3 things that matter today (payments, alerts, opportunity); weekly: achievements, deviations, adjustment. Figures with receipts. Optionally by email too (H3).                                                                                                                               | I + H |
 | G3  | **Multi-currency and live FX** | H     | Accounts, income and expenses in several currencies; exchange rates from official/reference sources with date and source (VERIFY provider: central bank/ECB/public API); net worth and budget consolidated in the base currency; FX markup on international purchases. `fx.convert@1` with provenance.                 | H     |
 | G4  | **Complete second country**    | H     | Complete `jurisdictions/<country>/`: currency, holidays, rate conventions, official reference rates, interest cap if any, local savings/credit products for D1, remittance corridor (D5), legal copy and demo persona; proves FINCH scales without touching the core. Country: **decision D-11** (Mexico recommended). | H     |
 

@@ -1,6 +1,6 @@
 # FINCH × Nebius × NVIDIA Global AI Hackathon — Hackathon program
 
-> **Status:** PROPOSED — requires approval from both founders (HELL and Nairy).
+> **Status:** PROPOSED — requires approval from both founders (HELL and Irene).
 > **Date:** 2026-09-28
 > **Submission deadline:** Friday 30 October 2026, 10:00 PT = **12:00 Colombia time** (17:00 UTC).
 > **Build days available:** 32 (Monday 28 Sep to Thursday 29 Oct; 30 Oct is buffer only).
@@ -66,8 +66,8 @@ Wk 4 (26 Oct → 30 Oct)  Code freeze 27 Oct · video 27–28 · submit 29 Oct �
 | Person                          | Hackathon role                                                                                                                      |
 | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
 | **HELL** (Helmut, `@HCHAPS404`) | Team Representative on Devpost. Lead for backend, financial engine, AI Gateway, agent, Nebius infrastructure.                       |
-| **Nairy** (co-founder)          | Lead for product/UX, web front end, branded design system, app shell and PWA, human evals (Toloka), video and submission narrative. |
+| **Irene** (co-founder)          | Lead for product/UX, web front end, branded design system, app shell and PWA, human evals (Toloka), video and submission narrative. |
 | Claude / Cursor                 | Tools (AGENTS.md §1), never authors. Claude: architecture, specs, review. Cursor: multi-file implementation.                        |
 
-The split is a **proposal**. If Nairy's strengths lie elsewhere, whole blocks of the timeline (05)
+The split is a **proposal**. If Irene's strengths lie elsewhere, whole blocks of the timeline (05)
 are swapped without breaking dependencies.

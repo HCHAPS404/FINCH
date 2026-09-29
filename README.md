@@ -343,7 +343,7 @@ Results are published in `evals/RESULTS.md` with **real numbers**, not targets, 
 <img src="assets/brand/headings/team.png" alt="Team" width="100%" />
 
 FINCH is built by its two founders, **Helmut** ([@HCHAPS404](https://github.com/HCHAPS404)) and
-**Nairy**, in Colombia. AI tools (Claude, Cursor) assist development; authorship and responsibility
+**Irene**, in Colombia. AI tools (Claude, Cursor) assist development; authorship and responsibility
 remain with the founders.
 
 <a id="license"></a>
