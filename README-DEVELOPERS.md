@@ -293,12 +293,20 @@ Sprint 1 progress (29 Sep 2026), HELL's branches:
 
 - `feat/s1-engine-credit-co` (S1-01) — merged (#8): the eight formulas of `colombia-credit.md`.
 - `docs/s1-threat-model` (S1-09) — merged (#10): `TM-001`, plus the S1-03 verification workbook.
-- `feat/s1-engine-personal-finance` (S1-02) — first delivery: `budget.allocate@1` and
+- `feat/s1-engine-personal-finance` (S1-02) — first delivery merged (#13): `budget.allocate@1` and
   `budget.envelope_state@1`; `purchase.afford`, `health.score`, `networth.compute` and `cards.status`
   remain.
+- S0-04 license merged (#11); S0-06 verification record merged (#14), waiting on the console figures
+  in its §3 before ADR-0038 is Accepted.
 - Owed by the founders: S1-03 re-derivation in the workbook. Not started: `feat/s1-ai-gateway`,
   `feat/s1-agent-receipts` (both wait on S0-05) and `feat/s1-payday-engine`.
 - Stage S0 → `main` is open as #12 for the M0 review.
+
+**Resuming locally.** Clone, `pnpm env:doctor`, `pnpm install --frozen-lockfile`, copy `.env.example`
+to `.env` and set `NEBIUS_API_KEY` there (gitignored; never in a tracked file or a chat). Then
+S0-05 starts with `pnpm ai:models nemotron`, which lists the IDs Token Factory really serves
+without printing the key; record them in ADR-0036 and `.env`. Next in HELL's order: S0-05 → S1-04
+(AI Gateway) → S1-05 → the rest of S1-02 → S1-07.
 
 Branches planned for the following sprints (created on each sprint's Monday from their area):
 

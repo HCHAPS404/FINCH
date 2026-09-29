@@ -17,6 +17,7 @@
     "dev:infra": "docker compose -f infra/docker/compose.yaml up -d",
     "dev:infra:down": "docker compose -f infra/docker/compose.yaml down",
     "build": "turbo run build",
+    "ai:models": "node --env-file-if-exists=.env scripts/list-models.mjs",
     "lint": "turbo run build --output-logs=errors-only && eslint .",
     "lint:fix": "turbo run build --output-logs=errors-only && eslint . --fix",
     "format": "prettier --write .",
