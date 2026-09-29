@@ -278,22 +278,27 @@ Format: `<type>/s<N>-<slug>` — type ∈ `feat` · `fix` · `test` · `chore` �
 
 **Sprint 0** branches already created:
 
-| Branch                           | From                  | Task (05)                                                        | Owner        | Status (29 Sep 2026)                        |
-| -------------------------------- | --------------------- | ---------------------------------------------------------------- | ------------ | ------------------------------------------- |
-| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + Nemotron chat + CI + deploy                   | HELL         | ✅ merged (#3, #5); deploy pending S0-06    |
-| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 schema v1 + synthetic persona seeds                        | HELL + Nairy | ✅ merged (#4)                              |
-| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, typography, base components, motion, dark mode     | Nairy        | Nairy (not tracked here)                    |
-| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 5-destination navigation, onboarding, installable PWA      | Nairy        | Nairy (not tracked here)                    |
-| `feat/s0-mobile-shell`           | `area/mobile`         | **Parked until phase 3 (Android)** — Expo shell                  | Nairy + HELL | parked                                      |
-| `feat/s0-desktop-shell`          | `area/desktop`        | **Parked until phase 2 (Windows)** — Tauri shell                 | HELL         | parked                                      |
-| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 license (after D-01), credits, decimal library | HELL         | ✅ S0-13 merged (#7); S0-03/04 wait on D-01 |
-| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 official figures and interviews                            | Nairy        | Nairy (not tracked here)                    |
+| Branch                           | From                  | Task (05)                                                        | Owner        | Status (29 Sep 2026)                                              |
+| -------------------------------- | --------------------- | ---------------------------------------------------------------- | ------------ | ----------------------------------------------------------------- |
+| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + Nemotron chat + CI + deploy                   | HELL         | ✅ merged (#3, #5); deploy pending S0-06                          |
+| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 schema v1 + synthetic persona seeds                        | HELL + Nairy | ✅ merged (#4)                                                    |
+| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, typography, base components, motion, dark mode     | Nairy        | Nairy (not tracked here)                                          |
+| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 5-destination navigation, onboarding, installable PWA      | Nairy        | Nairy (not tracked here)                                          |
+| `feat/s0-mobile-shell`           | `area/mobile`         | **Parked until phase 3 (Android)** — Expo shell                  | Nairy + HELL | parked                                                            |
+| `feat/s0-desktop-shell`          | `area/desktop`        | **Parked until phase 2 (Windows)** — Tauri shell                 | HELL         | parked                                                            |
+| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 license (after D-01), credits, decimal library | HELL         | ✅ S0-13 (#7) · S0-04 Apache-2.0 (#11); S0-03 credits per founder |
+| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 official figures and interviews                            | Nairy        | Nairy (not tracked here)                                          |
 
-Sprint 1 progress (29 Sep 2026): `feat/s1-engine-credit-co` (S1-01) is merged into
-`area/backend` (#8): the eight formulas of `docs/financial-formulas/colombia-credit.md`, with 56
-independent golden vectors. Its S1-03 spreadsheet re-derivation is still owed by the founders. The
-remaining HELL branches — `feat/s1-engine-personal-finance`, `feat/s1-ai-gateway`,
-`feat/s1-agent-receipts`, `feat/s1-payday-engine`, `docs/s1-threat-model` — are not started.
+Sprint 1 progress (29 Sep 2026), HELL's branches:
+
+- `feat/s1-engine-credit-co` (S1-01) — merged (#8): the eight formulas of `colombia-credit.md`.
+- `docs/s1-threat-model` (S1-09) — merged (#10): `TM-001`, plus the S1-03 verification workbook.
+- `feat/s1-engine-personal-finance` (S1-02) — first delivery: `budget.allocate@1` and
+  `budget.envelope_state@1`; `purchase.afford`, `health.score`, `networth.compute` and `cards.status`
+  remain.
+- Owed by the founders: S1-03 re-derivation in the workbook. Not started: `feat/s1-ai-gateway`,
+  `feat/s1-agent-receipts` (both wait on S0-05) and `feat/s1-payday-engine`.
+- Stage S0 → `main` is open as #12 for the M0 review.
 
 Branches planned for the following sprints (created on each sprint's Monday from their area):
 

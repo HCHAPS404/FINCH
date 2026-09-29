@@ -30,10 +30,22 @@ Deterministic layered algorithm (each layer consumes from `remaining`):
 - **Invariant:** `Σ allocations + free = income` exactly (conservation test).
 - Output: list of `(destination, amount, target_date, reason, layer)` + execution checklist.
 
+Resolved definitions (version 1, implemented in `packages/financial-engine/src/budget/allocate.ts`):
+obligations and minimums due after `next_income` are left for that income; ties keep the input order;
+`RULE_50_30_20` means 20 % pay-yourself-first; the buffer layer is
+`min(remaining, max(0, target − current), cap_per_cycle)`; goals take `min(remaining, suggested)` by
+priority (1 first), then target date; the surplus layer sends `round(surplus_share · remaining)` to the
+highest-rate debt (capped at its balance) or to savings. Rounding is `HALF_EVEN`, only in layers 3 and 6. On a deficit, layers 1–2 are listed in full, `free = 0` and `shortfall` is reported, so the
+invariant reads `Σ allocations + free = income + shortfall`.
+
 ## 2. Envelope state — `budget.envelope_state@1` (B2)
 
 `envelope_available = allocated − Σ expenses(envelope, cycle) ± transfers_between_envelopes`.
 Alerts at 80 % and 100 %. Moving between envelopes conserves the cycle total.
+
+Resolved definitions (version 1, `src/budget/envelope.ts`): alerts are measured against
+`allocated + transfers_in − transfers_out`, only when something was spent, and the 80 % test is exact
+integer arithmetic (`5 · spent ≥ 4 · budget`).
 
 ## 3. Financial health — `health.score@1` (B7)
 

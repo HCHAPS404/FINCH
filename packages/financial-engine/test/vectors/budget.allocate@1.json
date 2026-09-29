@@ -1,0 +1,519 @@
+{
+  "formulaId": "budget.allocate",
+  "version": 1,
+  "spec": "docs/financial-formulas/personal-finance.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_personal_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "all seven layers; avalanche surplus to the highest-rate debt",
+      "inputs": {
+        "income": "450000000",
+        "incomeDate": "2026-10-15",
+        "nextIncome": "2026-10-30",
+        "obligations": [
+          {
+            "id": "internet",
+            "amount": "12000000",
+            "dueDate": "2026-10-25"
+          },
+          {
+            "id": "rent",
+            "amount": "150000000",
+            "dueDate": "2026-10-20"
+          },
+          {
+            "id": "insurance",
+            "amount": "9000000",
+            "dueDate": "2026-11-05"
+          }
+        ],
+        "debts": [
+          {
+            "id": "card",
+            "minimum": "25000000",
+            "dueDate": "2026-10-22",
+            "rate": "0.028",
+            "balance": "300000000"
+          },
+          {
+            "id": "loan",
+            "minimum": "40000000",
+            "dueDate": "2026-10-18",
+            "rate": "0.016",
+            "balance": "900000000"
+          }
+        ],
+        "rule": {
+          "kind": "PAY_YOURSELF_FIRST",
+          "rate": "0.1"
+        },
+        "buffer": {
+          "target": "200000000",
+          "current": "150000000",
+          "capPerCycle": "30000000"
+        },
+        "goals": [
+          {
+            "id": "trip",
+            "priority": "2",
+            "targetDate": "2027-06-01",
+            "suggested": "20000000"
+          },
+          {
+            "id": "laptop",
+            "priority": "1",
+            "targetDate": "2027-01-15",
+            "suggested": "35000000"
+          },
+          {
+            "id": "course",
+            "priority": "2",
+            "targetDate": "2027-02-01",
+            "suggested": "15000000"
+          }
+        ],
+        "strategy": "DEBT_AVALANCHE",
+        "surplusShare": "0.5"
+      },
+      "expected": {
+        "lines": [
+          {
+            "layer": "OBLIGATION",
+            "destination": "rent",
+            "amount": "150000000"
+          },
+          {
+            "layer": "OBLIGATION",
+            "destination": "internet",
+            "amount": "12000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "loan",
+            "amount": "40000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "card",
+            "amount": "25000000"
+          },
+          {
+            "layer": "PAY_YOURSELF_FIRST",
+            "destination": "savings",
+            "amount": "45000000"
+          },
+          {
+            "layer": "BUFFER",
+            "destination": "buffer",
+            "amount": "30000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "laptop",
+            "amount": "35000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "course",
+            "amount": "15000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "trip",
+            "amount": "20000000"
+          },
+          {
+            "layer": "SURPLUS",
+            "destination": "card",
+            "amount": "39000000"
+          }
+        ],
+        "free": "39000000",
+        "shortfall": "0"
+      }
+    },
+    {
+      "description": "50/30/20 rule and SAVINGS strategy",
+      "inputs": {
+        "income": "450000000",
+        "incomeDate": "2026-10-15",
+        "nextIncome": "2026-10-30",
+        "obligations": [
+          {
+            "id": "internet",
+            "amount": "12000000",
+            "dueDate": "2026-10-25"
+          },
+          {
+            "id": "rent",
+            "amount": "150000000",
+            "dueDate": "2026-10-20"
+          },
+          {
+            "id": "insurance",
+            "amount": "9000000",
+            "dueDate": "2026-11-05"
+          }
+        ],
+        "debts": [
+          {
+            "id": "card",
+            "minimum": "25000000",
+            "dueDate": "2026-10-22",
+            "rate": "0.028",
+            "balance": "300000000"
+          },
+          {
+            "id": "loan",
+            "minimum": "40000000",
+            "dueDate": "2026-10-18",
+            "rate": "0.016",
+            "balance": "900000000"
+          }
+        ],
+        "rule": {
+          "kind": "RULE_50_30_20"
+        },
+        "buffer": {
+          "target": "200000000",
+          "current": "150000000",
+          "capPerCycle": "30000000"
+        },
+        "goals": [
+          {
+            "id": "trip",
+            "priority": "2",
+            "targetDate": "2027-06-01",
+            "suggested": "20000000"
+          },
+          {
+            "id": "laptop",
+            "priority": "1",
+            "targetDate": "2027-01-15",
+            "suggested": "35000000"
+          },
+          {
+            "id": "course",
+            "priority": "2",
+            "targetDate": "2027-02-01",
+            "suggested": "15000000"
+          }
+        ],
+        "strategy": "SAVINGS",
+        "surplusShare": "0.5"
+      },
+      "expected": {
+        "lines": [
+          {
+            "layer": "OBLIGATION",
+            "destination": "rent",
+            "amount": "150000000"
+          },
+          {
+            "layer": "OBLIGATION",
+            "destination": "internet",
+            "amount": "12000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "loan",
+            "amount": "40000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "card",
+            "amount": "25000000"
+          },
+          {
+            "layer": "PAY_YOURSELF_FIRST",
+            "destination": "savings",
+            "amount": "90000000"
+          },
+          {
+            "layer": "BUFFER",
+            "destination": "buffer",
+            "amount": "30000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "laptop",
+            "amount": "35000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "course",
+            "amount": "15000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "trip",
+            "amount": "20000000"
+          },
+          {
+            "layer": "SURPLUS",
+            "destination": "savings",
+            "amount": "16500000"
+          }
+        ],
+        "free": "16500000",
+        "shortfall": "0"
+      }
+    },
+    {
+      "description": "deficit: obligations and minimums exceed income, nothing else allocated",
+      "inputs": {
+        "income": "200000000",
+        "incomeDate": "2026-10-15",
+        "nextIncome": "2026-10-30",
+        "obligations": [
+          {
+            "id": "internet",
+            "amount": "12000000",
+            "dueDate": "2026-10-25"
+          },
+          {
+            "id": "rent",
+            "amount": "150000000",
+            "dueDate": "2026-10-20"
+          },
+          {
+            "id": "insurance",
+            "amount": "9000000",
+            "dueDate": "2026-11-05"
+          }
+        ],
+        "debts": [
+          {
+            "id": "card",
+            "minimum": "25000000",
+            "dueDate": "2026-10-22",
+            "rate": "0.028",
+            "balance": "300000000"
+          },
+          {
+            "id": "loan",
+            "minimum": "40000000",
+            "dueDate": "2026-10-18",
+            "rate": "0.016",
+            "balance": "900000000"
+          }
+        ],
+        "rule": {
+          "kind": "PAY_YOURSELF_FIRST",
+          "rate": "0.1"
+        },
+        "buffer": {
+          "target": "200000000",
+          "current": "150000000",
+          "capPerCycle": "30000000"
+        },
+        "goals": [
+          {
+            "id": "trip",
+            "priority": "2",
+            "targetDate": "2027-06-01",
+            "suggested": "20000000"
+          },
+          {
+            "id": "laptop",
+            "priority": "1",
+            "targetDate": "2027-01-15",
+            "suggested": "35000000"
+          },
+          {
+            "id": "course",
+            "priority": "2",
+            "targetDate": "2027-02-01",
+            "suggested": "15000000"
+          }
+        ],
+        "strategy": "DEBT_AVALANCHE",
+        "surplusShare": "0.5"
+      },
+      "expected": {
+        "lines": [
+          {
+            "layer": "OBLIGATION",
+            "destination": "rent",
+            "amount": "150000000"
+          },
+          {
+            "layer": "OBLIGATION",
+            "destination": "internet",
+            "amount": "12000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "loan",
+            "amount": "40000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "card",
+            "amount": "25000000"
+          }
+        ],
+        "free": "0",
+        "shortfall": "27000000"
+      }
+    },
+    {
+      "description": "small income: goals are only partly funded, free is zero",
+      "inputs": {
+        "income": "300000000",
+        "incomeDate": "2026-10-15",
+        "nextIncome": "2026-10-30",
+        "obligations": [
+          {
+            "id": "internet",
+            "amount": "12000000",
+            "dueDate": "2026-10-25"
+          },
+          {
+            "id": "rent",
+            "amount": "150000000",
+            "dueDate": "2026-10-20"
+          },
+          {
+            "id": "insurance",
+            "amount": "9000000",
+            "dueDate": "2026-11-05"
+          }
+        ],
+        "debts": [
+          {
+            "id": "card",
+            "minimum": "25000000",
+            "dueDate": "2026-10-22",
+            "rate": "0.028",
+            "balance": "300000000"
+          },
+          {
+            "id": "loan",
+            "minimum": "40000000",
+            "dueDate": "2026-10-18",
+            "rate": "0.016",
+            "balance": "900000000"
+          }
+        ],
+        "rule": {
+          "kind": "NONE"
+        },
+        "buffer": {
+          "target": "200000000",
+          "current": "150000000",
+          "capPerCycle": "30000000"
+        },
+        "goals": [
+          {
+            "id": "trip",
+            "priority": "2",
+            "targetDate": "2027-06-01",
+            "suggested": "20000000"
+          },
+          {
+            "id": "laptop",
+            "priority": "1",
+            "targetDate": "2027-01-15",
+            "suggested": "35000000"
+          },
+          {
+            "id": "course",
+            "priority": "2",
+            "targetDate": "2027-02-01",
+            "suggested": "15000000"
+          }
+        ],
+        "strategy": "DEBT_AVALANCHE",
+        "surplusShare": "0.5"
+      },
+      "expected": {
+        "lines": [
+          {
+            "layer": "OBLIGATION",
+            "destination": "rent",
+            "amount": "150000000"
+          },
+          {
+            "layer": "OBLIGATION",
+            "destination": "internet",
+            "amount": "12000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "loan",
+            "amount": "40000000"
+          },
+          {
+            "layer": "DEBT_MINIMUM",
+            "destination": "card",
+            "amount": "25000000"
+          },
+          {
+            "layer": "BUFFER",
+            "destination": "buffer",
+            "amount": "30000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "laptop",
+            "amount": "35000000"
+          },
+          {
+            "layer": "GOAL",
+            "destination": "course",
+            "amount": "8000000"
+          }
+        ],
+        "free": "0",
+        "shortfall": "0"
+      }
+    },
+    {
+      "description": "no obligations, no debts, no goals: everything after the buffer is surplus and free",
+      "inputs": {
+        "income": "450000000",
+        "incomeDate": "2026-10-15",
+        "nextIncome": "2026-10-30",
+        "obligations": [],
+        "debts": [],
+        "rule": {
+          "kind": "PAY_YOURSELF_FIRST",
+          "rate": "0.1"
+        },
+        "buffer": {
+          "target": "200000000",
+          "current": "150000000",
+          "capPerCycle": "30000000"
+        },
+        "goals": [],
+        "strategy": "SAVINGS",
+        "surplusShare": "0.3"
+      },
+      "expected": {
+        "lines": [
+          {
+            "layer": "PAY_YOURSELF_FIRST",
+            "destination": "savings",
+            "amount": "45000000"
+          },
+          {
+            "layer": "BUFFER",
+            "destination": "buffer",
+            "amount": "30000000"
+          },
+          {
+            "layer": "SURPLUS",
+            "destination": "savings",
+            "amount": "112500000"
+          }
+        ],
+        "free": "262500000",
+        "shortfall": "0"
+      }
+    }
+  ]
+}

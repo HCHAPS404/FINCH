@@ -32,6 +32,9 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
     savings, break-even month, longer-term alert, conservative truth propagation;
   - `debt.payoff_plan@1` — `payoffPlan`: AVALANCHE and SNOWBALL side by side, months to
     debt-free, total interest and payoff order.
+- The budget engine (`src/budget/`, task S1-02, spec `docs/financial-formulas/personal-finance.md`
+  §1–§2): `budget.allocate@1` (`budgetAllocate`, the layered Payday plan with an explicit shortfall)
+  and `budget.envelope_state@1` (`envelopeState`, 80 % / 100 % alerts).
 - The cash-flow engine (`src/cashflow/`, same spec §7–§8): `cashflow.forecast_30d@1`
   (`forecast30d`, business-day shifts from a calendar parameter, nearest-rank P25 for
   variable income) and `cashflow.safe_to_spend@1` (`safeToSpend`), over clock-free civil
@@ -56,6 +59,7 @@ Dependencies: `decimal.js` and, among workspace packages, only `@finch/contracts
 - `money.allocate` conserves the total exactly.
 - A French schedule repays exactly the principal and ends at a zero balance; a higher rate
   never lowers total interest.
+- `budget.allocate` conserves the income exactly: Σ allocations + free = income + shortfall.
 - Total cost decomposes exactly into interest + insurance + fees + GMF + upfront costs; no
   added charge ever lowers the real effective rate.
 
@@ -79,7 +83,7 @@ in a `CalcReceipt`.
 
 `pnpm --filter @finch/financial-engine test` and `pnpm financial:verify` (JSON artifact).
 Golden vectors live in `test/vectors/<formulaId>@<version>.json` and are produced by
-`test/vectors/generate_credit_vectors.py`, an independent implementation with Python's
+`test/vectors/generate_credit_vectors.py` and `test/vectors/generate_personal_vectors.py`, an independent implementation with Python's
 `decimal` module at 60 digits that never runs this code (the reference IRR uses Newton's
 method, the engine bisection, so they agree only if both are right); re-run it with `python3` after
 changing a case. The founders' spreadsheet (task S1-03) re-derives a subset before a

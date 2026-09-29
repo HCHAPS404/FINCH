@@ -73,3 +73,16 @@ export type {
 export { safeToSpend } from './cashflow/safe-to-spend.js';
 export type { SafeToSpendResult } from './cashflow/safe-to-spend.js';
 export { toDayNumber, toIsoDate, isoWeekday } from './cashflow/civil-date.js';
+
+// Personal-finance budget formulas (S1-02). Importing './budget/formulas.js' registers them.
+import './budget/formulas.js';
+export { budgetAllocate } from './budget/allocate.js';
+export type {
+  AllocateInput,
+  AllocateResult,
+  AllocationLayer,
+  AllocationLine,
+  SavingsRule,
+} from './budget/allocate.js';
+export { envelopeState } from './budget/envelope.js';
+export type { EnvelopeInput, EnvelopeState } from './budget/envelope.js';
