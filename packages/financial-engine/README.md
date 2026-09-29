@@ -18,6 +18,11 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 - The formula registry (`formulaId@version`): purpose, inputs, rounding, assumptions,
   reference, edge cases and test vectors for every formula.
 - Currency definitions (COP, USD, EUR with their ISO exponents).
+- The credit engine (`src/credit/`, task S1-01, spec `docs/financial-formulas/colombia-credit.md`):
+  - `rate.convert@1` — `convertRate` / `parseQuote` / `QUOTES` (EA, MV, NAMV, …) between
+    effective or nominal, any supported frequency, in arrears or in advance;
+  - `amortization.french@1` — `frenchAmortization`: fixed instalment and full schedule in
+    `Money`, half-even per period, last instalment clears the balance.
 
 ## Does not own
 
@@ -33,10 +38,15 @@ Compute every figure FINCH shows, exactly and reproducibly, from its inputs alon
 - Rounding is never implicit.
 - A formula change creates a new version; registered versions are never edited (§14.2).
 - `money.allocate` conserves the total exactly.
+- A French schedule repays exactly the principal and ends at a zero balance; a higher rate
+  never lowers total interest.
 
 ## Failure modes
 
-Invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
+Formula-domain errors throw `FinancialInputError` with a stable `code`
+(`RATE_OUT_OF_DOMAIN`, `UNSUPPORTED_QUOTE`, `INVALID_TERM`, `INVALID_PRINCIPAL`,
+`UNAMORTIZABLE_IN_MINOR_UNITS`), which the API maps to `FINCH_FINANCIAL_<code>`.
+Other invalid input throws immediately (`RangeError`, `CurrencyMismatchError`): an unknown
 currency, a fractional minor unit, too many decimals for the currency, division by zero,
 a non-plain decimal string, invalid decimal places. The engine never returns a
 partially valid number.
@@ -48,7 +58,10 @@ in a `CalcReceipt`.
 
 ## Tests
 
-`pnpm --filter @finch/financial-engine test` (76 tests) and `pnpm financial:verify`
-(JSON artifact). Decimal reference values were computed independently with Python's
-`decimal` module; formula golden vectors are verified in an independent spreadsheet
-(task S1-03) before a formula informs a recommendation (README §15).
+`pnpm --filter @finch/financial-engine test` and `pnpm financial:verify` (JSON artifact).
+Golden vectors live in `test/vectors/<formulaId>@<version>.json` and are produced by
+`test/vectors/generate_credit_vectors.py`, an independent implementation with Python's
+`decimal` module at 60 digits that never runs this code; re-run it with `python3` after
+changing a case. The founders' spreadsheet (task S1-03) re-derives a subset before a
+formula informs a recommendation (README §15). Every vector recorded in the registry is
+recomputed by `src/credit/formulas.test.ts`, so the registry cannot drift from the code.

@@ -56,6 +56,16 @@ last instalment adjusts the residue so that `balance_n = 0`.
 
 Illustrative example: `P` = COP 10,000,000, `i` = 1.6 % MV, `n` = 36 → `C` ≈ COP 367,572.18.
 
+Edge cases: `n` must be an integer in `1..1200`; `P > 0`; `i ≥ 0` in version 1. When the rounded
+instalment would repay the whole principal before period `n` (amounts too small for the term in
+whole minor units, e.g. 6 minor units over 8 periods at 0 %), the formula rejects the input with
+`UNAMORTIZABLE_IN_MINOR_UNITS` instead of producing a negative balance.
+
+**Implementation status (S1-01):** §1 and §2 are implemented in `packages/financial-engine/src/credit/`
+(`rate.ts`, `french.ts`), registered as `rate.convert@1` and `amortization.french@1`, and tested
+against golden vectors in `packages/financial-engine/test/vectors/` produced by an independent
+Python `decimal` implementation. The negative-rate flag of §1 is `allowNegative`.
+
 ## 3. Total cost and real effective rate — `credit.total_cost@1`
 
 Monthly cash flows from the borrower's perspective:
