@@ -1,0 +1,96 @@
+{
+  "formulaId": "budget.envelope_state",
+  "version": 1,
+  "spec": "docs/financial-formulas/personal-finance.md",
+  "generatedBy": "packages/financial-engine/test/vectors/generate_personal_vectors.py (Python decimal, 60 digits)",
+  "verifiedBy": [
+    "python-decimal-reference"
+  ],
+  "vectors": [
+    {
+      "description": "under 80 %: no alert",
+      "inputs": {
+        "allocated": "100000000",
+        "expenses": [
+          "20000000",
+          "15000000"
+        ],
+        "transfersIn": [],
+        "transfersOut": []
+      },
+      "expected": {
+        "spent": "35000000",
+        "available": "65000000",
+        "alert": "NONE"
+      }
+    },
+    {
+      "description": "exactly 80 %: warning",
+      "inputs": {
+        "allocated": "100000000",
+        "expenses": [
+          "50000000",
+          "30000000"
+        ],
+        "transfersIn": [],
+        "transfersOut": []
+      },
+      "expected": {
+        "spent": "80000000",
+        "available": "20000000",
+        "alert": "WARN_80"
+      }
+    },
+    {
+      "description": "over budget: limit and negative available",
+      "inputs": {
+        "allocated": "100000000",
+        "expenses": [
+          "70000000",
+          "45000000"
+        ],
+        "transfersIn": [],
+        "transfersOut": []
+      },
+      "expected": {
+        "spent": "115000000",
+        "available": "-15000000",
+        "alert": "LIMIT_100"
+      }
+    },
+    {
+      "description": "transfers change the budget the alert is measured against",
+      "inputs": {
+        "allocated": "100000000",
+        "expenses": [
+          "90000000"
+        ],
+        "transfersIn": [
+          "30000000"
+        ],
+        "transfersOut": [
+          "5000000"
+        ]
+      },
+      "expected": {
+        "spent": "90000000",
+        "available": "35000000",
+        "alert": "NONE"
+      }
+    },
+    {
+      "description": "empty envelope with no spending: no alert",
+      "inputs": {
+        "allocated": "0",
+        "expenses": [],
+        "transfersIn": [],
+        "transfersOut": []
+      },
+      "expected": {
+        "spent": "0",
+        "available": "0",
+        "alert": "NONE"
+      }
+    }
+  ]
+}
