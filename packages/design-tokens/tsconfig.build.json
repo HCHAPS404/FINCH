@@ -1,6 +1,11 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": { "rootDir": "src", "outDir": "dist" },
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    // Build state lives inside dist/: deleting dist/ must force a rebuild, not a no-op.
+    "tsBuildInfoFile": "dist/.tsbuildinfo"
+  },
   "include": ["src/**/*.ts", "src/**/*.json"],
   "exclude": ["src/**/*.test.ts"]
 }

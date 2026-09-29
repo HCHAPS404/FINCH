@@ -2,3 +2,12 @@ packages:
   - "apps/*"
   - "packages/*"
   - "jurisdictions/*"
+# Dependency install scripts are denied unless a package needs one to work (README §43).
+# All four below are development-only (drizzle-kit, Testcontainers) and work without
+# their scripts: esbuild ships its binary as an optional platform package, ssh2 falls
+# back to pure JavaScript without cpu-features, and protobufjs's script is informational.
+allowBuilds:
+  cpu-features: false
+  esbuild: false
+  protobufjs: false
+  ssh2: false

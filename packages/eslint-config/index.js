@@ -125,6 +125,18 @@ export const typed = [
   },
 ];
 
+/**
+ * NestJS apps. Nest modules are decorated classes with no instance members by design
+ * (`@Module({...}) class X {}`), so only *decorated* classes are exempted from
+ * no-extraneous-class; an undecorated static-only class is still an error.
+ */
+export const nestApps = {
+  files: ['apps/api/**/*.ts', 'apps/worker/**/*.ts'],
+  rules: {
+    '@typescript-eslint/no-extraneous-class': ['error', { allowWithDecorator: true }],
+  },
+};
+
 /** Applied to packages/domain, packages/financial-engine, packages/contracts. */
 export const pureLayers = {
   files: [
@@ -211,4 +223,4 @@ export const tests = {
 };
 
 /** The default composed configuration consumed by the repository root. */
-export default [ignores, ...base, ...typed, pureLayers, ...repoScripts, tests, prettier];
+export default [ignores, ...base, ...typed, nestApps, pureLayers, ...repoScripts, tests, prettier];

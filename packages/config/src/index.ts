@@ -43,6 +43,32 @@ const featureFlagSchema = z.object({
 });
 
 /**
+ * AI provider configuration — README §30, ADR-0036.
+ *
+ * Model IDs are configuration, never constants: providers rename models, and the IDs
+ * must be confirmed against `GET /v1/models` with the team's key before they are
+ * trusted (task S0-05). A tier with no model ID is reported as unavailable rather
+ * than silently routed to another model.
+ */
+const aiConfigSchema = z.object({
+  provider: z.literal('nebius-token-factory'),
+  baseUrl: z.url(),
+  models: z.object({
+    FAST: z.string().min(1).optional(),
+    AGENT: z.string().min(1).optional(),
+    DEEP: z.string().min(1).optional(),
+  }),
+  requestTimeoutMs: z.coerce.number().int().min(1_000).max(120_000),
+  maxOutputTokens: z.coerce.number().int().min(16).max(8_192),
+});
+
+/** Abuse limits for public endpoints — README §119 (rate limiting), §62. */
+const limitsConfigSchema = z.object({
+  requestsPerMinutePerClient: z.coerce.number().int().min(1).max(10_000),
+  aiTurnsPerMinutePerClient: z.coerce.number().int().min(1).max(1_000),
+});
+
+/**
  * Secret config is kept in a separate shape so it can never be spread into a log
  * line or an error report alongside public values (README §12).
  */
@@ -50,17 +76,22 @@ const secretConfigSchema = z.object({
   databaseUrl: z.string().min(1),
   sentryDsn: z.string().optional(),
   authJwksUrl: z.string().optional(),
+  nebiusApiKey: z.string().min(1).optional(),
 });
 
 export const configSchema = z.object({
   public: publicConfigSchema,
   jurisdiction: jurisdictionConfigSchema,
   flags: featureFlagSchema,
+  ai: aiConfigSchema,
+  limits: limitsConfigSchema,
   secrets: secretConfigSchema,
 });
 
 export type FinchConfig = z.infer<typeof configSchema>;
 export type PublicConfig = z.infer<typeof publicConfigSchema>;
+export type AiConfig = z.infer<typeof aiConfigSchema>;
+export type LimitsConfig = z.infer<typeof limitsConfigSchema>;
 
 /**
  * Treat an empty or whitespace-only environment variable as absent.
@@ -74,6 +105,20 @@ function optionalEnv(value: string | undefined): string | undefined {
   if (value === undefined) return undefined;
   const trimmed = value.trim();
   return trimmed === '' ? undefined : trimmed;
+}
+
+/**
+ * Drop keys whose value is `undefined`.
+ *
+ * With `exactOptionalPropertyTypes`, an optional key must be absent rather than
+ * present-and-undefined; this keeps the parsed object honest about what was set.
+ */
+function withoutUndefined<T extends Record<string, string | undefined>>(
+  record: T,
+): Partial<Record<keyof T, string>> {
+  return Object.fromEntries(
+    Object.entries(record).filter(([, value]) => value !== undefined),
+  ) as Partial<Record<keyof T, string>>;
 }
 
 /**
@@ -103,11 +148,27 @@ export function loadConfig(env: Record<string, string | undefined>): FinchConfig
       paymentExecutionEnabled: env['FEATURE_PAYMENT_EXECUTION_ENABLED'] === 'true',
       aiExplanationsEnabled: env['FEATURE_AI_EXPLANATIONS_ENABLED'] === 'true',
     },
-    secrets: {
+    ai: {
+      provider: 'nebius-token-factory',
+      baseUrl: optionalEnv(env['NEBIUS_BASE_URL']) ?? 'https://api.tokenfactory.nebius.com/v1/',
+      models: withoutUndefined({
+        FAST: optionalEnv(env['NEBIUS_MODEL_FAST']),
+        AGENT: optionalEnv(env['NEBIUS_MODEL_AGENT']),
+        DEEP: optionalEnv(env['NEBIUS_MODEL_DEEP']),
+      }),
+      requestTimeoutMs: optionalEnv(env['AI_REQUEST_TIMEOUT_MS']) ?? '30000',
+      maxOutputTokens: optionalEnv(env['AI_MAX_OUTPUT_TOKENS']) ?? '1024',
+    },
+    limits: {
+      requestsPerMinutePerClient: optionalEnv(env['API_RATE_LIMIT_PER_MINUTE']) ?? '120',
+      aiTurnsPerMinutePerClient: optionalEnv(env['AI_TURNS_PER_MINUTE']) ?? '10',
+    },
+    secrets: withoutUndefined({
       databaseUrl: env['DATABASE_URL'],
       sentryDsn: optionalEnv(env['SENTRY_DSN']),
       authJwksUrl: optionalEnv(env['AUTH_JWKS_URL']),
-    },
+      nebiusApiKey: optionalEnv(env['NEBIUS_API_KEY']),
+    }),
   });
 
   if (!result.success) {
@@ -131,6 +192,8 @@ export function redactedConfig(config: FinchConfig): Record<string, unknown> {
     public: config.public,
     jurisdiction: config.jurisdiction,
     flags: config.flags,
+    ai: config.ai,
+    limits: config.limits,
     secrets: Object.fromEntries(
       Object.entries(config.secrets).map(([key, value]) => [
         key,
