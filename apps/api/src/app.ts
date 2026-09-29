@@ -12,12 +12,15 @@ import {
   type InferencePort,
 } from '@finch/ai-core';
 import type { FinchConfig } from '@finch/config';
-import { Module, type DynamicModule } from '@nestjs/common';
+import { connect, type DatabaseHandle } from '@finch/db';
+import { ConsoleLogger, Module, type DynamicModule, type LoggerService } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 
+import { DatabaseAiAuditSink, type AuditLogger } from './infrastructure/db-ai-audit-sink.js';
 import { AssistantController } from './modules/assistant/adapters/assistant.controller.js';
 import { HealthController } from './modules/health/health.controller.js';
+import { ReadinessController } from './modules/health/readiness.controller.js';
 import { CORRELATION_HEADER, resolveCorrelationId } from './platform/correlation.js';
 import { FinchExceptionFilter, FinchHttpError, mapError } from './platform/errors.js';
 import { FixedWindowLimiter } from './platform/rate-limit.js';
@@ -26,6 +29,7 @@ import {
   AI_TURN_LIMITER,
   BUILD_INFO,
   CONFIG,
+  DATABASE,
   type BuildInfo,
 } from './platform/tokens.js';
 
@@ -34,13 +38,23 @@ export interface AppOverrides {
   readonly inference?: InferencePort;
   readonly audit?: AiAuditSink;
   readonly build?: BuildInfo;
+  /**
+   * The database. Omitted: connect to `DATABASE_URL` (production path). `null`: run
+   * without a database — `/api/ready` reports it and AI calls are not persisted.
+   */
+  readonly database?: DatabaseHandle | null;
+}
+
+interface Wiring {
+  readonly database: DatabaseHandle | null;
+  readonly audit: AiAuditSink;
 }
 
 const MINUTE_MS = 60_000;
 
 @Module({})
 class AppModule {
-  static register(config: FinchConfig, overrides: AppOverrides): DynamicModule {
+  static register(config: FinchConfig, overrides: AppOverrides, wiring: Wiring): DynamicModule {
     const apiKey = config.secrets.nebiusApiKey;
     const inference =
       overrides.inference ??
@@ -54,9 +68,10 @@ class AppModule {
 
     return {
       module: AppModule,
-      controllers: [HealthController, AssistantController],
+      controllers: [HealthController, ReadinessController, AssistantController],
       providers: [
         { provide: CONFIG, useValue: config },
+        { provide: DATABASE, useValue: wiring.database },
         {
           provide: BUILD_INFO,
           useValue: overrides.build ?? {
@@ -76,12 +91,24 @@ class AppModule {
             models: config.ai.models,
             enabled: config.flags.aiExplanationsEnabled,
             maxOutputTokens: config.ai.maxOutputTokens,
-            audit: overrides.audit ?? { record: () => undefined },
+            audit: wiring.audit,
           }),
         },
       ],
     };
   }
+}
+
+/**
+ * Framework logs: silent in tests, structured JSON without colors in production
+ * (README §46: logs are machine-parseable), human-readable locally.
+ */
+function nestLogger(config: FinchConfig): LoggerService | false {
+  if (config.public.nodeEnv === 'test') return false;
+  if (config.public.nodeEnv === 'production') {
+    return new ConsoleLogger({ json: true, colors: false, logLevels: ['error', 'warn', 'log'] });
+  }
+  return new ConsoleLogger({ logLevels: ['error', 'warn', 'log'] });
 }
 
 export async function createApp(
@@ -98,10 +125,24 @@ export async function createApp(
         ? false
         : { level: 'info', redact: ['req.headers.authorization'] },
   });
+  const fastifyLog = adapter.getInstance().log;
+  const auditLogger: AuditLogger = {
+    error: (details, message) => {
+      fastifyLog.error(details, message);
+    },
+  };
+  const ownsDatabase = overrides.database === undefined;
+  const database =
+    overrides.database === undefined
+      ? connect({ url: config.secrets.databaseUrl })
+      : overrides.database;
+  const dbSink = database === null ? undefined : new DatabaseAiAuditSink(database.db, auditLogger);
+  const audit: AiAuditSink = overrides.audit ?? dbSink ?? { record: () => undefined };
+
   const app = await NestFactory.create<NestFastifyApplication>(
-    AppModule.register(config, overrides),
+    AppModule.register(config, overrides, { database, audit }),
     adapter,
-    { logger: config.public.nodeEnv === 'test' ? false : ['error', 'warn', 'log'] },
+    { logger: nestLogger(config) },
   );
 
   const requestLimiter = new FixedWindowLimiter(
@@ -129,6 +170,12 @@ export async function createApp(
         .status(mapped.status)
         .send({ error: { code: mapped.code, message: mapped.message, correlationId } });
     }
+  });
+
+  // On shutdown: let queued audit writes land, then release the pool we opened.
+  fastify.addHook('onClose', async () => {
+    await dbSink?.flush();
+    if (ownsDatabase) await database?.close();
   });
 
   app.useGlobalFilters(new FinchExceptionFilter());

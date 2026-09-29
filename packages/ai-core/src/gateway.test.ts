@@ -50,6 +50,7 @@ const REQUEST = {
   system: 'You are FINCH.',
   userText: 'My email is laura.demo@example.com. Can I afford it?',
   correlationId: 'corr-1',
+  promptId: 'test.prompt@1',
 };
 
 describe('AiGateway.narrate', () => {
@@ -68,7 +69,12 @@ describe('AiGateway.narrate', () => {
     expect(result.truthClass).toBe('GENERATED_NARRATIVE');
     expect(port.requests[0]?.maxOutputTokens).toBe(256);
     expect(records).toEqual([
-      expect.objectContaining({ outcome: 'OK', redactionsCount: 1, inputTokens: 20 }),
+      expect.objectContaining({
+        outcome: 'OK',
+        redactionsCount: 1,
+        inputTokens: 20,
+        promptId: 'test.prompt@1',
+      }),
     ]);
   });
 
@@ -126,6 +132,13 @@ describe('AiGateway.narrate', () => {
     await expect(gateway.narrate(REQUEST)).rejects.toMatchObject({
       code: 'FINCH_PROVIDER_AI_UNAVAILABLE',
     });
+  });
+
+  it('requires a versioned prompt ID', async () => {
+    const port = new RecordingPort(() => ({ text: 'x', servedModel: 'm', usage: undefined }));
+    const { gateway } = setup({ port });
+    await expect(gateway.narrate({ ...REQUEST, promptId: 'unversioned' })).rejects.toThrow();
+    expect(port.requests).toHaveLength(0);
   });
 
   it('rejects empty or oversized input before any call', async () => {
