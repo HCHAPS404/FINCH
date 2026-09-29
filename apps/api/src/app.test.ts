@@ -8,6 +8,7 @@ import type { AddressInfo } from 'node:net';
 
 import type { AiCallRecord } from '@finch/ai-core';
 import { loadConfig } from '@finch/config';
+import { connect, type DatabaseHandle } from '@finch/db';
 import type { NestFastifyApplication } from '@nestjs/platform-fastify';
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest';
 
@@ -80,9 +81,14 @@ function env(overrides: Record<string, string> = {}): Record<string, string> {
   };
 }
 
-async function start(overrides: Record<string, string> = {}, audit: AiCallRecord[] = []) {
+async function start(
+  overrides: Record<string, string> = {},
+  audit: AiCallRecord[] = [],
+  database: DatabaseHandle | null = null,
+) {
   const app = await createApp(loadConfig(env(overrides)), {
     audit: { record: (entry) => audit.push(entry) },
+    database,
     build: { service: 'finch-api', version: '0.0.0-test', commit: 'abc1234' },
   });
   await app.init();
@@ -139,6 +145,30 @@ describe('GET /api/health', () => {
       headers: { 'x-correlation-id': 'bad\r\nInjected: header' },
     });
     expect(replaced.headers['x-correlation-id']).not.toContain('Injected');
+  });
+});
+
+describe('GET /api/ready', () => {
+  it('reports not ready, with 503, when there is no database', async () => {
+    const app = await start();
+    const response = await app.inject({ method: 'GET', url: '/api/ready' });
+    expect(response.statusCode).toBe(503);
+    expect(response.json()).toEqual({ status: 'not_ready', database: 'not_configured' });
+  });
+
+  it('reports the database as down, with 503, when it does not answer', async () => {
+    const unreachable = connect({
+      url: 'postgresql://finch:x@127.0.0.1:1/finch',
+      maxConnections: 1,
+    });
+    try {
+      const app = await start({}, [], unreachable);
+      const response = await app.inject({ method: 'GET', url: '/api/ready' });
+      expect(response.statusCode).toBe(503);
+      expect(response.json()).toEqual({ status: 'not_ready', database: 'down' });
+    } finally {
+      await unreachable.close();
+    }
   });
 });
 

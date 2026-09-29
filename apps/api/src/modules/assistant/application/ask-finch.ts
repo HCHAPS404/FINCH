@@ -45,6 +45,7 @@ export async function askFinch(
     system: ASSISTANT_SYSTEM_PROMPT,
     userText: message,
     correlationId,
+    promptId: ASSISTANT_PROMPT_ID,
   });
   return {
     answer: result.text,

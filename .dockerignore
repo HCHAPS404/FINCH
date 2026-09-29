@@ -1,0 +1,15 @@
+# Keep build contexts small and secret-free (README §40, §43).
+**/node_modules
+**/dist
+**/.turbo
+**/coverage
+**/*.tsbuildinfo
+.git
+.env
+.env.*
+!.env.example
+artifacts
+assets
+docs
+*.md
+!packages/**/README.md

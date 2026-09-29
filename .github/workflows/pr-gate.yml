@@ -154,6 +154,21 @@ jobs:
         run: pnpm test:integration
 
   # ---------------------------------------------------------------------------
+  # The API container must keep building: it is the deploy artifact (ADR-0038).
+  container:
+    name: Container · API image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Build API image
+        run: docker build -f apps/api/Dockerfile -t finch-api:${{ github.sha }} .
+
+      - name: Image runs as a non-root user
+        run: test "$(docker run --rm finch-api:${{ github.sha }} id -un)" = "node"
+
+  # ---------------------------------------------------------------------------
   secrets:
     name: Secret scan
     runs-on: ubuntu-latest
