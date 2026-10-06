@@ -55,6 +55,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Type-aware lint rules resolve cross-package imports (@finch/contracts,
+      # @finch/domain, ...) through each package's built dist/*.d.ts. Without this,
+      # every cross-package import type-checks as `error`, and typescript-eslint
+      # cascades hundreds of false no-unsafe-* findings — it looks like a lint
+      # failure but is actually a missing build step.
+      - name: Build packages
+        run: pnpm build
+
       - name: Lint
         run: pnpm lint
 

@@ -32,7 +32,7 @@
     "db:seed": "turbo run db:seed --filter=@finch/db",
     "openapi:generate": "turbo run openapi:generate --filter=@finch/api",
     "release:verify": "node scripts/release-verify.mjs",
-    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm architecture:check && pnpm security:check && pnpm test"
+    "check": "pnpm build && pnpm lint && pnpm format:check && pnpm typecheck && pnpm architecture:check && pnpm security:check && pnpm test"
   },
   "devDependencies": {
     "@finch/eslint-config": "workspace:*",
