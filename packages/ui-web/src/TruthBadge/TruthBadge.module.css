@@ -1,0 +1,48 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.observed {
+  background: var(--fc-verified-bg);
+  color: var(--fc-verified-fg);
+}
+
+.userAsserted {
+  background: var(--fc-pending-bg);
+  color: var(--fc-pending-fg);
+}
+
+/* DERIVED_DETERMINISTIC ("Calculated"): Figma's own local color, not promoted to a
+   shared @finch/design-tokens token — see TruthBadge.tsx. */
+.derivedDeterministic {
+  background: #edf1ee;
+  color: #10513a;
+}
+
+[data-theme='dark'] .derivedDeterministic {
+  background: #1a2620;
+  color: #7fb89a;
+}
+
+.estimated {
+  background: var(--fc-estimated-bg);
+  color: var(--fc-estimated-fg);
+}
+
+/* GENERATED_NARRATIVE: deliberately unhighlighted — Constitution §4.2/§4.7: LLM prose
+   never establishes a fact, so it must never look as confirmed as the other four
+   kinds. No Figma precedent exists for this kind; this is a provisional treatment. */
+.generatedNarrative {
+  background: transparent;
+  color: var(--fc-text-secondary);
+  border: 1px solid var(--fc-border-subtle);
+}

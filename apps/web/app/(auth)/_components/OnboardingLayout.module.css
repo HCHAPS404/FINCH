@@ -1,0 +1,91 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fc-surface-base);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+  text-decoration: none;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.content {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.progress {
+  display: flex;
+  gap: 6px;
+}
+
+.progressSegment {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--fc-border-subtle);
+}
+
+.progressSegmentActive {
+  background: var(--fc-positive-fg);
+}
+
+.step {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-muted);
+}
+
+.title {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.subtitle {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+  margin: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 8px;
+}

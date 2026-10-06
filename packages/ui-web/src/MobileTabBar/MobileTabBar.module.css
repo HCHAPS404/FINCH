@@ -1,0 +1,7 @@
+.bar {
+  display: flex;
+  justify-content: space-around;
+  padding: 6px 12px;
+  background: var(--fc-surface-raised);
+  border-top: 1px solid var(--fc-border-default);
+}

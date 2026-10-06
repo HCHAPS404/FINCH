@@ -1,0 +1,31 @@
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}
+
+.fresh {
+  color: var(--fc-positive-fg);
+}
+
+.recent {
+  color: var(--fc-text-secondary);
+}
+
+.stale {
+  color: var(--fc-stale-fg);
+}
+
+.unknown {
+  color: var(--fc-warning-fg);
+}

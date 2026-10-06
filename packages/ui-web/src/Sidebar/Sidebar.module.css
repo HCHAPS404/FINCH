@@ -1,0 +1,23 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 264px;
+  padding: 24px 16px;
+  gap: 4px;
+  background: var(--fc-surface-raised);
+  border-right: 1px solid var(--fc-border-default);
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  margin-bottom: 20px;
+}
+
+.spacer {
+  flex: 1;
+}

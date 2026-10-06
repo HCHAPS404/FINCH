@@ -1,0 +1,44 @@
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 16px;
+  white-space: nowrap;
+}
+
+.positive {
+  background: var(--fc-positive-bg);
+  color: var(--fc-positive-fg);
+}
+
+.negative {
+  background: var(--fc-negative-bg);
+  color: var(--fc-negative-fg);
+}
+
+.warning {
+  background: var(--fc-warning-bg);
+  color: var(--fc-warning-fg);
+}
+
+.info {
+  background: var(--fc-pending-bg);
+  color: var(--fc-pending-fg);
+}
+
+/* Figma StatusChip "Tone=Accent" — a local brand tint, not a shared design token
+   (see design-tokens README: only 11 semantic names are promoted there). */
+.accent {
+  border-radius: 999px;
+  background: #e8fbf3;
+  color: #0b6a4a;
+}
+
+[data-theme='dark'] .accent {
+  background: #0f3c2c;
+  color: #4fd6a8;
+}

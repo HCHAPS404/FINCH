@@ -23,7 +23,7 @@ built on it reproducible.
 ## Does not own
 
 - Authorization decisions — `can(principal, action, resource, workspace, context)`
-  lives in `@finch/authorization`; this package only models what a Membership *is*.
+  lives in `@finch/authorization`; this package only models what a Membership _is_.
 - Persistence — schema and queries live in `@finch/db`. This package never imports a
   database driver (`domain-is-framework-free`, `.dependency-cruiser.cjs`).
 - Financial mathematics — that is `@finch/financial-engine`.
