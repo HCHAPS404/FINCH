@@ -1,7 +1,8 @@
 # Contributing to FINCH
 
-`README.md` is the architecture authority. `AGENTS.md` is normative for AI agents.
-Read both before your first change.
+`docs/architecture/CONSTITUTION.md` is the architecture authority (`README §N` references point
+to it). `AGENTS.md` is normative for AI agents. `README-DEVELOPERS.md` is the founders' working
+agreement. Read all three before your first change.
 
 ## Setup
 
@@ -26,16 +27,20 @@ pnpm check    # lint + format:check + typecheck + architecture:check + test
 
 ## Branching
 
-Trunk-oriented. `main` is always deployable. No permanent `develop` branch without an
-ADR.
+`main` is always deployable and only receives milestone merges. During the hackathon program,
+work integrates through weekly `stage/sN-<name>` branches and per-platform `area/<area>` lanes
+(`design`, `backend`, `web`, `mobile`, `desktop`) (ADR-0040); task branches start from their area
+and live at most two days. No permanent `develop` branch.
 
 ```
-feat/FIN-123-short-description
-fix/FIN-456-short-description
-security/FIN-789-short-description
-chore/FIN-012-short-description
-spike/FIN-345-short-description
+feat/s1-payday-autopilot
+fix/s2-receipt-total-rounding
+security/s3-household-authorization
+chore/s0-license-credits-setup
+spike/s2-multimodal-extraction
 ```
+
+Full model, milestones and duties: `README-DEVELOPERS.md` §6–§7.
 
 ## Commits
 
