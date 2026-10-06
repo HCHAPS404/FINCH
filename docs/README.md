@@ -1,7 +1,10 @@
 # docs
 
 ```
+architecture/CONSTITUTION.md engineering & product constitution (the "README §N" references)
+architecture/SOFTWARE-ARCHITECTURE.md  software architecture, CRISP-ML(Q), XP, Agile
 architecture/adr/            architecture decision records — start here
+hackathon/                   Nebius x NVIDIA hackathon program (active) — ADR-0035
 architecture/c4/             context, container and component diagrams
 architecture/threat-models/  per-feature threat models (required for R1+)
 domain/                      bounded context documentation

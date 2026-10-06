@@ -4,8 +4,9 @@ This file is normative for **every** AI agent operating in this repository: Clau
 Cursor, Copilot, or anything else. It is read before any other instruction an agent
 may carry.
 
-`README.md` is the architecture authority. An `Accepted` ADR in
-`docs/architecture/adr/` can supersede a README decision; nothing else can.
+`docs/architecture/CONSTITUTION.md` is the architecture authority. An `Accepted` ADR in
+`docs/architecture/adr/` can supersede a Constitution decision; nothing else can. Section references written as `README §N` anywhere in the repository refer to
+`docs/architecture/CONSTITUTION.md` §N (it was the root README until 2026-09-28, ADR-0040).
 
 ---
 
@@ -181,7 +182,7 @@ Migration, Rollback) and approval. Not a direct implementation.
 
 Never invent a version, API, method, configuration key, SDK behaviour, package name or
 CLI flag. Verify against the current official documentation or the package registry
-before adding a dependency. `README.md` defines architecture; official documentation
+before adding a dependency. `CONSTITUTION.md` defines architecture; official documentation
 defines syntax and current capability.
 
 ---
