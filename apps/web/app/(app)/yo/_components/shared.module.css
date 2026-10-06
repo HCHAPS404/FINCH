@@ -1,0 +1,106 @@
+/* Shared primitives reused across every "Yo" sub-page, so each page file only
+   defines what's actually specific to it. */
+
+.card {
+  background: var(--fc-surface-raised);
+  border: 1px solid var(--fc-border-default);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.cardTitle {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .grid2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.row:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.rowIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--fc-surface-base);
+  color: var(--fc-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rowBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowTitle {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.rowMeta {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+  text-decoration: none;
+  margin-bottom: 16px;
+}

@@ -1,0 +1,300 @@
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--fc-border-default);
+  margin-bottom: 20px;
+  overflow-x: auto;
+}
+
+.tab {
+  padding: 10px 16px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-secondary);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.tabActive {
+  color: var(--fc-positive-fg);
+  border-bottom-color: var(--fc-positive-fg);
+}
+
+.card {
+  background: var(--fc-surface-raised);
+  border: 1px solid var(--fc-border-default);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  gap: 12px;
+}
+
+.cardTitle {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.cardSubtitle {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.grid2 {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+@media (min-width: 900px) {
+  .grid2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Ranking rows (CDTs, compra de cartera, remesas) */
+.rankRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.rankRow:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.rankBadge {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  background: var(--fc-surface-base);
+  color: var(--fc-text-secondary);
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.rankBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.rankName {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.rankMeta {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+.rankValue {
+  text-align: right;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--fc-positive-fg);
+  white-space: nowrap;
+}
+
+.sourceLine {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: var(--fc-text-muted);
+}
+
+/* Subscription rows */
+.subRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.subRow:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.subIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--fc-surface-base);
+  color: var(--fc-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.subBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.subName {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.subMeta {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+.subAmount {
+  text-align: right;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--fc-text-primary);
+}
+
+/* Anomaly decision cards */
+.anomalyCard {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--fc-border-default);
+  background: var(--fc-surface-raised);
+}
+
+.anomalyHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.anomalyTitle {
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.anomalyEvidence {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 0;
+}
+
+.anomalyActions {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+/* Comparison cards (gastos fijos) */
+.compareCard {
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid var(--fc-border-default);
+  background: var(--fc-surface-raised);
+}
+
+.compareHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.compareLabel {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-muted);
+}
+
+.compareRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 6px 0;
+}
+
+.compareCurrent {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+}
+
+.compareBest {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+}
+
+.compareSavings {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 1px solid var(--fc-border-default);
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-positive-fg);
+  font-weight: 500;
+}
+
+/* Remittance corridor rows */
+.corridorHeader {
+  display: flex;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--fc-text-muted);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--fc-border-default);
+}
+
+.simBanner {
+  margin-top: 16px;
+}
