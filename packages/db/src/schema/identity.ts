@@ -22,6 +22,24 @@ export const parties = identity.table('parties', {
   createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
 });
 
+/**
+ * Personal data (signup display name, date of birth, phone) lives here rather than on
+ * `parties` itself — same reason `security.credentials` stays off `principals`
+ * (README §8.6, §100): the identity/tenancy entities stay minimal and open, personal
+ * data that only ever matters for a `PERSON`-type Party lives alongside it, not on it.
+ */
+export const partyProfiles = identity.table('party_profiles', {
+  partyId: text('party_id')
+    .primaryKey()
+    .references(() => parties.id),
+  displayName: text('display_name').notNull(),
+  dateOfBirth: text('date_of_birth'),
+  phone: text('phone'),
+  locale: text('locale').notNull().default('es-CO'),
+  createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
+});
+
 export const workspaces = identity.table('workspaces', {
   id: text('id').primaryKey(),
   type: text('type').notNull(),

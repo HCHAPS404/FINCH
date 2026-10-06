@@ -73,6 +73,7 @@ during the Foundation bootstrap, with the evidence that drove them.
 | [ADR-0038](0038-hackathon-demo-deployment-topology.md)       | Hackathon demo deployment topology                                           | Proposed | §41, §79                    |
 | [ADR-0039](0039-channel-hub.md)                              | Autonomous app with an optional Channel Hub                                  | Proposed | §27, §115                   |
 | [ADR-0040](0040-engineering-method-and-branching.md)         | Engineering method (XP + Agile + CRISP-ML(Q)) and stage branching            | Proposed | §67, §70                    |
+| [ADR-0041](0041-interim-local-credentials.md)                | Interim local email+password credentials until ADR-0015 resolves             | Accepted | §76, §112                   |
 
 ## Open decisions
 

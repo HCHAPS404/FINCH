@@ -15,10 +15,19 @@ built on it reproducible.
   invariants (README §8.6).
 - `membershipGrants` / `revokeMembership` — the domain-level half of the README §9
   authorization harness (revocation semantics, capability matching).
-- `AuthSessionPort` — the shape of a verified session, deliberately vendor-silent since
-  ADR-0015 (identity provider) is still Proposed. `isSessionExpired` and
-  `isAuthSandboxEligible` are the pure logic around it.
+- `AuthSessionPort` — the shape of a verified session (`verify`) and how one is
+  minted (`issue`), deliberately vendor-silent since ADR-0015 (identity provider) is
+  still Proposed. `isSessionExpired` and `isAuthSandboxEligible` are the pure logic
+  around it.
 - `EventPublisher` — the port `apps/worker` publishes outbox rows through.
+- `IdGenerator` — README §60's reasoning applied to identifiers: this package only
+  owns the port and `sequentialIdGenerator` for tests; the real
+  `crypto.randomUUID()`-backed generator is Node-specific and lives at the
+  composition root (`apps/api/src/infrastructure/security/`), same split as
+  `AuthSessionPort`/`DevAuthSessionAdapter`.
+- `isResetTokenExpired` (ADR-0041) — the pure, clock-based half of password reset
+  expiry. Generating and hashing the token itself needs Node's `crypto` and lives
+  with the rest of ADR-0041's adapter code in `apps/api`, not here.
 
 ## Does not own
 
@@ -42,6 +51,9 @@ built on it reproducible.
 - A `Membership` always carries at least one capability — access is granted explicitly,
   never implicitly.
 - A revoked `Membership` grants nothing, regardless of the capabilities it still lists.
+- A password reset token is single-use and clock-expired (ADR-0041); this package
+  only enforces the expiry half — issuance, hashing and the single-use check against
+  storage are `apps/api`'s job.
 
 ## Failure modes
 
