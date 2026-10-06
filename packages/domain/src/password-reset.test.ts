@@ -13,10 +13,16 @@ describe('isResetTokenExpired', () => {
 
   it('is expired exactly at, and after, its expiry instant', () => {
     expect(
-      isResetTokenExpired(new Date('2026-01-01T00:30:00Z'), fixedClock(new Date('2026-01-01T00:30:00Z'))),
+      isResetTokenExpired(
+        new Date('2026-01-01T00:30:00Z'),
+        fixedClock(new Date('2026-01-01T00:30:00Z')),
+      ),
     ).toBe(true);
     expect(
-      isResetTokenExpired(new Date('2026-01-01T00:30:00Z'), fixedClock(new Date('2026-01-01T01:00:00Z'))),
+      isResetTokenExpired(
+        new Date('2026-01-01T00:30:00Z'),
+        fixedClock(new Date('2026-01-01T01:00:00Z')),
+      ),
     ).toBe(true);
   });
 });
