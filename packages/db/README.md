@@ -8,7 +8,7 @@ Drizzle schema, migrations and seeds. The only package permitted to touch the da
 
 ## Owns
 
-- Table definitions across the identity, security, finance, planning, decision, documents, actions, integration and audit schemas. Foundation ships `identity` (principals, parties, workspaces, memberships) and `integration` (the outbox); the rest arrive with the domain concepts that need them.
+- Table definitions across the identity, security, finance, planning, decision, documents, actions, integration and audit schemas. Ships `identity` (principals, parties, workspaces, memberships, party_profiles), `integration` (the outbox), `security` (credentials, password_reset_tokens — ADR-0041 interim local auth), `finance` (debts, cards — user-asserted personal financial data, §11 provenance columns) and `documents` (RAW-zone upload metadata only, §12 — no scan/OCR status states, §29's full pipeline is not implemented here); planning, decision and actions arrive with the domain concepts that need them.
 - Versioned migrations following expand -> migrate/backfill -> contract (§72), generated with `drizzle-kit generate` into `migrations/`.
 - Synthetic Colombian seed personas (§80), via `seedSyntheticPersonas` built on `@finch/testing`'s deterministic factories.
 - The transactional outbox table (§21.1).

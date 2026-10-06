@@ -13,6 +13,8 @@
 
 OPEN. README §112 defers the choice between Auth0, Cognito and other OIDC providers. Foundation builds the port; no vendor is selected. Scaffold acceptance criterion §102.10 stays incomplete until this is decided.
 
+**Interim note (2026-10-06):** ADR-0041 adds a local email+password credential store and `AuthSessionPort` adapter so signup/login/password-recovery are exercisable before this decision lands. It is explicitly interim — this ADR, and the federated-vendor choice it defers, are unchanged by it.
+
 ## Alternatives considered
 
 > **Outstanding.** To be written before this ADR is treated as a complete decision

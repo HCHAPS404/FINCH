@@ -36,3 +36,8 @@ export type { AuthSession, AuthSessionPort } from './auth-session.js';
 export { isSessionExpired, isAuthSandboxEligible } from './auth-session.js';
 
 export type { EventPublisher } from './event-publisher.js';
+
+export type { IdGenerator } from './id.js';
+export { sequentialIdGenerator } from './id.js';
+
+export { PASSWORD_RESET_TTL_MS, isResetTokenExpired } from './password-reset.js';

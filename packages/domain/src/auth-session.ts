@@ -1,11 +1,13 @@
 /**
- * Auth session port — README §8, §9, ADR-0015.
+ * Auth session port — README §8, §9, ADR-0015, ADR-0041.
  *
  * ADR-0015 (identity provider) is still **Proposed** — no vendor has been chosen. Per
  * ADR-0022, the domain defines the shape a session takes; a vendor-shaped adapter
  * (OIDC, JWT, whatever ADR-0015 eventually settles on) lives at a composition root,
- * never here. Foundation's only concrete implementation is a dev-only sandbox adapter
- * in `apps/api`, which is why this file stays silent about tokens or claims formats.
+ * never here. `issue()` was originally sandbox-only (ADR-0015 note on Foundation's
+ * dev adapter); ADR-0041's real password adapter also needs to issue a session after
+ * a successful login, so it is now part of the port both implementations share —
+ * this file still stays silent about token/claims formats, that stays adapter detail.
  */
 import type { PrincipalId } from '@finch/contracts';
 import type { Clock } from './clock.js';
@@ -17,6 +19,7 @@ export interface AuthSession {
 }
 
 export interface AuthSessionPort {
+  issue(principalId: PrincipalId): string;
   verify(token: string): Promise<AuthSession | undefined>;
 }
 
