@@ -1,0 +1,102 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 10px;
+  border: 1px solid transparent;
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition:
+    background-color 120ms ease,
+    color 120ms ease,
+    border-color 120ms ease;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--fc-pending-fg);
+  outline-offset: 2px;
+}
+
+.medium {
+  padding: 10px 16px;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.large {
+  padding: 14px 24px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* Text on a solid primary fill is deliberately not var(--fc-surface-raised): that
+   token means "card background", not "text that sits on a saturated brand fill", and
+   in dark mode it resolves to a near-black that would be a coincidence, not a
+   decision. #FFFFFF / #0B2B20 below are picked and contrast-checked for this
+   specific pairing. */
+.primary {
+  background: #146044;
+  color: #ffffff;
+}
+.primary:hover:not(:disabled) {
+  background: #0e4331;
+}
+[data-theme='dark'] .primary {
+  background: #2cd395;
+  color: #0b2b20;
+}
+[data-theme='dark'] .primary:hover:not(:disabled) {
+  background: #5ee3b4;
+}
+.primary:disabled {
+  background: var(--fc-border-default);
+  color: var(--fc-text-muted);
+}
+
+.secondary {
+  background: var(--fc-border-default);
+  color: var(--fc-text-primary);
+}
+.secondary:hover:not(:disabled) {
+  background: var(--fc-border-subtle);
+}
+.secondary:disabled {
+  background: var(--fc-border-default);
+  color: var(--fc-text-muted);
+}
+
+.ghost {
+  background: transparent;
+  color: var(--fc-positive-fg);
+}
+.ghost:hover:not(:disabled) {
+  background: var(--fc-positive-bg);
+}
+.ghost:disabled {
+  color: var(--fc-text-muted);
+}
+
+.danger {
+  background: var(--fc-negative-bg);
+  color: var(--fc-negative-fg);
+}
+/* Same reasoning as .primary: hover is a solid fill, so its text is an explicit,
+   contrast-checked color rather than a reused "card surface" token. */
+.danger:hover:not(:disabled) {
+  background: #a4221a;
+  color: #ffffff;
+}
+[data-theme='dark'] .danger:hover:not(:disabled) {
+  background: #eb8a84;
+  color: #460f0b;
+}
+.danger:disabled {
+  background: var(--fc-border-default);
+  color: var(--fc-text-muted);
+}

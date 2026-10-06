@@ -1,0 +1,291 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 960px) {
+  .layout {
+    grid-template-columns: 2fr 1fr;
+    align-items: start;
+  }
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 0;
+}
+
+.card {
+  background: var(--fc-surface-raised);
+  border: 1px solid var(--fc-border-default);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.cardTitle {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.cardLink {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fc-positive-fg);
+  text-decoration: none;
+}
+
+/* Safe to spend */
+.safeToSpendLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+}
+
+.safeToSpendAmount {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 36px;
+  color: var(--fc-text-primary);
+  margin: 4px 0 0;
+}
+
+.safeToSpendPerDay {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 16px;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.metricLabel {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 0 0 4px;
+}
+
+.metricValue {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.metricMeta {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: var(--fc-text-muted);
+  margin: 2px 0 0;
+}
+
+.receiptLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 16px;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+}
+
+/* Three things today */
+.taskRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.taskRow:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.taskIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  background: var(--fc-surface-base);
+  color: var(--fc-text-secondary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.taskBody {
+  flex: 1;
+  min-width: 0;
+}
+
+.taskTitle {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.taskSubtitle {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 2px 0 0;
+}
+
+/* Envelopes */
+.envelopeGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .envelopeGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Ask FINCH */
+.askFinchHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--fc-text-primary);
+}
+
+.askFinchSubtitle {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-secondary);
+  margin: 6px 0 16px;
+}
+
+.suggestedQuestion {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  border-radius: 10px;
+  border: 1px solid var(--fc-border-default);
+  background: var(--fc-surface-base);
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-primary);
+  cursor: pointer;
+}
+
+.askFinchInput {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--fc-border-subtle);
+  background: var(--fc-surface-base);
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: var(--fc-text-muted);
+}
+
+/* Card usage */
+.cardUsageRow + .cardUsageRow {
+  margin-top: 16px;
+}
+
+.cardUsageHeader {
+  display: flex;
+  justify-content: space-between;
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+  margin-bottom: 6px;
+}
+
+.cardUsageTrack {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--fc-border-default);
+  overflow: hidden;
+}
+
+.cardUsageFill {
+  height: 100%;
+  border-radius: 999px;
+  background: var(--fc-positive-fg);
+}
+
+.cardUsageMeta {
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: var(--fc-text-muted);
+  margin: 6px 0 0;
+}
+
+/* Upcoming */
+.upcomingRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid var(--fc-border-default);
+}
+
+.upcomingRow:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+
+.upcomingDate {
+  width: 48px;
+  flex-shrink: 0;
+  font-family: Inter, sans-serif;
+  font-size: 12px;
+  color: var(--fc-text-muted);
+}
+
+.upcomingLabel {
+  flex: 1;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-primary);
+}
+
+.upcomingAmount {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fc-text-primary);
+}

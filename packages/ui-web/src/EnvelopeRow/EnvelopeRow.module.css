@@ -1,0 +1,74 @@
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: var(--fc-surface-raised);
+  border: 1px solid var(--fc-border-default);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.name {
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  color: var(--fc-text-primary);
+}
+
+.status {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: right;
+}
+
+.track {
+  height: 8px;
+  border-radius: 999px;
+  background: var(--fc-border-default);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  border-radius: 999px;
+}
+
+.meta {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fc-text-muted);
+}
+
+.statusOk {
+  color: var(--fc-text-secondary);
+}
+.fillOk {
+  background: var(--fc-positive-fg);
+}
+
+.statusWarning {
+  color: var(--fc-warning-fg);
+}
+.fillWarning {
+  background: var(--fc-warning-fg);
+}
+
+.statusFull,
+.statusOverspent {
+  color: var(--fc-negative-fg);
+}
+.fillFull,
+.fillOverspent {
+  background: var(--fc-negative-fg);
+}

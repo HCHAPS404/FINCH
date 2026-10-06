@@ -1,0 +1,111 @@
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+.brandPanel {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 620px;
+  flex-shrink: 0;
+  padding: 48px;
+  background: #053f2b;
+  color: #ffffff;
+}
+
+@media (min-width: 960px) {
+  .brandPanel {
+    display: flex;
+  }
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pitch {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+}
+
+.headline {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 36px;
+  margin: 0;
+}
+
+.subhead {
+  font-family: Inter, sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #cfd8d3;
+  margin: 0;
+}
+
+.points {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.point {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.pointIcon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  color: #2cd395;
+  margin-top: 1px;
+}
+
+.testimonial {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.quote {
+  font-family: Inter, sans-serif;
+  font-style: italic;
+  font-size: 16px;
+  line-height: 24px;
+  margin: 0;
+}
+
+.attribution {
+  font-family: Inter, sans-serif;
+  font-size: 13px;
+  color: #9da9a4;
+}
+
+.formArea {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+  background: var(--fc-surface-base);
+}
+
+.form {
+  width: 100%;
+  max-width: 380px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}

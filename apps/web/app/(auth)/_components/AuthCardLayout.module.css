@@ -1,0 +1,75 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--fc-surface-base);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 40px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.help {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  color: var(--fc-text-secondary);
+  text-decoration: none;
+}
+
+.body {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+  background: var(--fc-surface-raised);
+  border: 1px solid var(--fc-border-default);
+  border-radius: 16px;
+  padding: 40px 32px;
+}
+
+.iconBadge {
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--fc-positive-bg);
+  color: var(--fc-positive-fg);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 22px;
+  color: var(--fc-text-primary);
+  margin: 0;
+}
+
+.description {
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fc-text-secondary);
+  margin: 0;
+}

@@ -1,0 +1,41 @@
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  font-family: Inter, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  text-decoration: none;
+  color: var(--fc-text-secondary);
+}
+
+.item:hover {
+  background: var(--fc-border-default);
+}
+
+.icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.active {
+  background: #e8fbf3;
+  color: #0b6a4a;
+}
+
+.active:hover {
+  background: #e8fbf3;
+}
+
+[data-theme='dark'] .active {
+  background: #0f3c2c;
+  color: #4fd6a8;
+}
+
+[data-theme='dark'] .active:hover {
+  background: #0f3c2c;
+}

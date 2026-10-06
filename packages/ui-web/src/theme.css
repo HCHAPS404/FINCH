@@ -1,0 +1,67 @@
+/**
+ * CSS custom properties mirroring @finch/design-tokens `light` and `dark` palettes.
+ *
+ * Why this file exists alongside the TS tokens: inline style objects cannot express
+ * :hover / :focus-visible / prefers-color-scheme, and this package has no CSS-in-JS
+ * dependency. CSS custom properties are the dependency-free way to get real
+ * interactive states in both apps/web (Next.js) and apps/desktop (Vite) without
+ * picking a styling library neither app has chosen yet.
+ *
+ * `theme.test.ts` parses this file and asserts every value here equals the
+ * corresponding value exported by `../../design-tokens/src/colors.ts` — this file
+ * cannot silently drift from the token source of truth.
+ */
+
+:root {
+  --fc-surface-base: #f7faf8;
+  --fc-surface-raised: #ffffff;
+  --fc-text-primary: #101a16;
+  --fc-text-secondary: #48554f;
+  --fc-text-muted: #5f6c66;
+  --fc-border-default: #e2e8e4;
+  --fc-border-subtle: #cfd8d3;
+  --fc-border-strong: #6f7e77;
+  --fc-positive-bg: #e6f4ec;
+  --fc-positive-fg: #146044;
+  --fc-negative-bg: #fcebe9;
+  --fc-negative-fg: #a4221a;
+  --fc-warning-bg: #fdf1e1;
+  --fc-warning-fg: #8a4b08;
+  --fc-critical-bg: #fcebe9;
+  --fc-critical-fg: #a4221a;
+  --fc-verified-bg: #e6f4ec;
+  --fc-verified-fg: #146044;
+  --fc-estimated-bg: #f7efdd;
+  --fc-estimated-fg: #6b4e12;
+  --fc-stale-bg: #ecefed;
+  --fc-stale-fg: #4e5a55;
+  --fc-pending-bg: #e8effb;
+  --fc-pending-fg: #1c4e9a;
+}
+
+[data-theme='dark'] {
+  --fc-surface-base: #0b2b20;
+  --fc-surface-raised: #0e4331;
+  --fc-text-primary: #f7faf8;
+  --fc-text-secondary: #cfd8d3;
+  --fc-text-muted: #9da9a4;
+  --fc-border-default: #688371;
+  --fc-border-subtle: #60766a;
+  --fc-border-strong: #73827b;
+  --fc-positive-bg: #0e4430;
+  --fc-positive-fg: #2cd395;
+  --fc-negative-bg: #460f0b;
+  --fc-negative-fg: #eb8a84;
+  --fc-warning-bg: #4d2a04;
+  --fc-warning-fg: #f28d21;
+  --fc-critical-bg: #460f0b;
+  --fc-critical-fg: #eb8a84;
+  --fc-verified-bg: #0e4430;
+  --fc-verified-fg: #2cd395;
+  --fc-estimated-bg: #46330c;
+  --fc-estimated-fg: #da9f25;
+  --fc-stale-bg: #262c29;
+  --fc-stale-fg: #9daaa4;
+  --fc-pending-bg: #0d2345;
+  --fc-pending-fg: #7ea8e7;
+}

@@ -1,0 +1,31 @@
+.header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--fc-surface-raised);
+  border-bottom: 1px solid var(--fc-border-default);
+}
+
+.heading {
+  flex: 1;
+  font-family: Inter, sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 26px;
+  color: var(--fc-text-primary);
+}
+
+.action {
+  background: transparent;
+  border: none;
+  padding: 4px;
+  color: var(--fc-text-secondary);
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.icon {
+  width: 22px;
+  height: 22px;
+}

@@ -21,3 +21,13 @@ allowBuilds:
   # scarf is an install-time telemetry package (phones home on install) pulled in by
   # a transitive dependency — denied, not needed for anything we use.
   "@scarf/scarf": false
+overrides:
+  # GHSA-m9gg-hp2v-232j: getAuthContext can return unauthorized certificates as though
+  # they were authorized, fixed in 1.14.5. Pulled in transitively, pinned below the fix
+  # (1.14.4), by @finch/observability's OTel gRPC exporters and @finch/testing's
+  # dockerode/testcontainers.
+  "@grpc/grpc-js": ">=1.14.5"
+  # GHSA-68fv-2mgg-jv7q: event-loop denial of service via indexed source-map section
+  # offsets, fixed in 1.2.2. Pulled in transitively, below the fix, by apps/web's
+  # next>postcss dependency chain.
+  "source-map-js": ">=1.2.2"

@@ -1,0 +1,55 @@
+.banner {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 12px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+}
+
+.title {
+  font-family: Inter, sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.body {
+  font-family: Inter, sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--fc-text-secondary);
+}
+
+.positive {
+  background: var(--fc-positive-bg);
+  border-color: var(--fc-positive-fg);
+}
+.positive .title {
+  color: var(--fc-positive-fg);
+}
+
+.negative {
+  background: var(--fc-negative-bg);
+  border-color: var(--fc-negative-fg);
+}
+.negative .title {
+  color: var(--fc-negative-fg);
+}
+
+.warning {
+  background: var(--fc-warning-bg);
+  border-color: var(--fc-warning-fg);
+}
+.warning .title {
+  color: var(--fc-warning-fg);
+}
+
+.info {
+  background: var(--fc-pending-bg);
+  border-color: var(--fc-pending-fg);
+}
+.info .title {
+  color: var(--fc-pending-fg);
+}

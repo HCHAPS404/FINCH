@@ -1,0 +1,54 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: Inter, sans-serif;
+}
+
+.label {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--fc-text-primary);
+}
+
+.field {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--fc-border-subtle);
+  background: var(--fc-surface-raised);
+  color: var(--fc-text-primary);
+  font-size: 14px;
+  line-height: 20px;
+  font-family: inherit;
+}
+
+.field::placeholder {
+  color: var(--fc-text-muted);
+}
+
+.field:focus-visible {
+  outline: none;
+  border-color: var(--fc-positive-fg);
+}
+
+.field:disabled {
+  background: var(--fc-border-default);
+  color: var(--fc-text-muted);
+  cursor: not-allowed;
+}
+
+.field[aria-invalid='true'] {
+  border-color: var(--fc-negative-fg);
+}
+
+.helper {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 16px;
+  color: var(--fc-text-secondary);
+}
+
+.helperError {
+  color: var(--fc-negative-fg);
+}

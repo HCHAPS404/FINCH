@@ -24,7 +24,7 @@ redaction rules, and correlation-id propagation across an operation (README §46
 - Audit events — those are a domain concern with their own retention (§54).
 - Sentry — a separate integration (FIN-024), composed at the app level alongside this
   package rather than inside it.
-- *Which* exporter target to use in production — that is `FINCH_ENV`/`OTEL_*`
+- _Which_ exporter target to use in production — that is `FINCH_ENV`/`OTEL_*`
   configuration owned by `@finch/config`, read by whatever composition root calls
   `bootstrapObservability`.
 

@@ -1,0 +1,50 @@
+.shell {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  display: none;
+}
+
+.main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topBar {
+  display: none;
+}
+
+.mobileHeader {
+  display: flex;
+}
+
+.content {
+  flex: 1;
+  padding: 20px;
+}
+
+.mobileTabBar {
+  display: flex;
+}
+
+@media (min-width: 960px) {
+  .sidebar {
+    display: flex;
+  }
+  .topBar {
+    display: flex;
+  }
+  .mobileHeader {
+    display: none;
+  }
+  .content {
+    padding: 32px 40px;
+  }
+  .mobileTabBar {
+    display: none;
+  }
+}
