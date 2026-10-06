@@ -21,7 +21,7 @@ credential behind it.
 Constitution §76 requires an ADR before an "auth architecture change." This is one:
 it adds a real credential store and a second `AuthSessionPort` implementation.
 Writing it as its own ADR, rather than folding it into ADR-0015, keeps ADR-0015
-honest — it still records that the *federated* vendor choice is unresolved — while
+honest — it still records that the _federated_ vendor choice is unresolved — while
 giving the interim mechanism its own accountable decision record.
 
 ## Decision
@@ -54,7 +54,7 @@ wires `PasswordAuthSessionAdapter` to `AUTH_SESSION_PORT` unconditionally;
   unblock unrelated CRUD work would make a vendor choice under the wrong pressure.
 - **JWT instead of the existing opaque HMAC token format.** Rejected: the dev
   sandbox's own doc comment is explicit that an opaque token is chosen deliberately
-  so it does not *look* like a real OIDC integration it is not. Reusing the same
+  so it does not _look_ like a real OIDC integration it is not. Reusing the same
   shape for the real adapter keeps that signal consistent instead of introducing a
   JWT now and a different format when ADR-0015 lands.
 
@@ -142,7 +142,7 @@ Straightforward: stop wiring `PasswordAuthSessionAdapter` to `AUTH_SESSION_PORT`
 `AuthModule.forRoot`, fall back to `DevAuthSessionAdapter` for `local`/`dev`/`test`
 (accepting that non-dev environments lose login entirely until a replacement exists).
 `security.credentials` and `security.password_reset_tokens` can be dropped without
-affecting `identity.*` or `integration.outbox`, since no foreign key points *into*
+affecting `identity.*` or `integration.outbox`, since no foreign key points _into_
 `security` from elsewhere.
 
 ## Implementation status (2026-10-06)

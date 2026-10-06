@@ -23,7 +23,7 @@ function contextFor(headers: Record<string, string>): {
 
 describe('AuthGuard', () => {
   it('rejects a request with no Authorization header', async () => {
-    const sessions: AuthSessionPort = { verify: vi.fn() };
+    const sessions: AuthSessionPort = { issue: vi.fn(), verify: vi.fn() };
     const guard = new AuthGuard(sessions);
     const { context } = contextFor({});
 
@@ -34,7 +34,7 @@ describe('AuthGuard', () => {
   });
 
   it('rejects a header that is not a Bearer token', async () => {
-    const sessions: AuthSessionPort = { verify: vi.fn() };
+    const sessions: AuthSessionPort = { issue: vi.fn(), verify: vi.fn() };
     const guard = new AuthGuard(sessions);
     const { context } = contextFor({ authorization: 'Basic dXNlcjpwYXNz' });
 
@@ -44,7 +44,10 @@ describe('AuthGuard', () => {
   });
 
   it('rejects a Bearer token the session port cannot verify', async () => {
-    const sessions: AuthSessionPort = { verify: vi.fn().mockResolvedValue(undefined) };
+    const sessions: AuthSessionPort = {
+      issue: vi.fn(),
+      verify: vi.fn().mockResolvedValue(undefined),
+    };
     const guard = new AuthGuard(sessions);
     const { context } = contextFor({ authorization: 'Bearer bad-token' });
 
@@ -56,7 +59,10 @@ describe('AuthGuard', () => {
 
   it('accepts a valid Bearer token and attaches the principal to the request', async () => {
     const session = { principalId, issuedAt: new Date(), expiresAt: new Date() };
-    const sessions: AuthSessionPort = { verify: vi.fn().mockResolvedValue(session) };
+    const sessions: AuthSessionPort = {
+      issue: vi.fn(),
+      verify: vi.fn().mockResolvedValue(session),
+    };
     const guard = new AuthGuard(sessions);
     const { context, request } = contextFor({ authorization: 'Bearer good-token' });
 
