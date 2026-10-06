@@ -1,20 +1,24 @@
 'use client';
 
 import type { ReactElement, SubmitEvent } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Checkbox, Input, IconGlobe, IconArrowRight } from '@finch/ui-web';
 import { AuthLayout } from '../_components/AuthLayout';
 import { FormHeading } from '../_components/FormHeading';
 import { LabeledDivider } from '../_components/LabeledDivider';
 
-// UI only — wiring to a real auth provider lands with FIN-021 (Auth provider port) and
-// the corresponding apps/api endpoint. Submitting here is intentionally inert rather
-// than faking a network call.
-function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
-  event.preventDefault();
-}
-
 export default function SignUpPage(): ReactElement {
+  const router = useRouter();
+
+  // No real auth provider yet (FIN-021), so there's no account to actually create or
+  // reject — any complete, valid submission moves on to onboarding, matching the real
+  // Figma flow (Sign up -> Onboarding 1-3 -> Hoy) instead of dead-ending here.
+  function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
+    event.preventDefault();
+    router.push('/onboarding/1');
+  }
+
   return (
     <AuthLayout
       headline="Tu CFO personal, privado y siempre atento."
@@ -22,7 +26,7 @@ export default function SignUpPage(): ReactElement {
     >
       <FormHeading title="Crea tu cuenta" subtitle="Empieza gratis. Sin conectar tu banco." />
 
-      <Button variant="secondary" size="large" style={{ width: '100%' }}>
+      <Button variant="secondary" size="large" style={{ width: '100%' }} disabled>
         <IconGlobe size={18} />
         Continuar con Google
       </Button>
