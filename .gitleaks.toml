@@ -1,0 +1,29 @@
+#
+# gitleaks config for the local `pnpm security:check` scan — scripts/security-check.mjs.
+#
+# `gitleaks dir` walks the raw filesystem, unlike CI's `gitleaks/gitleaks-action`
+# (`gitleaks detect`), which scans git history and therefore never sees anything that
+# isn't committed. Locally that difference means `dir` also walks build artifacts that
+# are gitignored and can never be committed — `.next/`, `dist/`, `node_modules/`, etc.
+# Next.js's own preview-mode signing/encryption keys inside `.next/cache` are the
+# concrete case that tripped this: real-looking secrets that cannot ever reach git
+# history. Allowlisting the directories below removes that noise without touching the
+# ruleset itself — a secret anywhere else, including a new planted one, still fails
+# the self-test the same as before.
+#
+title = "FINCH local gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+  '''(^|/)node_modules/''',
+  '''(^|/)\.next/''',
+  '''(^|/)\.turbo/''',
+  '''(^|/)dist/''',
+  '''(^|/)build/''',
+  '''(^|/)coverage/''',
+  '''(^|/)artifacts/''',
+  '''(^|/)\.git/''',
+]

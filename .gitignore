@@ -99,6 +99,9 @@ override.tf.json
 *.sql.gz
 pgdata/
 
+# --- Local document storage (ADR-0041 LocalDiskStorageAdapter — may contain PII) ---
+.data/
+
 # --- Editors & OS ----------------------------------------------------------
 .DS_Store
 Thumbs.db

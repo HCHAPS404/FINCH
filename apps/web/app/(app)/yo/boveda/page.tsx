@@ -19,21 +19,6 @@ import { getSession } from '../../../_lib/session';
 const ALLOWED_TYPES = new Set(['application/pdf', 'image/png', 'image/jpeg']);
 const MAX_SIZE_BYTES = 10 * 1024 * 1024;
 
-function readAsBase64(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const result = reader.result as string;
-      // `data:<mime>;base64,<payload>` — the API wants the payload only.
-      resolve(result.slice(result.indexOf(',') + 1));
-    };
-    reader.onerror = () => {
-      reject(new Error('Could not read file'));
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
 function formatSize(sizeBytes: string): string {
   const bytes = Number(sizeBytes);
   if (bytes < 1024) return `${bytes} B`;
@@ -84,12 +69,7 @@ export default function BovedaPage(): ReactElement {
 
     setUploading(true);
     try {
-      const contentBase64 = await readAsBase64(file);
-      const uploaded = await uploadDocument(workspaceId, {
-        originalFilename: file.name,
-        mimeType: file.type,
-        contentBase64,
-      });
+      const uploaded = await uploadDocument(workspaceId, file);
       setDocuments((previous) => [uploaded, ...previous]);
     } catch {
       setError('No pudimos subir el documento.');

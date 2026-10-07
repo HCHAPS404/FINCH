@@ -2,6 +2,7 @@ import 'reflect-metadata';
 import { NestFactory } from '@nestjs/core';
 import { FastifyAdapter, type NestFastifyApplication } from '@nestjs/platform-fastify';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import fastifyMultipart from '@fastify/multipart';
 import { loadConfig } from '@finch/config';
 import { createLogger, bootstrapObservability } from '@finch/observability';
 import { createDbClient } from '@finch/db';
@@ -9,6 +10,7 @@ import { AppModule } from './app.module.js';
 import { FinchExceptionFilter } from './common/filters/finch-exception.filter.js';
 import { correlationHook } from './common/correlation-hook.js';
 import { NestPinoLogger } from './infrastructure/observability/nest-pino-logger.js';
+import { MAX_DOCUMENT_SIZE_BYTES } from './documents/documents.controller.js';
 
 async function bootstrap(): Promise<void> {
   const config = loadConfig(process.env);
@@ -40,6 +42,8 @@ async function bootstrap(): Promise<void> {
   app.getHttpAdapter().getInstance().addHook('onRequest', correlationHook);
   app.useGlobalFilters(new FinchExceptionFilter());
   app.setGlobalPrefix('api/v1');
+  // Document uploads only (ADR-0041) — every other route stays JSON-in/JSON-out.
+  await app.register(fastifyMultipart, { limits: { fileSize: MAX_DOCUMENT_SIZE_BYTES } });
   // apps/web runs on a different origin (Next.js dev server); browsers enforce CORS
   // even though curl/server-to-server calls never hit this restriction (ADR-0041).
   app.enableCors({

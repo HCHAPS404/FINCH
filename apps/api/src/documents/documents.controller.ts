@@ -1,20 +1,19 @@
 /**
  * Document upload/list/delete — RAW zone only (Constitution §12), ADR-0041.
  *
- * Upload is a JSON body with base64 content, not `multipart/form-data`: the Fastify
- * adapter this API runs on (`@nestjs/platform-fastify`) has no multipart parser wired
- * in, and adding one is a separate decision from proving the storage port and CRUD
- * work end to end. This is named here as a deliberate scope limit for this pass, not
- * silently assumed — swapping to multipart later changes only this controller's
- * request parsing, not `DocumentStoragePort` or its adapter.
+ * Upload is real `multipart/form-data` (`@fastify/multipart`, registered in
+ * `main.ts`) — the file part's own `filename`/`mimetype` are used directly, no
+ * separate JSON fields duplicate them. An earlier pass accepted JSON+base64 instead,
+ * named at the time as a deliberate scope limit; this replaces it without touching
+ * `DocumentStoragePort` or its adapter, exactly as that note predicted.
  *
  * No malware scan, OCR or classification (§29's full pipeline is not implemented) —
  * `status` is `'RAW'` for every row this controller writes.
  */
-import { Body, Controller, Delete, Get, Inject, Param, Post, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Inject, Param, Post, Req, UseGuards } from '@nestjs/common';
 import { createHash } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import { z } from 'zod';
+import type { FastifyRequest } from 'fastify';
 import type { Database } from '@finch/db';
 import { schema } from '@finch/db';
 import { systemClock } from '@finch/domain';
@@ -32,13 +31,8 @@ import {
 } from '../infrastructure/documents/document-storage.port.js';
 
 const ALLOWED_MIME_TYPES = new Set(['application/pdf', 'image/png', 'image/jpeg']);
-const MAX_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB.
-
-const uploadSchema = z.object({
-  originalFilename: z.string().min(1),
-  mimeType: z.string().min(1),
-  contentBase64: z.string().min(1),
-});
+/** Kept in lockstep with the `@fastify/multipart` registration in `main.ts`. */
+export const MAX_DOCUMENT_SIZE_BYTES = 10 * 1024 * 1024; // 10 MB.
 
 type DocumentRow = typeof schema.documentRows.$inferSelect;
 interface DocumentResponse extends Omit<DocumentRow, 'sizeBytes'> {
@@ -74,18 +68,21 @@ export class DocumentsController {
   async upload(
     @Param('workspaceId') workspaceId: string,
     @CurrentPrincipal() principalId: string,
-    @Body() body: unknown,
+    @Req() request: FastifyRequest,
   ): Promise<DocumentResponse> {
-    const parsed = uploadSchema.safeParse(body);
-    if (!parsed.success) {
-      throw new FinchHttpException('FINCH_VALIDATION_REQUEST_INVALID', 'Invalid upload payload');
+    const file = await request.file({ limits: { fileSize: MAX_DOCUMENT_SIZE_BYTES } });
+    if (file === undefined) {
+      throw new FinchHttpException(
+        'FINCH_VALIDATION_REQUEST_INVALID',
+        'No file part found in the multipart request',
+      );
     }
-    if (!ALLOWED_MIME_TYPES.has(parsed.data.mimeType)) {
+    if (!ALLOWED_MIME_TYPES.has(file.mimetype)) {
       throw new FinchHttpException('FINCH_DOCUMENT_TYPE_NOT_ALLOWED', 'Unsupported file type');
     }
 
-    const bytes = Buffer.from(parsed.data.contentBase64, 'base64');
-    if (bytes.length === 0 || bytes.length > MAX_SIZE_BYTES) {
+    const bytes = await file.toBuffer();
+    if (bytes.length === 0 || file.file.truncated) {
       throw new FinchHttpException(
         'FINCH_DOCUMENT_TOO_LARGE',
         'File is empty or exceeds the size limit',
@@ -102,8 +99,8 @@ export class DocumentsController {
         id,
         workspaceId,
         createdByPrincipalId: principalId,
-        originalFilename: parsed.data.originalFilename,
-        mimeType: parsed.data.mimeType,
+        originalFilename: file.filename,
+        mimeType: file.mimetype,
         sizeBytes: BigInt(bytes.length),
         sha256: createHash('sha256').update(bytes).digest('hex'),
         storageKey,

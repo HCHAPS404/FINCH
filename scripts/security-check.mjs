@@ -91,11 +91,15 @@ if (!has('gitleaks')) {
 } else {
   const runGitleaks = () => {
     try {
-      execFileSync('gitleaks', ['dir', '.', '--no-banner', '--redact'], {
-        cwd: ROOT,
-        encoding: 'utf8',
-        stdio: ['ignore', 'pipe', 'pipe'],
-      });
+      execFileSync(
+        'gitleaks',
+        ['dir', '.', '--config', join(ROOT, '.gitleaks.toml'), '--no-banner', '--redact'],
+        {
+          cwd: ROOT,
+          encoding: 'utf8',
+          stdio: ['ignore', 'pipe', 'pipe'],
+        },
+      );
       return { clean: true };
     } catch (error) {
       return { clean: false, output: `${error.stdout ?? ''}${error.stderr ?? ''}` };

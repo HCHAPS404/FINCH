@@ -24,7 +24,11 @@ async function request<T>(
   path: string,
   options: { method?: string; body?: unknown; auth?: boolean } = {},
 ): Promise<T> {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+  const headers: Record<string, string> = {};
+  const isFormData = options.body instanceof FormData;
+  if (!isFormData) {
+    headers['Content-Type'] = 'application/json';
+  }
   if (options.auth !== false) {
     const session = getSession();
     if (session !== undefined) {
@@ -35,7 +39,9 @@ async function request<T>(
   const response = await fetch(`${API_BASE_URL}${path}`, {
     method: options.method ?? 'GET',
     headers,
-    ...(options.body !== undefined ? { body: JSON.stringify(options.body) } : {}),
+    ...(options.body !== undefined
+      ? { body: isFormData ? (options.body as FormData) : JSON.stringify(options.body) }
+      : {}),
   });
 
   if (!response.ok) {
@@ -186,11 +192,10 @@ export function listDocuments(workspaceId: string): Promise<DocumentMeta[]> {
   return request(`/workspaces/${workspaceId}/documents`);
 }
 
-export function uploadDocument(
-  workspaceId: string,
-  input: { originalFilename: string; mimeType: string; contentBase64: string },
-): Promise<DocumentMeta> {
-  return request(`/workspaces/${workspaceId}/documents`, { method: 'POST', body: input });
+export function uploadDocument(workspaceId: string, file: File): Promise<DocumentMeta> {
+  const body = new FormData();
+  body.append('file', file, file.name);
+  return request(`/workspaces/${workspaceId}/documents`, { method: 'POST', body });
 }
 
 export function deleteDocument(workspaceId: string, id: string): Promise<{ ok: true }> {
