@@ -31,3 +31,15 @@ overrides:
   # offsets, fixed in 1.2.2. Pulled in transitively, below the fix, by apps/web's
   # next>postcss dependency chain.
   "source-map-js": ">=1.2.2"
+  # GHSA-67mh-4wv8-2f99: esbuild's dev server lets any website send it requests and
+  # read the response, fixed in 0.25.0. Pulled in at 0.18.20, well below the fix, by
+  # the deprecated @esbuild-kit/core-utils (a drizzle-kit dependency, merged into tsx
+  # upstream but drizzle-kit@0.31.11 still depends on the old package). Dev-only
+  # tooling dependency, never shipped; esbuild's API used here (TS config transform)
+  # is stable across this range.
+  esbuild: ">=0.25.0"
+  # GHSA-cg3r-mgc5-795v: unhandled exception on HTTP/2 trailer responses causes a
+  # process crash (DoS), fixed in 5.12.5. apps/api depends on 5.12.5 directly, but
+  # @nestjs/platform-fastify@12.0.3's own fastify dependency range resolves to
+  # 5.12.4 — override forces one resolved version everywhere.
+  fastify: ">=5.12.5"
