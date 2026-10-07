@@ -1,16 +1,40 @@
 # 05 — Roadmap y cronograma
 
 Alcance: **[08-feature-catalog.md](08-feature-catalog.md)** — **45 funciones H** (todas completas); las **P**
-quedan documentadas. Convenciones: **H** = HELL, **N** = Nairy. Cada PR lo revisa **el otro
-fundador** (README §100). IDs de funciones (A1, B1…) según el catálogo.
+quedan documentadas. Convenciones heredadas del plan original de 2 personas: **H** = HELL, **N** =
+Nairy (ver nota de 2026-10-07 en §0 y §2 — ya no hay segunda persona, todo es HELL). Sin segunda
+persona, la autorevisión de README-DEVELOPERS.md §3 reemplaza la revisión de PR cruzada. IDs de
+funciones (A1, B1…) según el catálogo.
 
 ---
 
 ## 0. Capacidad vs esfuerzo (honesto)
 
-**Capacidad:** 2 personas × 8+ h/día × 6 días/semana × ~4,5 semanas (28-sep → 29-oct) ≈ **430 h**
-(≈ 500 h si trabajan también domingos). Claude y Cursor aceleran implementación y revisión, pero no
-reemplazan pruebas ni decisiones.
+> **Actualizado 2026-10-07 — proyecto de un solo fundador.** Nairy ya no participa; HELL ejecuta
+> solo, el alcance y las fechas de este documento **se mantienen sin recortar** (decisión explícita
+> de HELL). Esto es una apuesta deliberada, no una corrección del plan: la cuenta de capacidad de
+> abajo ya reconocía que 2 personas estaban ajustadas; con 1 persona el déficit de horas-humano es
+> real y mayor del que el plan original absorbía. Se cubre apoyándose mucho más en Claude y Cursor
+> para el trabajo que no exige juicio humano directo — no porque eso iguale la capacidad, sino porque
+> es la única palanca disponible sin tocar el catálogo. El plan de contingencia (§5) es más probable
+> que se active, y más temprano, que en el escenario de 2 personas.
+
+**Capacidad humana:** 1 persona × 8+ h/día × 6 días/semana × ~4,5 semanas (28-sep → 29-oct) ≈ **215 h**
+(≈ 250 h si se trabaja también domingos) de tiempo de HELL para decisiones, revisión, pruebas y lo
+que ninguna IA puede hacer por él. Claude y Cursor aceleran la implementación repetitiva, pero no
+reemplazan pruebas ni decisiones — ver la regla de reparto abajo.
+
+**Reparto de trabajo entre Claude y Cursor** (para no agotar presupuesto ni perder trazabilidad):
+
+- **Claude:** arquitectura, ADRs, specs de fórmulas, threat models, revisión profunda de diffs
+  grandes o cambios críticos (dinero, autorización, auth), planeación de cada bloque de esta tabla
+  antes de implementarlo.
+- **Cursor:** implementación multiarchivo de alto volumen una vez el plan está claro — pantallas del
+  catálogo a partir de un patrón ya establecido, refactors mecánicos, tests que siguen un molde ya
+  usado, depuración local iterativa. Es el motor principal para absorber las ~363 h de diferencia
+  entre el esfuerzo estimado (abajo) y la capacidad humana de 1 persona.
+- Ninguna de las dos aprueba su propio cambio crítico (dinero, autorización, seguridad) — eso sigue
+  siendo autorevisión humana de HELL, siempre (README-DEVELOPERS.md §3).
 
 **Esfuerzo estimado (h-persona):**
 
@@ -33,15 +57,24 @@ reemplazan pruebas ni decisiones.
 | Pulido, bug bash, video, README, Devpost                                                    | 35        | N + H              |
 | **Total**                                                                                   | **≈ 578** |                    |
 
-**Conclusión (honesta):** con todo en H, el esfuerzo (~580 h) supera la capacidad (430–500 h) en
-**~15–35 %**. Se vuelve viable con cuatro condiciones:
+**Conclusión (honesta, recalculada para 1 persona):** el esfuerzo estimado (~578 h) supera la
+capacidad humana de HELL solo (~215–250 h) en **más del doble**, no en 15–35 % como en el plan
+original a 2 personas. HELL decidió explícitamente no recortar el catálogo para cerrar esa brecha;
+se cubre, de forma más agresiva que el plan original, con cinco condiciones:
 
-1. **Trabajar 7 días** en las semanas 2 y 3 (≈ 500 h) y usar Claude/Cursor de forma intensiva para
-   implementación repetitiva (UI de catálogo, plantillas, tests), siempre con revisión humana.
-2. **Orden por valor:** el demo es enviable al final de cada semana.
-3. **Plan de contingencia (§5)** aplicado sin discusión el lunes que un hito no se cumpla: no se
-   elimina ninguna función, se **difiere su pulido** en un orden predefinido.
-4. Nada fuera del catálogo hasta el 29-oct.
+1. **Trabajar 7 días** desde ya, no solo en semanas 2 y 3, y delegar en Cursor toda la implementación
+   de alto volumen que siga un patrón ya decidido (UI de catálogo, plantillas, tests), reservando el
+   tiempo humano de HELL para lo que de verdad lo requiere: decisiones, pruebas de fórmulas y
+   revisión de lo crítico.
+2. **Orden por valor:** el demo es enviable al final de cada semana — esto importa más todavía con
+   menos margen de error.
+3. **Plan de contingencia (§5)** aplicado sin discusión el lunes que un hito no se cumpla — y con la
+   expectativa realista de que se active más seguido que en el plan de 2 personas.
+4. Nada fuera del catálogo hasta el 29-oct — con 1 persona, el costo de oportunidad de cualquier
+   desvío es más alto que antes.
+5. Revisar el domingo de cada semana, honestamente, si la brecha entre lo planeado y lo entregado
+   se está cerrando o ampliando — y escalar al plan de contingencia antes de que sea tarde, no
+   después.
 
 ## 1. Hitos
 
@@ -58,6 +91,11 @@ reemplazan pruebas ni decisiones.
 
 ## 2. Semana a semana
 
+> Las columnas **Resp.** de las tablas que siguen conservan las iniciales del plan original
+> (H = HELL, N = Nairy) para no reescribir cada celda — pero **todas** son ahora responsabilidad de
+> HELL, solo o con Claude/Cursor (§0). Léase "N" y "H+N" como "HELL, antes pensado como trabajo de
+> producto/UX/frontend" — útil para saber qué _tipo_ de trabajo es cada tarea, ya no quién la hace.
+
 ### Semana 0 — Fundación (lun 28-sep → dom 4-oct)
 
 | ID    | Tarea                                                                                                                                                                                           | Resp. | Límite |
@@ -73,7 +111,7 @@ reemplazan pruebas ni decisiones.
 | S0-09 | App shell + navegación + onboarding de 3 preguntas + PWA instalable (manifest, íconos del logo).                                                                                                | N     | dom 4  |
 | S0-10 | Investigación: 3–5 cifras oficiales con URL; 5 entrevistas cortas.                                                                                                                              | N     | dom 4  |
 | S0-11 | Aclaración Devpost (acumulación de premios); office hours Nebius (lista VERIFICAR).                                                                                                             | H     | mar 29 |
-| S0-12 | Nairy en AGENTS.md y CODEOWNERS; protección de rama.                                                                                                                                            | H     | mar 29 |
+| S0-12 | ~~Nairy en AGENTS.md y CODEOWNERS~~ — moot, proyecto de un solo fundador (2026-10-07); protección de rama sigue pendiente de decidir (README-DEVELOPERS.md §6).                                 | H     | mar 29 |
 | S0-13 | Librería decimal (potencias fraccionarias) — nota en ADR-0016.                                                                                                                                  | H     | jue 1  |
 | S0-14 | Esquema de DB v1 (twin, sobres, tarjetas, transacciones, documentos, recibos, cards, memorias, workspaces compartidos, auditoría) + seeds de personas.                                          | H+N   | dom 4  |
 

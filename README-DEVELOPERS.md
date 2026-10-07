@@ -14,8 +14,14 @@
 
 <br/><br/>
 
-**Acuerdo de trabajo de los fundadores de FINCH.** Todo lo del [README público](README.md), más
-cómo trabajamos, qué nos obligamos a cumplir y cómo se entrega.
+**Acuerdo de trabajo del fundador de FINCH.** Todo lo del [README público](README.md), más
+cómo trabajo, qué me obligo a cumplir y cómo se entrega.
+
+> **Nota (2026-10-07):** FINCH pasó a ser un proyecto de un solo fundador (HELL). Las menciones a
+> "el otro fundador", a Nairy o a procesos de dos personas que quedan más abajo describen el plan
+> original; donde aplicaban una aprobación o revisión de una segunda persona, ahora se reemplazan
+> por autorevisión disciplinada (`pnpm check` + checklist de Definition of Done) antes de cada push
+> directo a `main`. Si en el futuro se suma otro fundador o dev, estas secciones vuelven a dividirse.
 
 </div>
 
@@ -59,29 +65,19 @@ Cuando dos documentos dicen cosas distintas, manda el de arriba:
 
 ## 2. 👥 Equipo, roles y responsabilidades
 
-| Rol                                    | Persona                                                  | Responsable de                                                                                                     |
-| -------------------------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
-| **Representative ante Devpost**        | HELL                                                     | Envío, comunicación oficial, affidavits, formularios fiscales.                                                     |
-| **Líder técnico backend / IA / infra** | HELL                                                     | Motor financiero, AI Gateway, agente, Market Truth, autorización, datos, Vigía, despliegue, seguridad.             |
-| **Líder de producto / UX / frontend**  | Nairy                                                    | Sistema de diseño, app (PWA), flujos, copy, accesibilidad, evaluación humana (Toloka), video, narrativa del envío. |
-| **Product Owner de la semana**         | Rota: S0 HELL · S1 Nairy · S2 HELL · S3 Nairy · S4 ambos | Prioriza el backlog de la semana, acepta historias en la review, decide la contingencia.                           |
-| **Claude**                             | Herramienta                                              | Arquitectura, especificaciones, ADRs, threat models, revisión profunda, planeación.                                |
-| **Cursor**                             | Herramienta                                              | Implementación multiarchivo, refactor, tests, depuración local.                                                    |
+| Rol                              | Persona      | Responsable de                                                                                                                                                                                                                           |
+| -------------------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Representative ante Devpost**  | HELL         | Envío, comunicación oficial, affidavits, formularios fiscales.                                                                                                                                                                           |
+| **Fundador / único responsable** | HELL         | Motor financiero, AI Gateway, agente, Market Truth, autorización, datos, Vigía, despliegue, seguridad, sistema de diseño, app (PWA), flujos, copy, accesibilidad, evaluación humana, video, narrativa del envío — todo el catálogo (08). |
+| **Product Owner de la semana**   | HELL siempre | Prioriza el backlog de la semana, acepta historias en la review, decide la contingencia.                                                                                                                                                 |
+| **Claude**                       | Herramienta  | Arquitectura, especificaciones, ADRs, threat models, revisión profunda, planeación. Candidato preferente para trabajo que requiere razonamiento o decisiones con más contexto.                                                           |
+| **Cursor**                       | Herramienta  | Implementación multiarchivo, refactor, tests, depuración local. Candidato preferente para trabajo repetitivo/de alto volumen (plantillas de catálogo, UI de pantallas, tests) para no agotar el presupuesto de Claude — ver §11.         |
 
-**Matriz RACI de bloques** (R = hace · A = aprueba · C = consultado · I = informado):
-
-| Bloque                             | HELL         | Nairy                                |
-| ---------------------------------- | ------------ | ------------------------------------ |
-| Motor financiero y fórmulas        | R/A          | C (golden vectors independientes: R) |
-| AI Gateway, agente, recibos, Ultra | R/A          | C                                    |
-| Market Truth (Tavily)              | R/A          | I                                    |
-| Autorización y hogar compartido    | R/A          | C                                    |
-| Sistema de diseño y app            | C            | R/A                                  |
-| Flujos de producto y copy          | C            | R/A                                  |
-| Captura (recibos, bóveda)          | R (pipeline) | R (UI) · A                           |
-| Evals y CRISP-ML(Q)                | R (runner)   | R (datasets, Toloka) · A             |
-| Operación del demo                 | R/A          | I                                    |
-| Video y Devpost                    | C            | R/A                                  |
+> Con un solo fundador, no hay matriz RACI de dos personas que mantener: HELL es R/A de todo el
+> catálogo. La división de trabajo que sigue vigente es entre **herramientas** (Claude vs. Cursor,
+> §11), no entre personas. Los golden vectors de fórmulas (antes verificados por Nairy sin ver el
+> código) ahora se derivan en una sesión de IA separada que no ve la implementación, o a mano —
+> nunca reutilizando el mismo razonamiento que produjo la fórmula.
 
 > Las IA son **herramientas, no autoras** (AGENTS.md §1). Nunca aparecen en el historial ni en
 > CODEOWNERS.
@@ -96,33 +92,37 @@ Cuando dos documentos dicen cosas distintas, manda el de arriba:
 4. **Un LLM nunca es autoridad** sobre saldos, tasas, elegibilidad, pagos ni cifras.
 5. **Nunca debilitar** un test, un tipo o un control de seguridad para que algo pase.
 6. **Nunca secretos en el repo** ni en el cliente. Nunca datos reales en desarrollo.
-7. **Nunca push directo a `main`.** Todo entra por PR revisado por el otro fundador.
+7. **`pnpm check` verde en local antes de cualquier push a `main`, sin excepción.** Fase
+   solo-founder: no hay segunda persona para aprobar un PR, así que el push directo reemplaza el
+   flujo de PR+aprobación — pero nunca reemplaza la verificación. Nunca force-push.
 8. **FINCH nunca mueve dinero** y **ninguna comisión altera un ranking**.
 9. **Una sola cuenta por persona** en cada programa de créditos (reglas §11 de la hackathon).
 
-### Deberes de cada fundador
+### Deberes del fundador
 
-| Deber                                                                             | Frecuencia / plazo                   |
-| --------------------------------------------------------------------------------- | ------------------------------------ |
-| Daily de 15 min (ayer · hoy · bloqueos)                                           | Diario, hora fija                    |
-| Revisar los PRs del otro                                                          | **≤ 4 h hábiles** desde que se piden |
-| Correr `pnpm check` antes de cada push                                            | Siempre                              |
-| Mantener el tablero actualizado (WIP ≤ 2)                                         | Continuo                             |
-| Registrar fricciones con Nebius/NVIDIA/Tavily en `docs/hackathon/feedback-log.md` | Cuando ocurran                       |
-| Actualizar el estado de las funciones en el README público (✅ 🚧 🗓️)             | Al cerrar cada historia              |
-| Actualizar el README del paquete si cambia su contrato                            | En el mismo PR                       |
-| Escribir o actualizar el ADR si la decisión es de arquitectura                    | Antes de implementar                 |
-| Asistir a planning, review y retro                                                | Lunes y domingo                      |
-| Respetar el ritmo sostenible (8+ h con pausas, descanso semanal fijo)             | Siempre                              |
-| Guardia del demo en su turno (01–15-dic)                                          | Según rotación (§14)                 |
+| Deber                                                                             | Frecuencia / plazo      |
+| --------------------------------------------------------------------------------- | ----------------------- |
+| Daily de 15 min (ayer · hoy · bloqueos) — autorregistro                           | Diario, hora fija       |
+| Correr `pnpm check` antes de cada push                                            | Siempre                 |
+| Mantener el tablero actualizado (WIP ≤ 2)                                         | Continuo                |
+| Registrar fricciones con Nebius/NVIDIA/Tavily en `docs/hackathon/feedback-log.md` | Cuando ocurran          |
+| Actualizar el estado de las funciones en el README público (✅ 🚧 🗓️)             | Al cerrar cada historia |
+| Actualizar el README del paquete si cambia su contrato                            | En el mismo commit      |
+| Escribir o actualizar el ADR si la decisión es de arquitectura                    | Antes de implementar    |
+| Planning y retro semanal (aunque sea autodirigido)                                | Lunes y domingo         |
+| Respetar el ritmo sostenible (8+ h con pausas, descanso semanal fijo)             | Siempre                 |
+| Guardia del demo todos los días (01–15-dic) — sin rotación posible                | Ver §14                 |
 
-### Deberes del revisor de un PR
+### Autorevisión antes de cada push a `main`
 
-- Leer el diff completo y ejecutar localmente si toca motor, autorización o dinero.
+Sin segunda persona que apruebe, esta checklist reemplaza al revisor de PR — no es opcional:
+
+- Leer el diff completo, no solo confiar en que "pnpm check pasó". Ejecutar localmente si toca
+  motor, autorización o dinero.
 - Verificar la Definition of Done (§9) punto por punto.
-- Bloquear si hay: cifra sin recibo, `number` en dinero, secreto, IA con autoridad, test debilitado,
-  PII en logs o analítica.
-- Aprobar o pedir cambios con comentarios concretos. Nunca "LGTM" sin haber leído.
+- Bloquear el propio push si hay: cifra sin recibo, `number` en dinero, secreto, IA con autoridad,
+  test debilitado, PII en logs o analítica.
+- Si algo se siente apurado o no verificado, es una señal para pausar, no para empujar igual.
 
 <img src="assets/brand/finch-divider.png" width="100%" alt="" />
 
@@ -216,16 +216,16 @@ gitGraph
 
 ### Ramas permanentes y de etapa
 
-| Rama                             | Propósito                                              | Vida            | Protección                                                                                |
-| -------------------------------- | ------------------------------------------------------ | --------------- | ----------------------------------------------------------------------------------------- |
-| `main`                           | Producto siempre desplegable; fuente del demo público. | Permanente      | PR obligatorio, 1 aprobación del otro fundador, CI verde, sin push directo ni force-push. |
-| `stage/s0-foundation`            | Sprint 0 — Fundación                                   | 28-sep → 4-oct  | CI verde para merge.                                                                      |
-| `stage/s1-payday`                | Sprint 1 — "Me llegó el sueldo"                        | 5 → 11-oct      | CI verde.                                                                                 |
-| `stage/s2-market-capture-decide` | Sprint 2 — Mercado, captura y decisión                 | 12 → 18-oct     | CI verde.                                                                                 |
-| `stage/s3-complete`              | Sprint 3 — Completar las 45 funciones                  | 19 → 25-oct     | CI verde.                                                                                 |
-| `stage/s4-release`               | Sprint 4 — Freeze, video y envío                       | 26 → 29-oct     | CI verde; solo P0 tras el freeze.                                                         |
-| `release/v0.1.0-hackathon`       | Se corta de `main` en el freeze (27-oct)               | Hasta 15-dic    | Solo lectura.                                                                             |
-| `next`                           | Desarrollo tras el envío                               | 31-oct → 15-dic | CI verde.                                                                                 |
+| Rama                             | Propósito                                              | Vida            | Protección                                                                                                                       |
+| -------------------------------- | ------------------------------------------------------ | --------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| `main`                           | Producto siempre desplegable; fuente del demo público. | Permanente      | CI verde obligatorio; `pnpm check` local antes de cada push (§3); push directo permitido en fase solo-founder; nunca force-push. |
+| `stage/s0-foundation`            | Sprint 0 — Fundación                                   | 28-sep → 4-oct  | CI verde para merge.                                                                                                             |
+| `stage/s1-payday`                | Sprint 1 — "Me llegó el sueldo"                        | 5 → 11-oct      | CI verde.                                                                                                                        |
+| `stage/s2-market-capture-decide` | Sprint 2 — Mercado, captura y decisión                 | 12 → 18-oct     | CI verde.                                                                                                                        |
+| `stage/s3-complete`              | Sprint 3 — Completar las 45 funciones                  | 19 → 25-oct     | CI verde.                                                                                                                        |
+| `stage/s4-release`               | Sprint 4 — Freeze, video y envío                       | 26 → 29-oct     | CI verde; solo P0 tras el freeze.                                                                                                |
+| `release/v0.1.0-hackathon`       | Se corta de `main` en el freeze (27-oct)               | Hasta 15-dic    | Solo lectura.                                                                                                                    |
+| `next`                           | Desarrollo tras el envío                               | 31-oct → 15-dic | CI verde.                                                                                                                        |
 
 **Al inicio de cada sprint:** la rama de etapa se actualiza desde `main`
 (`git switch stage/sN-… && git merge main`). **Al cierre (domingo, review):** PR
@@ -247,13 +247,13 @@ gitGraph
 Tres niveles: **`main` ← `stage/sN` ← `area/<área>` ← ramas de tarea.** Cada área es el carril de
 integración de una plataforma o disciplina, con dueño fijo.
 
-| Rama           | Área                       | Plataformas / alcance                                                                  | Stack (ADR)                                                                       | Dueño                           |
-| -------------- | -------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------------------------------- |
-| `area/design`  | Diseño y sistema de diseño | Tokens, componentes, iconografía, motion, prototipos; alimenta web, móvil y escritorio | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitución §34)                | Nairy                           |
-| `area/backend` | Backend, motor, IA y datos | API, worker/Vigía, motor financiero, AI Gateway, Market Truth, DB, Channel Hub         | NestJS + Fastify (ADR-0007), PostgreSQL (ADR-0009), `financial-engine`, `ai-core` | HELL                            |
-| `area/web`     | Frontend web               | App web / **PWA instalable** (canal principal del demo) + panel admin                  | Next.js (ADR-0005)                                                                | Nairy                           |
-| `area/mobile`  | App móvil                  | **iOS y Android**                                                                      | React Native + Expo (ADR-0004)                                                    | Nairy (UI) + HELL (integración) |
-| `area/desktop` | App de escritorio          | **Windows, macOS y Linux**                                                             | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL (empaquetado) + Nairy (UI) |
+| Rama           | Área                       | Plataformas / alcance                                                                  | Stack (ADR)                                                                       | Dueño |
+| -------------- | -------------------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ----- |
+| `area/design`  | Diseño y sistema de diseño | Tokens, componentes, iconografía, motion, prototipos; alimenta web, móvil y escritorio | `packages/design-tokens`, `ui-web`, `ui-mobile` (Constitución §34)                | HELL  |
+| `area/backend` | Backend, motor, IA y datos | API, worker/Vigía, motor financiero, AI Gateway, Market Truth, DB, Channel Hub         | NestJS + Fastify (ADR-0007), PostgreSQL (ADR-0009), `financial-engine`, `ai-core` | HELL  |
+| `area/web`     | Frontend web               | App web / **PWA instalable** (canal principal del demo) + panel admin                  | Next.js (ADR-0005)                                                                | HELL  |
+| `area/mobile`  | App móvil                  | **iOS y Android**                                                                      | React Native + Expo (ADR-0004)                                                    | HELL  |
+| `area/desktop` | App de escritorio          | **Windows, macOS y Linux**                                                             | Tauri 2 + React/Vite (ADR-0006)                                                   | HELL  |
 
 **Reglas de área:**
 
@@ -265,7 +265,8 @@ integración de una plataforma o disciplina, con dueño fijo.
 - **Alcance en la hackathon:** la **PWA web** es la superficie principal del demo y del video. Móvil y
   escritorio entregan **apps shell funcionales** (login de demo, "Hoy", bandeja y recibos) que consumen
   los mismos paquetes, y builds instalables si el tiempo lo permite; su versión completa es P1 (Q1 2027).
-  Ampliar su alcance en la hackathon requiere acuerdo de ambos (impacta la capacidad, 05 §0).
+  Ampliar su alcance en la hackathon es decisión de HELL, pero impacta la capacidad ya ajustada (05 §0)
+  de una sola persona — pensarlo dos veces antes de aceptar.
 
 ### Ramas de tarea
 
@@ -275,16 +276,16 @@ vuelven por PR a su área.
 
 Ramas del **Sprint 0** ya creadas:
 
-| Rama                             | Sale de               | Tarea (05)                                                          | Resp.        |
-| -------------------------------- | --------------------- | ------------------------------------------------------------------- | ------------ |
-| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + chat Nemotron + CI + deploy                      | HELL         |
-| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 esquema v1 + seeds de personas sintéticas                     | HELL + Nairy |
-| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, tipografía, componentes base, motion, modo oscuro     | Nairy        |
-| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 navegación de 5 destinos, onboarding, PWA instalable          | Nairy        |
-| `feat/s0-mobile-shell`           | `area/mobile`         | Shell Expo iOS/Android consumiendo tokens y cliente de API          | Nairy + HELL |
-| `feat/s0-desktop-shell`          | `area/desktop`        | Shell Tauri Windows/macOS/Linux consumiendo tokens y cliente de API | HELL         |
-| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 licencia (tras D-01), créditos, librería decimal  | HELL         |
-| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 cifras oficiales y entrevistas                                | Nairy        |
+| Rama                             | Sale de               | Tarea (05)                                                          | Resp. |
+| -------------------------------- | --------------------- | ------------------------------------------------------------------- | ----- |
+| `feat/s0-walking-skeleton`       | `area/backend`        | S0-07 API health + chat Nemotron + CI + deploy                      | HELL  |
+| `feat/s0-db-schema-personas`     | `area/backend`        | S0-14 esquema v1 + seeds de personas sintéticas                     | HELL  |
+| `feat/s0-design-system`          | `area/design`         | S0-08 tokens, tipografía, componentes base, motion, modo oscuro     | HELL  |
+| `feat/s0-app-shell-pwa`          | `area/web`            | S0-09 navegación de 5 destinos, onboarding, PWA instalable          | HELL  |
+| `feat/s0-mobile-shell`           | `area/mobile`         | Shell Expo iOS/Android consumiendo tokens y cliente de API          | HELL  |
+| `feat/s0-desktop-shell`          | `area/desktop`        | Shell Tauri Windows/macOS/Linux consumiendo tokens y cliente de API | HELL  |
+| `chore/s0-license-credits-setup` | `stage/s0-foundation` | S0-03/S0-04/S0-13 licencia (tras D-01), créditos, librería decimal  | HELL  |
+| `docs/s0-research-evidence`      | `stage/s0-foundation` | S0-10 cifras oficiales y entrevistas                                | HELL  |
 
 Ramas previstas para los siguientes sprints (se crean el lunes de cada sprint desde su área):
 
@@ -299,7 +300,7 @@ Ramas previstas para los siguientes sprints (se crean el lunes de cada sprint de
 
 ```text
 Historia (tablero, "Ready") → rama de tarea desde area/<área> (o stage/sN si es transversal) → TDD donde aplique → commits pequeños
-→ pnpm check → PR a su área (plantilla) → revisión del otro fundador (≤ 4 h) → CI verde
+→ pnpm check → autorevisión (§3) → CI verde
 → merge (squash) → PR área → stage (≤ 2 días) → preview → actualizar estado en README público → tarjeta a "Done"
 ```
 
@@ -361,7 +362,7 @@ fallbacks, costo, latencia). **Ningún prompt o modelo nuevo entra sin pasar la 
 - [ ] ES/EN.
 - [ ] Modos de fallo y observabilidad documentados en el README del módulo.
 - [ ] Para IA: prompt versionado, eval ejecutada, resultado registrado.
-- [ ] Revisado y aprobado por el otro fundador.
+- [ ] Autorevisión completa (§3) antes del push — sin segunda persona que apruebe.
 
 ## 10. 📐 Estándares de código
 
@@ -389,8 +390,11 @@ fallbacks, costo, latencia). **Ningún prompt o modelo nuevo entra sin pasar la 
 
 - Claude y Cursor son herramientas; nunca aprueban su propio cambio crítico.
 - Nunca editan simultáneamente el mismo worktree.
-- Todo lo que generan pasa por `pnpm check` y por la revisión del otro fundador.
+- Todo lo que generan pasa por `pnpm check` y por la autorevisión de HELL (§3) — sin segunda persona.
 - Verificar versiones y APIs contra documentación oficial; nunca inventar.
+- **Reparto por consumo:** Claude para arquitectura, ADRs, threat models, revisión profunda y
+  decisiones con contexto largo; Cursor para implementación repetitiva de alto volumen (pantallas
+  del catálogo, refactors, tests) donde conviene no gastar presupuesto de Claude. Ver §2.
 
 ## 12. 🔐 Seguridad, secretos y datos
 
@@ -403,11 +407,11 @@ fallbacks, costo, latencia). **Ningún prompt o modelo nuevo entra sin pasar la 
 
 ## 13. 💳 Créditos y costos
 
-| Servicio             | Crédito                                                           | Dueño de la cuenta       |
-| -------------------- | ----------------------------------------------------------------- | ------------------------ |
-| Nebius Token Factory | USD 25 promo + USD 25 Builders (por persona)                      | Cada fundador, su cuenta |
-| Tavily               | Plan gratuito + add-on del Builders (HELL: 4.125 créditos add-on) | Cada fundador, su cuenta |
-| LangSmith · Toloka   | USD 100 c/u (Builders)                                            | HELL                     |
+| Servicio             | Crédito                                                           | Dueño de la cuenta |
+| -------------------- | ----------------------------------------------------------------- | ------------------ |
+| Nebius Token Factory | USD 25 promo + USD 25 Builders                                    | HELL               |
+| Tavily               | Plan gratuito + add-on del Builders (HELL: 4.125 créditos add-on) | HELL               |
+| LangSmith · Toloka   | USD 100 c/u (Builders)                                            | HELL               |
 
 - Registrar saldos (nunca llaves) en `docs/hackathon/credits.md` cada lunes.
 - **Reservar ≥ 40 % del crédito de inferencia para el periodo de jurados (01–15-dic).**
@@ -415,10 +419,12 @@ fallbacks, costo, latencia). **Ningún prompt o modelo nuevo entra sin pasar la 
 
 ## 14. 📟 Operación del demo y guardia
 
-- Monitor de uptime con alertas a ambos; revisión diaria de salud y créditos.
+- Monitor de uptime con alertas a HELL; revisión diaria de salud y créditos.
 - Despliegues solo desde CI; tras el envío, solo desde `release/v0.1.0-hackathon`.
-- **Guardia 01–15-dic:** HELL días impares, Nairy días pares; runbook en `docs/operations/runbooks/hackathon-demo.md`.
-- Incidente: estabilizar → comunicar al otro fundador → registrar → postmortem breve.
+- **Guardia 01–15-dic:** HELL todos los días, sin rotación — planear cobertura (alertas en el
+  teléfono, ventanas de respuesta realistas) sabiendo que no hay turno de reemplazo; runbook en
+  `docs/operations/runbooks/hackathon-demo.md`.
+- Incidente: estabilizar → registrar → postmortem breve (sin segunda persona a quien avisar primero).
 
 ## 15. 🧯 Decisiones y escalamiento
 
@@ -427,9 +433,10 @@ STOP → EXPLAIN → PROPOSE → WAIT (si la decisión es material)
 ```
 
 - Decisiones de arquitectura → **ADR** antes de implementar (Constitución §76).
-- Decisiones de producto/alcance → catálogo (08) + acuerdo de ambos fundadores.
+- Decisiones de producto/alcance → catálogo (08) + decisión de HELL, registrada.
 - Decisiones abiertas → `docs/hackathon/07-risks-and-decisions.md` (D-01…D-13).
-- Desacuerdo → cada uno expone en 5 min; decide el Product Owner de la semana; se registra.
+- Sin segunda persona para desacuerdos: decide HELL y se registra la razón, no solo la decisión —
+  para poder auditarla después con la cabeza fría.
 
 ## 16. 🗺️ Mapa de documentación
 
@@ -448,6 +455,6 @@ STOP → EXPLAIN → PROPOSE → WAIT (si la decisión es material)
 <br/>
 <img src="assets/brand/finch-app-icon-green.png" width="64" alt="FINCH" />
 
-<sub><b>FINCH</b> · construido por sus fundadores · Nemotron explica. La matemática decide.</sub>
+<sub><b>FINCH</b> · construido por su fundador · Nemotron explica. La matemática decide.</sub>
 
 </div>

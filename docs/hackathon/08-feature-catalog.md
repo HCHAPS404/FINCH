@@ -1,6 +1,7 @@
 # 08 — Catálogo de funciones de FINCH
 
-> **Estado:** PROPUESTO — aprobado en conversación por HELL el 2026-09-28; pendiente de revisión de Nairy.
+> **Estado:** APROBADO por HELL el 2026-09-28. Proyecto de un solo fundador desde 2026-10-07 — ya no
+> queda pendiente de revisión de una segunda persona.
 > Este catálogo es la **fuente única** de alcance. `02-product-spec.md` describe la experiencia y
 > `05-roadmap-and-timeline.md` la secuencia; si hay conflicto de alcance, manda este documento.
 
@@ -29,7 +30,8 @@ Reglas que aplican a **todas** las funciones (no se repiten en cada ficha):
 
 Leyenda de modelos: **L** = Nemotron 3.5 Lightning · **S** = Nemotron 3 Super · **U** = Nemotron 3
 Ultra · **V** = multimodal NVIDIA (VERIFICAR disponibilidad) · **E** = embeddings · **T** = Tavily.
-Dueño: **H** = HELL, **N** = Nairy (propuesta; ver 05).
+Dueño: **HELL**, solo (desde 2026-10-07; el reparto H/N de 05 queda como referencia histórica del
+tipo de trabajo, no de quién lo hace — ver 05 §0).
 
 ---
 

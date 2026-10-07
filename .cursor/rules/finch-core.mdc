@@ -5,9 +5,19 @@ alwaysApply: true
 
 # FINCH — core rules
 
-Read `AGENTS.md` and `README.md` before making changes. `README.md` is the
-architecture authority; Accepted ADRs in `docs/architecture/adr/` supersede it only
-where they say so explicitly.
+Read `AGENTS.md` first — it is normative for every AI agent, Cursor included. Then read
+`docs/architecture/CONSTITUTION.md`, the architecture authority (references written as
+"README §N" anywhere in the repo point here — it was the root README until ADR-0040,
+2026-09-28). Accepted ADRs in `docs/architecture/adr/` supersede it only where they say
+so explicitly. The root `README.md` is public product documentation, not architecture.
+
+FINCH is a solo-founder project (HELL) as of 2026-10-07 — see
+`README-DEVELOPERS.md` §2 and `docs/hackathon/05-roadmap-and-timeline.md` §0. Cursor is
+one of two tools HELL directs (the other is Claude); there is no second human to route
+work to. Lean on Cursor for high-volume, pattern-following implementation (catalog
+screens, refactors, tests that follow an established shape) once the plan is clear —
+that's deliberate, to avoid spending Claude's budget on repetitive work. Save
+architecture decisions, ADRs and deep review for Claude.
 
 ## Authorship — absolute
 

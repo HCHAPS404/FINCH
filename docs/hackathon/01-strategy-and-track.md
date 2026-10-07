@@ -47,7 +47,7 @@ de NVIDIA en lugar de competir contra él.
   cartera les ahorraría dinero.
 - Los chatbots financieros genéricos **alucinan números**. En finanzas personales, un número
   inventado causa daño real.
-- Tarea de investigación (S0-09, Nairy): reunir 3–5 cifras oficiales (SFC, Banco de la República,
+- Tarea de investigación (S0-09/S0-10, HELL — reasignada de Nairy el 2026-10-07): reunir 3–5 cifras oficiales (SFC, Banco de la República,
   DANE, Banca de las Oportunidades) sobre endeudamiento de consumo, uso de tarjetas e inclusión
   financiera, **con URL y fecha**, para la descripción y el video. Si una cifra no tiene fuente
   oficial, no se usa.

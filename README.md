@@ -347,15 +347,14 @@ Results are published in `evals/RESULTS.md` with **real numbers**, not targets, 
 
 ## 👥 Team
 
-FINCH is built by its two founders, **Helmut** ([@HCHAPS404](https://github.com/HCHAPS404)) and
-**Nairy**, in Colombia. AI tools (Claude, Cursor) assist development; authorship and responsibility
-remain with the founders.
+FINCH is built by its founder, **Helmut** ([@HCHAPS404](https://github.com/HCHAPS404)), in Colombia.
+AI tools (Claude, Cursor) assist development; authorship and responsibility remain with the founder.
 
 ## 📄 License & trademarks
 
 Open-source licensing follows [ADR-0037](docs/architecture/adr/0037-open-source-license.md)
-(Apache-2.0 proposed; the `LICENSE` file is added when the founders approve it). The **FINCH** name
-and logo are trademarks of the founders and are not licensed for reuse.
+(Apache-2.0 proposed; the `LICENSE` file is added when the founder approves it). The **FINCH** name
+and logo are trademarks of the founder and are not licensed for reuse.
 
 <div align="center">
 <br/>

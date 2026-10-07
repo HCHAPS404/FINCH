@@ -26,11 +26,13 @@ usa si Devpost o YouTube fallan.
 
 - Colombia **no** está excluida (las exclusiones son Brasil, Quebec, Rusia, Crimea, Cuba, Irán,
   Corea del Norte y los países con sanciones OFAC completas).
-- Ambos deben ser mayores de edad en su país.
-- **Forma de participar recomendada: Team** (HELL + Nairy) con **HELL como Representative**. El
-  premio se paga al Representative, que lo reparte entre el equipo. Alternativa: participar como
-  _Organization_, pero solo si la sociedad (p. ej. una S.A.S.) **ya existe al momento del envío**.
-  En ese caso el pago va a la cuenta de la sociedad (ver [07](07-risks-and-decisions.md), D-05).
+- HELL debe ser mayor de edad en su país.
+- **Forma de participar (actualizado 2026-10-07 — proyecto de un solo fundador): Solo**, HELL como
+  Representative. El plan original recomendaba _Team_ (HELL + Nairy); con un solo fundador, revisar
+  en Devpost si _Solo_ es la categoría correcta antes del envío — no asumir que el resto de las
+  reglas de _Team_ sigue aplicando igual. Alternativa: participar como _Organization_, pero solo si
+  la sociedad (p. ej. una S.A.S.) **ya existe al momento del envío**. En ese caso el pago va a la
+  cuenta de la sociedad (ver [07](07-risks-and-decisions.md), D-05).
 - No puede haber apoyo financiero ni preferencial previo de Nebius o Devpost (no aplica).
 - Ningún jurado puede ser empleador de ninguno de los dos (verificarlo cuando se publiquen los jurados).
 

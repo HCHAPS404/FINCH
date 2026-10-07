@@ -1,6 +1,6 @@
 # FINCH × Nebius × NVIDIA Global AI Hackathon — Programa de hackathon
 
-> **Estado:** PROPUESTO — requiere aprobación de ambos fundadores (HELL y Nairy).
+> **Estado:** APROBADO por HELL. Proyecto de un solo fundador desde 2026-10-07 (ver 05 §0).
 > **Fecha:** 2026-09-28
 > **Deadline de envío:** viernes 30 de octubre de 2026, 10:00 PT = **12:00 hora Colombia** (17:00 UTC).
 > **Días de construcción disponibles:** 32 (de lunes 28-sep a jueves 29-oct; el 30-oct es solo colchón).
@@ -63,11 +63,12 @@ Sem 4 (26-oct → 30-oct)  Code freeze 27-oct · video 27–28 · envío 29-oct 
 
 ## Equipo
 
-| Persona                         | Rol en la hackathon                                                                                                                       |
-| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| **HELL** (Helmut, `@HCHAPS404`) | Representante del equipo ante Devpost. Líder de backend, motor financiero, AI Gateway, agente, infraestructura Nebius.                    |
-| **Nairy** (cofundadora)         | Líder de producto/UX, frontend web, sistema de diseño con la marca, app shell y PWA, evals humanas (Toloka), video y narrativa del envío. |
-| Claude / Cursor                 | Herramientas (AGENTS.md §1). No son autores. Claude: arquitectura, specs, revisión. Cursor: implementación multiarchivo.                  |
+| Persona                         | Rol en la hackathon                                                                                                                                                                                                                             |
+| ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **HELL** (Helmut, `@HCHAPS404`) | Representante ante Devpost (categoría Solo, ver 00 §2). Único fundador: backend, motor financiero, AI Gateway, agente, infraestructura Nebius, producto/UX, frontend, sistema de diseño, evals, video y narrativa del envío — todo el catálogo. |
+| Claude / Cursor                 | Herramientas (AGENTS.md §1). No son autores. Claude: arquitectura, specs, revisión profunda. Cursor: implementación multiarchivo de alto volumen, para no agotar presupuesto de Claude (05 §0).                                                 |
 
-La división es una **propuesta**. Si las fortalezas de Nairy son otras, se intercambian los
-bloques completos del cronograma (05) sin romper las dependencias.
+> **Actualizado 2026-10-07:** FINCH dejó de ser un proyecto de dos fundadores (HELL + Nairy). El
+> reparto de bloques que describía esta tabla antes es ahora enteramente responsabilidad de HELL,
+> con Claude y Cursor como las dos herramientas que absorben la carga que antes cubría una segunda
+> persona.
