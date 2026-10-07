@@ -145,33 +145,32 @@ Straightforward: stop wiring `PasswordAuthSessionAdapter` to `AUTH_SESSION_PORT`
 affecting `identity.*` or `integration.outbox`, since no foreign key points _into_
 `security` from elsewhere.
 
-## Implementation status (2026-10-06)
+## Implementation status (2026-10-07)
 
-Landed so far: `security.credentials` and `security.password_reset_tokens` tables
-(`packages/db/src/schema/security.ts`); `identity.party_profiles`
-(`packages/db/src/schema/identity.ts`, personal data for signup — display name, date
-of birth, phone); `finance.debts` / `finance.cards`
-(`packages/db/src/schema/finance.ts`, user-asserted personal financial data, §11
-provenance columns); `documents.documents`
-(`packages/db/src/schema/documents.ts`, RAW zone only); the pure domain half —
-`IdGenerator`/`sequentialIdGenerator` (`packages/domain/src/id.ts`),
-`PASSWORD_RESET_TTL_MS`/`isResetTokenExpired` (`packages/domain/src/password-reset.ts`),
-and a widened `AuthSessionPort` (`packages/domain/src/auth-session.ts`) with both
-`issue` and `verify` in the formal interface. All of the above is typechecked, linted
-and tested green.
+Complete. The DB schema layer described below now has a generated Drizzle migration
+(`packages/db/migrations/0001_wonderful_mentor.sql`). `apps/api/src/infrastructure/security/`
+exists: `id-generator.adapter.ts` (`crypto.randomUUID()`), `password.adapter.ts`
+(scrypt-based `hashPassword`/`verifyPassword`, tested), `reset-token.adapter.ts`.
+`PasswordAuthSessionAdapter` (`apps/api/src/infrastructure/auth/password-auth-session.adapter.ts`)
+exists and `AuthModule.forRoot` wires it to `AUTH_SESSION_PORT` unconditionally, in
+every environment including production; `DevAuthSessionAdapter` remains only as the
+sandbox shortcut behind `isAuthSandboxEligible`. `AUTH_SESSION_SECRET` is in
+`packages/config`'s `secretConfigSchema` (`z.string().min(32)`), alongside
+`DOCUMENTS_STORAGE_DIR` (`storageConfigSchema`) and `WEB_APP_ORIGIN` (CORS, wired in
+`apps/api/src/main.ts`).
 
-Not yet started: the Drizzle migration for the three new schemas has not been
-generated (`pnpm --filter @finch/db db:generate`); `apps/api/src/infrastructure/security/`
-(real `crypto.randomUUID()`-backed `IdGenerator`, `hashPassword`/`verifyPassword`,
-reset-token generation/hashing) does not exist yet; `PasswordAuthSessionAdapter` does
-not exist yet and `AuthModule` still wires only `DevAuthSessionAdapter`;
-`AUTH_SESSION_SECRET` has not been added to `packages/config`'s `secretConfigSchema`;
-none of the new API endpoints (`/auth/signup`, `/auth/login`,
-`/auth/password-reset/*`, `GET`/`PATCH /me`, the `finance` and `documents` modules)
-exist; `apps/web` still calls nothing — it is 100% static mock data with no API
-client. The full remaining task list lives in the plan this ADR was written
-alongside; pick it up at "API (`apps/api`)" once the DB schema layer above has a
-generated migration.
+The new API endpoints exist: `users/auth.controller.ts` (signup/login),
+`users/me.controller.ts` (profile get/patch), `finance/debts.controller.ts`,
+`finance/cards.controller.ts`, `documents/documents.controller.ts` (RAW-zone upload
+only — no malware scan, OCR or classification; that is out of scope for this ADR, not
+an oversight). `apps/web` no longer calls nothing: the static demo auth
+(`app/(auth)/_lib/demo-auth.ts`) is deleted, a real API client exists
+(`app/_lib/api.ts`, `app/_lib/session.ts`), and signup/login/forgot-password/
+reset-password, `yo/perfil` and the `dinero` cards tab (`TarjetasTab`) call the real
+backend instead of static mock data.
+
+Verified green: `pnpm check` (build, lint, format, typecheck, architecture:check,
+security:check, test) and `pnpm financial:verify`, all passing on 2026-10-07.
 
 ## References
 

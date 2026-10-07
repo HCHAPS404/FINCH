@@ -19,6 +19,8 @@ const publicConfigSchema = z.object({
   finchEnv: z.enum(['local', 'dev', 'integration', 'staging', 'prod']),
   apiPort: z.coerce.number().int().min(1).max(65_535),
   apiBaseUrl: z.url(),
+  /** The one browser origin allowed to call this API cross-origin (CORS). */
+  webAppOrigin: z.url(),
 });
 
 /** Jurisdiction defaults — README §36. Never hardcoded inside the core. */
@@ -68,11 +70,25 @@ const featureFlagSchema = z.object({
 /**
  * Secret config is kept in a separate shape so it can never be spread into a log
  * line or an error report alongside public values (README §12).
+ *
+ * `authSessionSecret` signs `PasswordAuthSessionAdapter`'s opaque session tokens
+ * (ADR-0041) — unlike the dev sandbox's per-process random secret, this one must be
+ * stable across restarts so a real user's session survives a deploy, which is why it
+ * is configured rather than generated.
  */
 const secretConfigSchema = z.object({
   databaseUrl: z.string().min(1),
   sentryDsn: z.string().optional(),
   authJwksUrl: z.string().optional(),
+  authSessionSecret: z.string().min(32),
+});
+
+/**
+ * Local-disk document storage (ADR-0041) — a `DocumentStoragePort` adapter, swappable
+ * for S3 later per ADR-0022, without this schema or its callers changing shape.
+ */
+const storageConfigSchema = z.object({
+  documentsStorageDir: z.string().min(1),
 });
 
 export const configSchema = z.object({
@@ -82,6 +98,7 @@ export const configSchema = z.object({
   identity: identityConfigSchema,
   flags: featureFlagSchema,
   secrets: secretConfigSchema,
+  storage: storageConfigSchema,
 });
 
 export type FinchConfig = z.infer<typeof configSchema>;
@@ -115,6 +132,7 @@ export function loadConfig(env: Record<string, string | undefined>): FinchConfig
       finchEnv: env['FINCH_ENV'],
       apiPort: env['API_PORT'],
       apiBaseUrl: env['API_BASE_URL'],
+      webAppOrigin: env['WEB_APP_ORIGIN'],
     },
     jurisdiction: {
       locale: env['FINCH_DEFAULT_LOCALE'],
@@ -143,6 +161,10 @@ export function loadConfig(env: Record<string, string | undefined>): FinchConfig
       databaseUrl: env['DATABASE_URL'],
       sentryDsn: optionalEnv(env['SENTRY_DSN']),
       authJwksUrl: optionalEnv(env['AUTH_JWKS_URL']),
+      authSessionSecret: env['AUTH_SESSION_SECRET'],
+    },
+    storage: {
+      documentsStorageDir: env['DOCUMENTS_STORAGE_DIR'],
     },
   });
 
@@ -175,5 +197,6 @@ export function redactedConfig(config: FinchConfig): Record<string, unknown> {
         value === undefined ? undefined : '[REDACTED]',
       ]),
     ),
+    storage: config.storage,
   };
 }

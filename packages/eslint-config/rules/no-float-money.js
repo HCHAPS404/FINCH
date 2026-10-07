@@ -20,9 +20,15 @@
 const MONEY_NAME =
   /(^|[._])(amount|balance|price|cost|fee|interest|principal|payment|total|subtotal|installment|cuota|saldo|monto|valor|premium|payout|debt|credit|debit)([._A-Z]|$)/i;
 
-/** Names that look money-ish but are counts, not currency. */
+/**
+ * Names that look money-ish but are counts, not currency. `bps` covers both
+ * `rate_bp(s)` and the camelCase `*Bps` suffix already used for basis points
+ * throughout `packages/db` (e.g. `interestRateBps`); `days?` covers both the plural
+ * and the singular `*Day` suffix used for day-of-month fields (e.g. `cutDay`,
+ * `paymentDueDay`).
+ */
 const ALLOWED =
-  /(count|qty|quantity|index|length|ratio|percent|pct|rate_bp|basis_points|days|months|years|periods|term)/i;
+  /(count|qty|quantity|index|length|ratio|percent|pct|bps|basis_points|days?|months|years|periods|term)/i;
 
 function isMoneyName(name) {
   return typeof name === 'string' && MONEY_NAME.test(name) && !ALLOWED.test(name);

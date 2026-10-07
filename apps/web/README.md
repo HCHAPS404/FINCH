@@ -14,28 +14,35 @@ real routes, composed from `@finch/ui-web` components and no ad-hoc styling.
 ## Owns
 
 - Customer web experience and its routing: `/signup`, `/login`, `/forgot-password`,
-  `/check-email`, `/onboarding/1`–`/3`, `/hoy`, `/dinero`.
-- Client-side session handling — not yet implemented; see "Does not own".
+  `/reset-password`, `/check-email`, `/onboarding/1`–`/3`, `/hoy`, `/dinero`,
+  `/yo/perfil`, `/yo/boveda`.
+- `app/_lib/api.ts` — the typed fetch client for `apps/api` (ADR-0041), and
+  `app/_lib/session.ts` — client-side session token storage. Real signup, login,
+  password recovery, profile edit, debts/cards CRUD (`Dinero` → "Tarjetas" tab) and
+  document upload (`/yo/boveda`) all call real `apps/api` endpoints against a real
+  Postgres database — not mock data.
 
 ## Does not own
 
 - Anything admin — apps/admin is a separate surface and is never merged into this one
   (§33.2, §52).
-- Authorization decisions (§12).
-- Authentication itself. Every form in `(auth)/` calls a local, inert
-  `event.preventDefault()` rather than a real endpoint — wiring to `@finch/authorization`
-  and an identity provider lands with FIN-021, not here. Do not read a working submit
-  handler as a working auth flow.
-- Server state fetching. `@tanstack/react-query` is declared (matching the documented
-  stack) but nothing in this app calls it yet — `/hoy` and `/dinero` render the literal
-  figures from the Figma file as static content, not live data. The data layer is a
-  separate piece of work once `apps/api` has endpoints for this app to call.
+- Authorization decisions (§12) — enforced server-side by `apps/api`'s
+  `AuthorizationGuard`; this app only reacts to a 403.
+- A real session cookie. `app/_lib/session.ts` stores the opaque session token in
+  `localStorage`, documented there as temporary: `apps/api` has no `@fastify/cookie`
+  support wired in yet. Not a security boundary beyond what React itself provides.
+- Most of the product surface's live data. `/hoy`, `/oportunidades`, `/finch` and most
+  of `/dinero` (everything except the "Tarjetas" tab) still render the literal figures
+  from the Figma file / product-spec docs as static content — there are no
+  Account/Transaction tables in `apps/db` yet for them to call. Not silently dropped,
+  just out of this pass's scope.
 
 ## Invariants
 
 - Sensitive authenticated responses use private/no-store cache policies (§116) — not
-  yet applicable: no authenticated request exists in this app yet (see "Does not own").
-  Revisit when real data fetching is added.
+  yet applicable: every authenticated call here is a plain `fetch` with no client-side
+  cache layer (no React Query wiring yet), so there is nothing to mark private.
+  Revisit once a cache layer is added.
 - Stale, estimated and verified values are visually distinguishable (§116) — enforced
   by construction: `/dinero`'s transaction table and `/hoy`'s safe-to-spend card render
   `@finch/ui-web`'s `TruthBadge`/`FreshnessStamp`, which cannot render a bare color (see
