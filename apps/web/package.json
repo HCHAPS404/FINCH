@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@finch/contracts": "workspace:*",
+    "@finch/financial-engine": "workspace:*",
     "@finch/ui-web": "workspace:*",
     "@tanstack/react-query": "5.103.1",
     "next": "16.3.8",

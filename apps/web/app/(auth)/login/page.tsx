@@ -8,21 +8,33 @@ import { Button, Checkbox, Input, IconGlobe, IconFingerprint, IconArrowRight } f
 import { AuthLayout } from '../_components/AuthLayout';
 import { FormHeading } from '../_components/FormHeading';
 import { LabeledDivider } from '../_components/LabeledDivider';
-import { DEMO_EMAIL, DEMO_PASSWORD, isDemoCredentials } from '../_lib/demo-auth';
+import { login, ApiError } from '../../_lib/api';
+import { setSession } from '../../_lib/session';
 
 export default function LoginPage(): ReactElement {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | undefined>(undefined);
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-    if (isDemoCredentials(email, password)) {
+    setError(undefined);
+    setSubmitting(true);
+    try {
+      const session = await login({ email, password });
+      setSession(session);
       router.push('/hoy');
-      return;
+    } catch (cause) {
+      setError(
+        cause instanceof ApiError
+          ? 'Correo o contraseña incorrectos.'
+          : 'No pudimos conectar con el servidor. Intenta de nuevo.',
+      );
+    } finally {
+      setSubmitting(false);
     }
-    setError(`Ese usuario no existe en este demo. Usa ${DEMO_EMAIL} / ${DEMO_PASSWORD}.`);
   }
 
   return (
@@ -31,22 +43,6 @@ export default function LoginPage(): ReactElement {
       subhead="Tu plan del mes te está esperando. Revisamos tasas y tarjetas mientras no estabas."
     >
       <FormHeading title="Inicia sesión" subtitle="Entra con tu correo o con tu llave de acceso." />
-
-      <div
-        style={{
-          padding: '10px 14px',
-          borderRadius: 10,
-          border: '1px solid var(--fc-border-subtle)',
-          background: 'var(--fc-surface-base)',
-          fontFamily: 'Inter, sans-serif',
-          fontSize: 13,
-          color: 'var(--fc-text-secondary)',
-        }}
-      >
-        Demo local, sin backend. Usuario de prueba:{' '}
-        <strong style={{ color: 'var(--fc-text-primary)' }}>{DEMO_EMAIL}</strong> / contraseña{' '}
-        <strong style={{ color: 'var(--fc-text-primary)' }}>{DEMO_PASSWORD}</strong>
-      </div>
 
       <Button variant="secondary" size="large" style={{ width: '100%' }} disabled>
         <IconFingerprint size={18} />
@@ -59,7 +55,12 @@ export default function LoginPage(): ReactElement {
 
       <LabeledDivider label="o con tu correo" />
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
+        style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+      >
         <Input
           label="Correo electrónico"
           name="email"
@@ -97,8 +98,8 @@ export default function LoginPage(): ReactElement {
             ¿Olvidaste tu contraseña?
           </Link>
         </div>
-        <Button type="submit" size="large" style={{ width: '100%' }}>
-          Iniciar sesión
+        <Button type="submit" size="large" style={{ width: '100%' }} disabled={submitting}>
+          {submitting ? 'Entrando…' : 'Iniciar sesión'}
           <IconArrowRight size={18} />
         </Button>
       </form>

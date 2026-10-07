@@ -1,22 +1,41 @@
 'use client';
 
 import type { ReactElement, SubmitEvent } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { Button, Checkbox, Input, IconGlobe, IconArrowRight } from '@finch/ui-web';
 import { AuthLayout } from '../_components/AuthLayout';
 import { FormHeading } from '../_components/FormHeading';
 import { LabeledDivider } from '../_components/LabeledDivider';
+import { signup, ApiError } from '../../_lib/api';
+import { setSession } from '../../_lib/session';
 
 export default function SignUpPage(): ReactElement {
   const router = useRouter();
+  const [error, setError] = useState<string | undefined>(undefined);
+  const [submitting, setSubmitting] = useState(false);
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  // No real auth provider yet (FIN-021), so there's no account to actually create or
-  // reject — any complete, valid submission moves on to onboarding, matching the real
-  // Figma flow (Sign up -> Onboarding 1-3 -> Hoy) instead of dead-ending here.
-  function handleSubmit(event: SubmitEvent<HTMLFormElement>): void {
+  async function handleSubmit(event: SubmitEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
-    router.push('/onboarding/1');
+    setError(undefined);
+    setSubmitting(true);
+    try {
+      const session = await signup({ email, password, displayName });
+      setSession(session);
+      router.push('/onboarding/1');
+    } catch (cause) {
+      setError(
+        cause instanceof ApiError && cause.code === 'FINCH_VALIDATION_EMAIL_TAKEN'
+          ? 'Ya existe una cuenta con ese correo.'
+          : 'No pudimos crear tu cuenta. Intenta de nuevo.',
+      );
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -33,12 +52,21 @@ export default function SignUpPage(): ReactElement {
 
       <LabeledDivider label="o con tu correo" />
 
-      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <form
+        onSubmit={(event) => {
+          void handleSubmit(event);
+        }}
+        style={{ display: 'flex', flexDirection: 'column', gap: 16 }}
+      >
         <Input
           label="Nombre"
           name="name"
           autoComplete="name"
           helperText="Lo usaremos solo para tu cuenta."
+          value={displayName}
+          onChange={(event) => {
+            setDisplayName(event.target.value);
+          }}
           required
         />
         <Input
@@ -47,6 +75,10 @@ export default function SignUpPage(): ReactElement {
           type="email"
           autoComplete="email"
           helperText="Te enviaremos un enlace para verificarlo."
+          value={email}
+          onChange={(event) => {
+            setEmail(event.target.value);
+          }}
           required
         />
         <Input
@@ -56,11 +88,16 @@ export default function SignUpPage(): ReactElement {
           autoComplete="new-password"
           helperText="Mínimo 12 caracteres, con un número."
           minLength={12}
+          value={password}
+          onChange={(event) => {
+            setPassword(event.target.value);
+          }}
+          {...(error ? { error } : {})}
           required
         />
         <Checkbox label="Acepto los Términos y la Política de datos" name="acceptTerms" required />
-        <Button type="submit" size="large" style={{ width: '100%' }}>
-          Crear cuenta
+        <Button type="submit" size="large" style={{ width: '100%' }} disabled={submitting}>
+          {submitting ? 'Creando cuenta…' : 'Crear cuenta'}
           <IconArrowRight size={18} />
         </Button>
       </form>

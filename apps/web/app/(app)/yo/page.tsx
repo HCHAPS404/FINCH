@@ -13,6 +13,7 @@ import {
   IconEye,
   IconBell,
   IconSettings,
+  IconUser,
 } from '@finch/ui-web';
 import { AppShell } from '../_components/AppShell';
 import { cls } from '../../_lib/cx';
@@ -26,6 +27,12 @@ interface Tile {
 }
 
 const TILES: readonly Tile[] = [
+  {
+    href: '/yo/perfil',
+    icon: IconUser,
+    title: 'Mi perfil',
+    description: 'Tus datos personales: nombre, teléfono y fecha de nacimiento.',
+  },
   {
     href: '/yo/metas',
     icon: IconTarget,

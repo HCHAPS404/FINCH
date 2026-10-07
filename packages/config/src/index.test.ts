@@ -13,6 +13,7 @@ const VALID = {
   FINCH_ENV: 'local',
   API_PORT: '4000',
   API_BASE_URL: 'http://localhost:4000',
+  WEB_APP_ORIGIN: 'http://localhost:3000',
   FINCH_DEFAULT_LOCALE: 'es-CO',
   FINCH_DEFAULT_TIMEZONE: 'America/Bogota',
   FINCH_DEFAULT_CURRENCY: 'COP',
@@ -26,6 +27,8 @@ const VALID = {
   DATABASE_URL: 'postgresql://finch:supersecret@localhost:5432/finch_dev',
   SENTRY_DSN: '',
   AUTH_JWKS_URL: '',
+  AUTH_SESSION_SECRET: 'a'.repeat(32),
+  DOCUMENTS_STORAGE_DIR: './.data/documents',
   FEATURE_BANK_SYNC_ENABLED: 'false',
   FEATURE_DOCUMENT_AI_ENABLED: 'false',
   FEATURE_EXTERNAL_ACTIONS_ENABLED: 'false',
@@ -112,6 +115,7 @@ describe('redactedConfig', () => {
       databaseUrl: '[REDACTED]',
       sentryDsn: undefined,
       authJwksUrl: undefined,
+      authSessionSecret: '[REDACTED]',
     });
   });
 

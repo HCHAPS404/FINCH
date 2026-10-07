@@ -27,11 +27,21 @@ export const parties = identity.table('parties', {
  * `parties` itself — same reason `security.credentials` stays off `principals`
  * (README §8.6, §100): the identity/tenancy entities stay minimal and open, personal
  * data that only ever matters for a `PERSON`-type Party lives alongside it, not on it.
+ *
+ * `principalId` is denormalized here rather than requiring `GET /me` to join through
+ * a Workspace: Principal and Party are deliberately separate concepts (README §100),
+ * but Foundation's signup flow creates exactly one Party per human Principal, and this
+ * column is how `/me` finds "my own" profile without assuming that relationship holds
+ * everywhere else in the system.
  */
 export const partyProfiles = identity.table('party_profiles', {
   partyId: text('party_id')
     .primaryKey()
     .references(() => parties.id),
+  principalId: text('principal_id')
+    .notNull()
+    .unique()
+    .references(() => principals.id),
   displayName: text('display_name').notNull(),
   dateOfBirth: text('date_of_birth'),
   phone: text('phone'),

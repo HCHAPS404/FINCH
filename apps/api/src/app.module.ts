@@ -6,6 +6,9 @@ import { DbModule } from './infrastructure/db/db.module.js';
 import { AuthModule } from './infrastructure/auth/auth.module.js';
 import { HealthModule } from './health/health.module.js';
 import { WorkspacesModule } from './workspaces/workspaces.module.js';
+import { UsersModule } from './users/users.module.js';
+import { FinanceModule } from './finance/finance.module.js';
+import { DocumentsModule } from './documents/documents.module.js';
 
 @Module({})
 export class AppModule {
@@ -18,6 +21,9 @@ export class AppModule {
         AuthModule.forRoot(config),
         HealthModule,
         WorkspacesModule,
+        UsersModule,
+        FinanceModule,
+        DocumentsModule.forRoot(config),
       ],
     };
   }

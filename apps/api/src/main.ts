@@ -40,6 +40,14 @@ async function bootstrap(): Promise<void> {
   app.getHttpAdapter().getInstance().addHook('onRequest', correlationHook);
   app.useGlobalFilters(new FinchExceptionFilter());
   app.setGlobalPrefix('api/v1');
+  // apps/web runs on a different origin (Next.js dev server); browsers enforce CORS
+  // even though curl/server-to-server calls never hit this restriction (ADR-0041).
+  app.enableCors({
+    origin: config.public.webAppOrigin,
+    credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  });
 
   const openApiDocument = SwaggerModule.createDocument(
     app,
