@@ -112,7 +112,7 @@ se cubre, de forma más agresiva que el plan original, con cinco condiciones:
 | S0-10 | Investigación: 3–5 cifras oficiales con URL; 5 entrevistas cortas.                                                                                                                              | N     | dom 4  |
 | S0-11 | Aclaración Devpost (acumulación de premios); office hours Nebius (lista VERIFICAR).                                                                                                             | H     | mar 29 |
 | S0-12 | ~~Nairy en AGENTS.md y CODEOWNERS~~ — moot, proyecto de un solo fundador (2026-10-07); protección de rama sigue pendiente de decidir (README-DEVELOPERS.md §6).                                 | H     | mar 29 |
-| S0-13 | Librería decimal (potencias fraccionarias) — nota en ADR-0016.                                                                                                                                  | H     | jue 1  |
+| S0-13 | ~~Librería decimal (potencias fraccionarias) — nota en ADR-0016.~~ Resuelto 2026-10-07: `decimal.js`.                                                                                           | H     | jue 1  |
 | S0-14 | Esquema de DB v1 (twin, sobres, tarjetas, transacciones, documentos, recibos, cards, memorias, workspaces compartidos, auditoría) + seeds de personas.                                          | H+N   | dom 4  |
 
 ### Semana 1 — "Me llegó el sueldo" (lun 5-oct → dom 11-oct)
