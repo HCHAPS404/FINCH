@@ -26,3 +26,13 @@ export type {
   BudgetAllocateInput,
   BudgetAllocateResult,
 } from './budget-allocate.js';
+export { computeEnvelopeState, ENVELOPE_ALERT_LEVELS } from './envelope-state.js';
+export type {
+  EnvelopeAlertLevel,
+  EnvelopeAllocation,
+  EnvelopeExpense,
+  EnvelopeTransfer,
+  EnvelopeStateInput,
+  EnvelopeState,
+  EnvelopeStateResult,
+} from './envelope-state.js';
