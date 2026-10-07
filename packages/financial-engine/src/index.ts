@@ -14,3 +14,15 @@ export { COP, USD, EUR, CURRENCIES, getCurrency } from './currency.js';
 export type { Currency } from './currency.js';
 export { registerFormula, getFormula, listFormulas } from './formula-registry.js';
 export type { FormulaDefinition, FormulaTestVector } from './formula-registry.js';
+export { allocateBudget, ALLOCATION_LAYERS } from './budget-allocate.js';
+export type {
+  AllocationLayer,
+  AllocationLineItem,
+  Obligation,
+  DebtMinimum,
+  Goal,
+  IncomeRule,
+  SurplusStrategy,
+  BudgetAllocateInput,
+  BudgetAllocateResult,
+} from './budget-allocate.js';
