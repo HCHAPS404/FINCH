@@ -36,3 +36,14 @@ export type {
   EnvelopeState,
   EnvelopeStateResult,
 } from './envelope-state.js';
+export {
+  Rate,
+  PERIODS_PER_YEAR,
+  periodicToEffectiveAnnual,
+  effectiveAnnualToPeriodic,
+  nominalToPeriodic,
+  periodicToNominal,
+  anticipatedToDue,
+  dueToAnticipated,
+} from './rate-convert.js';
+export type { RateValue, PeriodsPerYear, RateConvertOptions } from './rate-convert.js';

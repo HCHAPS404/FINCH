@@ -128,16 +128,16 @@ en el README, porque es central para el argumento de privacidad del track.
 
 ## 7. Stack técnico concreto (versiones a verificar en el registro antes de agregar, AGENTS.md §7)
 
-| Necesidad                                                        | Elección propuesta                                        | Estado                                           |
-| ---------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------ |
-| Cliente OpenAI-compatible                                        | SDK oficial `openai` (Node) apuntando a `NEBIUS_BASE_URL` | VERIFICAR versión                                |
-| Validación de esquemas                                           | `zod` + conversión a JSON Schema                          | VERIFICAR versión                                |
-| Decimal de precisión arbitraria (tasas, potencias fraccionarias) | `decimal.js` (soporta `pow` con exponente no entero)      | VERIFICAR; requiere ADR menor o nota en ADR-0016 |
-| Tavily                                                           | SDK oficial `@tavily/core` o HTTP directo                 | VERIFICAR                                        |
-| Web Push                                                         | API estándar Web Push + VAPID (librería a VERIFICAR)      | VERIFICAR soporte iOS en PWA instalada           |
-| Correo transaccional + recepción                                 | Proveedor a elegir en S0-06 (ADR-0039)                    | VERIFICAR costo y dominio                        |
-| ORM                                                              | Drizzle (ya en README)                                    | VERIFICAR                                        |
-| Vector                                                           | extensión `pgvector`                                      | VERIFICAR en el host elegido                     |
-| i18n web                                                         | `next-intl` o i18n nativo de Next                         | VERIFICAR                                        |
-| PDF (cartas)                                                     | `@react-pdf/renderer` o `pdf-lib`                         | VERIFICAR                                        |
-| Tracing                                                          | LangSmith SDK u OTel exporter hacia LangSmith             | VERIFICAR soporte OTel                           |
+| Necesidad                                                        | Elección propuesta                                        | Estado                                              |
+| ---------------------------------------------------------------- | --------------------------------------------------------- | --------------------------------------------------- |
+| Cliente OpenAI-compatible                                        | SDK oficial `openai` (Node) apuntando a `NEBIUS_BASE_URL` | VERIFICAR versión                                   |
+| Validación de esquemas                                           | `zod` + conversión a JSON Schema                          | VERIFICAR versión                                   |
+| Decimal de precisión arbitraria (tasas, potencias fraccionarias) | `decimal.js` 10.6.0 (`pow` con exponente no entero)       | Resuelto: ADR-0016 (S0-13); lo usa `rate.convert@1` |
+| Tavily                                                           | SDK oficial `@tavily/core` o HTTP directo                 | VERIFICAR                                           |
+| Web Push                                                         | API estándar Web Push + VAPID (librería a VERIFICAR)      | VERIFICAR soporte iOS en PWA instalada              |
+| Correo transaccional + recepción                                 | Proveedor a elegir en S0-06 (ADR-0039)                    | VERIFICAR costo y dominio                           |
+| ORM                                                              | Drizzle (ya en README)                                    | VERIFICAR                                           |
+| Vector                                                           | extensión `pgvector`                                      | VERIFICAR en el host elegido                        |
+| i18n web                                                         | `next-intl` o i18n nativo de Next                         | VERIFICAR                                           |
+| PDF (cartas)                                                     | `@react-pdf/renderer` o `pdf-lib`                         | VERIFICAR                                           |
+| Tracing                                                          | LangSmith SDK u OTel exporter hacia LangSmith             | VERIFICAR soporte OTel                              |

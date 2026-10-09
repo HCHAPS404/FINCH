@@ -19,9 +19,9 @@ the arbitrary-precision decimal library for rates and intermediate calculations 
 for `docs/financial-formulas/colombia-credit.md`'s `rate.convert@1` and related
 formulas, which require fractional-exponent rate conversion (e.g. `(1+EA)^(1/m) − 1`)
 at ≥34 significant digits — `bigint`/`Money` alone cannot express a fractional power.
-Not yet added as a dependency or used anywhere in the codebase as of this addendum;
-this records the choice so whoever implements `colombia-credit.md` next does not
-re-litigate it.
+First consumer: `rate.convert@1` in `packages/financial-engine/src/rate-convert.ts`
+(`decimal.js` 10.6.0, precision 34, `ROUND_HALF_EVEN`). The rest of
+`colombia-credit.md` still builds on this primitive and is not implemented yet.
 
 ## Alternatives considered
 

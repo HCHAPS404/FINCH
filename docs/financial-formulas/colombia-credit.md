@@ -7,7 +7,7 @@
 >
 > **Precisión:** los montos se guardan como `bigint` en unidades menores (ADR-0016). Las tasas y
 > los valores intermedios usan un decimal de precisión arbitraria (≥ 34 dígitos significativos).
-> Las potencias fraccionarias (`^(1/12)`) requieren `ln`/`exp` decimales: la librería se decide en S0-13.
+> Las potencias fraccionarias (`^(1/12)`) usan `decimal.js` 10.6.0 (ADR-0016, S0-13), con 34 dígitos significativos.
 >
 > **Redondeo:** nunca implícito. Por defecto, el interés de cada periodo se redondea a unidades
 > menores con `HALF_EVEN` y la última cuota absorbe el residuo. Las tasas se muestran con 2
